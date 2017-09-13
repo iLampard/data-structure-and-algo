@@ -10,7 +10,7 @@ struct Node;
 typedef struct Node *pNode;
 typedef pNode Position;
 typedef pNode List;
-typedef float ElementType;
+typedef int ElementType;
 
 
 struct Node
@@ -19,7 +19,7 @@ struct Node
     Position Next;
     Node(ElementType X): Element(X), Next(NULL){};
     Node(ElementType X, Position P): Element(X), Next(P){};
-    Node();
+    Node(){};
 };
 
 
@@ -32,24 +32,39 @@ int isLast(Position P)
 void printLinkedList(List L)
 {
     Position P = L->Next;
-    if(!isLast(P))
+    while(!isLast(P))
     {
-        std::cout<<P->Element<<" ";
+        std::cout<<P->Element<<"->";
         P = P->Next;
     }
+    std::cout<<P->Element<<std::endl;
 };
 
 
-List initLinkedList(ElementType* ElementArray)
+void insertElement(ElementType X, Position P)
+{
+    if(P!=NULL)
+    {
+        Position temp = new Node(X, P->Next);
+        P->Next = temp;
+    }
+    else
+    {
+        Position temp = new Node(X);
+        P = temp;
+    }
+}
+
+List initLinkedList(ElementType ElementArray[], int iSize)
 {
     List L = new Node(0);
-    Position temp = new Node;
-    while(ElementArray)
+    Position P = L;
+    int i = 0;
+    while(i < iSize)
     {
-        temp->Element = *ElementArray;
-        temp->Next = NULL;
-        L->Next = temp;
-        ElementArray++;
+        insertElement(ElementArray[i], P);
+        P = P->Next;
+        i++;
     }
     return L;
 }
@@ -75,8 +90,10 @@ void add(List L1, List L2)
 }
 
 int main(int argc, const char * argv[]) {
+    ElementType L1_Array[] = {2, 4, 3};
+    int iSize = sizeof(L1_Array)/sizeof(ElementType);
+    List L1 = initLinkedList(L1_Array, iSize);
+    printLinkedList(L1);
     
-    
-    std::cout << "Hello, World!\n";
     return 0;
 }
