@@ -145,15 +145,22 @@ List add(List L1, List L2)
 // 给定链表，要求翻转从m到n的位置，不能申请新空间
 List reverse(List L, int from, int to)
 {
-    List LReverse = new Node(0);
-    Position Head = advance(LReverse, from-1);
-    Position P = Head->Next;
+    Position Head = L;
+    List LReverse = Head;
+    Head = advance(L, from-1);
+    Position Prev = Head->Next;
+    Position P = Prev->Next;
+    Position temp = NULL;
     
     // 以from结点的前驱作为head， 遍历 (to - from) 次，每次新的结点直接称为head->Next指向的结点
     int i = from;
     while((i < to) && (P != NULL))
     {
-        
+        temp = Head->Next;
+        Head->Next = P;
+        Prev->Next = P->Next;
+        P->Next = temp;
+        P = Prev->Next;
         i++;
         
     }
@@ -163,12 +170,32 @@ List reverse(List L, int from, int to)
 
 
 int main(int argc, const char * argv[]) {
+    std::cout<<"Add two linked list............"<<std::endl;
     ElementType L1_Array[] = {4, 9, 0, 4, 7, 1};
     List L1 = initLinkedList(L1_Array, sizeof(L1_Array)/sizeof(ElementType));
     ElementType L2_Array[] = {1, 7, 1, 5, 5, 4, 2, 8};
     List L2 = initLinkedList(L2_Array, sizeof(L2_Array)/sizeof(ElementType));
     List L = add(L1, L2);
+    std::cout<<"input: "<<std::endl;
+    printLinkedList(L1);
+    printLinkedList(L2);
+    std::cout<<"output: "<<std::endl;
     printLinkedList(L);
     deleteList(L);
+    deleteList(L1);
+    deleteList(L2);
+    
+    std::cout<<std::endl;
+    std::cout<<"Partially reverse a linked list........"<<std::endl;
+    ElementType L3_Array[] = {64, 62, 58, 78, 24, 69, 0, 34, 67, 41};
+    List L3 = initLinkedList(L3_Array, sizeof(L3_Array)/sizeof(ElementType));
+    std::cout<<"input: "<<std::endl;
+    printLinkedList(L3);
+    std::cout<<"output: "<<std::endl;
+    List L4 = reverse(L3, 4, 8);
+    printLinkedList(L4);
+    deleteList(L3);
+    deleteList(L4);
+    
     return 0;
 }
