@@ -87,8 +87,8 @@ const char* longestCommonSubsequence(char* s1, char* s2)
 void longestIncreasingSubsequence(int* array,
                                   int iLen,
                                   int** preIndex,
-                                  int* iLargestLIS,
-                                  int* iLargestLISIndex)
+                                  int* ilengthLIS,
+                                  int* iLISIndex)
 {
     int* lengthLISByIndex = new int[iLen];
     (*preIndex) = new int[iLen];
@@ -100,10 +100,10 @@ void longestIncreasingSubsequence(int* array,
         (*preIndex)[i] = -1;
     }
     
-    (*iLargestLIS) = 1;
+    (*ilengthLIS) = 1;
     for(i = 1; i < iLen; i++)
     {
-        for(j = 0; j < iLen; j++)
+        for(j = 0; j < i; j++)
         {
             if(array[i] > array[j])
             {
@@ -115,18 +115,18 @@ void longestIncreasingSubsequence(int* array,
             }
             
         }
-        if(lengthLISByIndex[i] > (*iLargestLIS))
+        if(lengthLISByIndex[i] > (*ilengthLIS))
         {
-            (*iLargestLIS) = lengthLISByIndex[i];
-            (*iLargestLISIndex) = i;
+            (*ilengthLIS) = lengthLISByIndex[i];
+            (*iLISIndex) = i;
         }
     
     }
 }
 
 
-int* longestIncreasingSubsequenceMain(int* array,
-                                      int iLen)
+std::vector<int> longestIncreasingSubsequenceMain(int* array,
+                                                  int iLen)
 {
     int* preIndex = new int[iLen];
     int iLargestLIS, iLargestLISIndex;
@@ -142,16 +142,15 @@ int* longestIncreasingSubsequenceMain(int* array,
     
     std::reverse(LIS.begin(), LIS.end());
     
-    return &LIS.front();
+    return LIS;
 }
 
 
-void printArray(int* array, int iLen)
+void printVector(std::vector<int> x)
 {
-    int i;
-    for( i = 0; i < iLen; i++)
+    for(int i = 0; i < x.size(); i++)
     {
-        std::cout<<array[i]<<' ';
+        std::cout<<x[i]<<" ";
     }
     std::cout<<std::endl;
 }
@@ -176,9 +175,9 @@ int main()
     std::cout<<"Longest increasing subsequence...."<<std::endl;
     std::cout<<"input: 1,4,5,6,2,3,8,9,10,11,12,12,1"<<std::endl;
     int x[] = {1, 4, 5, 6, 2, 3, 8, 9, 10, 11, 12, 12, 1};
-    int* lis = longestIncreasingSubsequenceMain(x, sizeof(x)/sizeof(int));
+    std::vector<int> lis = longestIncreasingSubsequenceMain(x, sizeof(x)/sizeof(int));
     std::cout<<"output:"<<std::endl;
-    printArray(lis, sizeof(lis)/sizeof(int));
+    printVector(lis);
     
 }
 
