@@ -156,6 +156,32 @@ void printVector(std::vector<int> x)
 }
 
 
+void printArray(int* x, int iLen)
+{
+    for(int i = 0; i < iLen; i++)
+    {
+        std::cout<<x[i]<<" ";
+    }
+    std::cout<<std::endl;
+}
+
+
+// 字符串的全排列
+void permutation(int* x, int iBegin, int iEnd)
+{
+    if(iBegin == iEnd)
+    {
+        printArray(x, iEnd);
+        return;
+    }
+    for(int i = iBegin; i < iEnd; i++)
+    {
+        std::swap(x[iBegin], x[i]);
+        permutation(x, iBegin+1, iEnd);
+        std::swap(x[iBegin], x[i]);
+    }
+}
+
 
 int main()
 {
@@ -178,6 +204,12 @@ int main()
     std::vector<int> lis = longestIncreasingSubsequenceMain(x, sizeof(x)/sizeof(int));
     std::cout<<"output:"<<std::endl;
     printVector(lis);
+    
+    std::cout<<"String permutations...."<<std::endl;
+    std::cout<<"input: 1,2,3,4"<<std::endl;
+    int y[] = {1, 2, 3, 4};
+    std::cout<<"output:"<<std::endl;
+    permutation(y, 0, sizeof(y)/sizeof(int));
     
 }
 
