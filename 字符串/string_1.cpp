@@ -183,6 +183,62 @@ void permutation(int* x, int iBegin, int iEnd)
 }
 
 
+// 字符串的全排列（有重复的情况）
+bool isDuplicate(int* x, int iBegin, int iEnd)
+{
+    int i = iBegin;
+    while(i < iEnd)
+    {
+        if(x[i] == x[iEnd])
+            return true;
+        i++;
+    }
+    return false;
+}
+
+
+void permutationWithDuplicate(int* x, int iBegin, int iEnd)
+{
+    if(iBegin == iEnd)
+    {
+        printArray(x, iEnd);
+        return;
+    }
+    for(int i = iBegin; i < iEnd; i++)
+    {
+        if(isDuplicate(x, iBegin, i)) // 检查x[i]是否与x[iBegin, i)重复
+        {
+            continue;
+        }
+        std::swap(x[iBegin], x[i]);
+        permutationWithDuplicate(x, iBegin+1, iEnd);
+        std::swap(x[iBegin], x[i]);
+    }
+}
+
+
+
+// 非递归算法解全排序
+void reverse(int* from, int* to)
+{
+    int temp = 0;
+    while(from < to)
+    {
+        temp = (*from);
+        (*from) = (*to);
+        (*to) = temp;
+        from++;
+        to--;
+    }
+}
+
+
+void permutationNext(int* x, int iBegin, int iEnd)
+{
+    // 找到最后一个升序的位置
+    
+}
+
 int main()
 {
     std::cout<<"Left rotate string with size 2...."<<std::endl;
@@ -210,6 +266,14 @@ int main()
     int y[] = {1, 2, 3, 4};
     std::cout<<"output:"<<std::endl;
     permutation(y, 0, sizeof(y)/sizeof(int));
+    
+    std::cout<<"String permutations with duplicates...."<<std::endl;
+    std::cout<<"input: 1,2,2,4"<<std::endl;
+    int z[] = {1, 2, 2, 4};
+    std::cout<<"output:"<<std::endl;
+    permutationWithDuplicate(z, 0, sizeof(z)/sizeof(int));
+    
+    
     
 }
 
