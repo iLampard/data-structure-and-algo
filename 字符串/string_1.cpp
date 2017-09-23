@@ -233,9 +233,42 @@ void reverse(int* from, int* to)
 }
 
 
-void permutationNext(int* x, int iBegin, int iEnd)
+bool permutationNext(int* x, int iLen)
 {
     // 找到最后一个升序的位置
+    int i = iLen - 2;
+    while((i >= 0) && (x[i] >= x[i+1]))
+    {
+        i--;
+    }
+    if(i < 0)
+        return false;
+    
+    // 在[i+1, iLen）中查找比x[i]大的最小的数
+    int j = iLen - 1;
+    int iPivotIndex = 0;
+    int iPivot = x[i];
+    while(j > i)
+    {
+        if(x[j] >= x[i])
+        {
+            if(iPivot > x[j])
+            {
+                iPivot = x[j];
+                iPivotIndex = j;
+            }
+        }
+        j--;
+    }
+    
+    
+    // 交换
+    std::swap(x[i], x[iPivotIndex]);
+    
+    // 翻转
+    reverse(x+i+1, x+iLen-1);
+    
+    return true;
     
 }
 
@@ -261,18 +294,25 @@ int main()
     std::cout<<"output:"<<std::endl;
     printVector(lis);
     
-    std::cout<<"String permutations...."<<std::endl;
+    std::cout<<"String permutations using recursion...."<<std::endl;
     std::cout<<"input: 1,2,3,4"<<std::endl;
     int y[] = {1, 2, 3, 4};
     std::cout<<"output:"<<std::endl;
     permutation(y, 0, sizeof(y)/sizeof(int));
     
-    std::cout<<"String permutations with duplicates...."<<std::endl;
+    std::cout<<"String permutations with duplicates using recursion...."<<std::endl;
     std::cout<<"input: 1,2,2,4"<<std::endl;
     int z[] = {1, 2, 2, 4};
     std::cout<<"output:"<<std::endl;
     permutationWithDuplicate(z, 0, sizeof(z)/sizeof(int));
     
+    std::cout<<"String permutations with duplicates using none-recursion...."<<std::endl;
+    std::cout<<"input: 1,2,2,4"<<std::endl;
+    std::cout<<"output:"<<std::endl;
+    while(permutationNext(z, sizeof(z)/sizeof(int)))
+    {
+        printArray(z, sizeof(z)/sizeof(int));
+    }
     
     
 }
