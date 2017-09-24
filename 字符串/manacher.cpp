@@ -2,8 +2,6 @@
 //  manacher.cpp
 //  algo
 //
-//  Created by Siqiao on 2017/9/24.
-//  Copyright © 2017年 Siqiao. All rights reserved.
+//  Created on 2017/9/24.
 //
 
-#include "manacher.hpp"
