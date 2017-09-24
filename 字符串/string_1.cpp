@@ -246,24 +246,14 @@ bool permutationNext(int* x, int iLen)
     
     // 在[i+1, iLen）中查找比x[i]大的最小的数
     int j = iLen - 1;
-    int iPivotIndex = 0;
-    int iPivot = x[i];
-    while(j > i)
+    while(x[j] <= x[i])
     {
-        if(x[j] >= x[i])
-        {
-            if(iPivot > x[j])
-            {
-                iPivot = x[j];
-                iPivotIndex = j;
-            }
-        }
         j--;
     }
     
     
     // 交换
-    std::swap(x[i], x[iPivotIndex]);
+    std::swap(x[i], x[j]);
     
     // 翻转
     reverse(x+i+1, x+iLen-1);
