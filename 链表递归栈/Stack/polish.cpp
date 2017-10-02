@@ -68,7 +68,7 @@ bool isMultDiv(char s)
 
 
 
-char* convertToReversePolish(char* infix, int iLen)
+char* convertToReversePolish(char* infix, int iLen, int* iOutLen)
 {
     char* reversePolishExpression = new char[iLen];
     std::stack<char> s;
@@ -98,45 +98,45 @@ char* convertToReversePolish(char* infix, int iLen)
             else
             {
                 topOperator = s.top();
-                if(priority[topOperator] < priority[infix[i]] || topOperator == '(')
+                if((priority[topOperator] < priority[infix[i]]) && infix[i] != ')')
                 {
                     // 栈顶优先级低 =》 入栈
                     s.push(infix[i]);
+                }
+                else if(infix[i] == ')')
+                {
+                    // 当栈外是右括号时，不断出栈 =》 直至左括号出栈
+                    while(topOperator != '(')
+                    {
+                        s.pop();
+                        reversePolishExpression[j] = topOperator;
+                        j++;
+                        topOperator = s.top();
+                    }
+                    s.pop();
+                    
                 }
                 else
                 {
                     while(priority[topOperator] >= priority[infix[i]])
                     {
                         
-                        if(topOperator == '(' && infix[i] == ')')
-                        {
-                            s.pop();
-                            break;
-                        }
-                        if (priority[topOperator] == priority[infix[i]])
-                        {
-                            // 栈顶和外部外优先级一样 =》 互换
-                            s.pop();
-                            s.push(infix[i]);
-                            reversePolishExpression[j] = topOperator;
-                            j++;
-                            break;
-                        }
-                        else
+                        
+                        if(topOperator != '(')
                         {
                             // 栈顶优先级高 =》 出栈
                             s.pop();
-                            if(topOperator != '(')
-                            {
-                                reversePolishExpression[j] = topOperator;
-                                j++;
-                            }
-                            
+                            reversePolishExpression[j] = topOperator;
+                            j++;
                         }
+                        else
+                            break;
+                        
                         if(s.empty())
                             break;
                         topOperator = s.top();
                     }
+                    s.push(infix[i]);
                 }
             }
         }
@@ -156,7 +156,8 @@ char* convertToReversePolish(char* infix, int iLen)
         reversePolishExpression[j] = topOperator;
         j++;
     }
-        
+    
+    (*iOutLen) = j;
     return reversePolishExpression;
 }
 
@@ -179,9 +180,10 @@ int main()
     std::cout<<calcReversePolish(reversePolish, sizeof(reversePolish)/sizeof(char))<<std::endl;
     
     std::cout<<"convert a+b*c+(d*e+f)*g to reverse polish expression of:"<<std::endl;
+    int iPolishLen = 0;
     char infix[] = {'a', '+', 'b', '*', 'c', '+', '(', 'd', '*', 'e', '+', 'f', ')', '*', 'g'};
-    char* polish = convertToReversePolish(infix, sizeof(infix)/sizeof(char));
-    printCharArray(polish, sizeof(polish)/sizeof(char));
+    char* polish = convertToReversePolish(infix, sizeof(infix)/sizeof(char), &iPolishLen);
+    printCharArray(polish, iPolishLen);
     
     return 0;
 }
