@@ -19,6 +19,8 @@ struct TreeNode
     ElementType Element;
     SearchTree Left;
     SearchTree Right;
+    TreeNode(ElementType Element_): Element(Element_), Left(NULL), Right(NULL){};
+    TreeNode(){};
 };
 
 
@@ -71,7 +73,14 @@ Position findMax(SearchTree T)
 
 SearchTree insert(ElementType X, SearchTree T)
 {
-    // TODO
+    if(!T)
+    {
+        T = new TreeNode(X);
+    }
+    if(X > T->Element)
+        return insert(X, T->Right);
+    else if (X < T->Element)
+        return insert(X, T->Left);
     return T;
 }
 
