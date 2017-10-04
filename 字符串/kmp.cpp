@@ -67,6 +67,41 @@ int* calcNext(char* pattern)
 }
 
 
+int* calcNext2(char* pattern)
+{
+    size_t iLen = strlen(pattern);
+    int* next = new int[iLen];
+    next[0] = -1;
+    int j = 1;
+    int k = -1;;
+    while(j < iLen - 1)
+    {
+        // k即是next[j-1], p[k]表示前缀， p[j]表示后缀
+        if(k == - 1 || pattern[k] == pattern[j])
+        {
+            k++;
+            j++;
+            if(pattern[k] == pattern[j])
+            {
+                next[j] = next[k];
+            }
+            else
+            {
+                next[j] = k;
+            }
+        }
+        else
+        {
+            k = next[k];
+        }
+    }
+    
+    return next;
+}
+
+
+
+
 void printArray(int* array, int iLen)
 {
     for(int i = 0; i < iLen; i++)
@@ -91,7 +126,8 @@ int KMP(char* text, char* pattern)
         }
         else
         {
-            j = calcNext(pattern)[j];
+            //j = calcNext(pattern)[j];
+            j = calcNext2(pattern)[j];
         }
         if(j == iLenPattern)
             return (i - (int)iLenPattern);
