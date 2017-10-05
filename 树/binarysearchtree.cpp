@@ -77,7 +77,6 @@ Position FindMin(SearchTree T)
 }
 
 
-
 /* 使用递归方法：在二叉查找树中查找最大元素 */
 Position FindMax(SearchTree T)
 {
@@ -90,6 +89,7 @@ Position FindMax(SearchTree T)
 }
 
 
+/* 使用递归方法：在二叉查找树中插入元素 */
 SearchTree Insert(ElementType X, SearchTree T)
 {
     if(!T) // 如果T不存在，那么创建一个单结点树
@@ -105,6 +105,8 @@ SearchTree Insert(ElementType X, SearchTree T)
 }
 
 
+
+/* 使用递归方法：在二叉查找树中删除元素 */
 SearchTree Delete(ElementType X, SearchTree T)
 {
     Position Temp = NULL;
