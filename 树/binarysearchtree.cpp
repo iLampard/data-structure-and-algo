@@ -9,10 +9,11 @@
 #include <stdio.h>
 
 
-
 typedef struct TreeNode *Position;
 typedef struct TreeNode *SearchTree;
 typedef int ElementType;
+typedef void (*VISIT)(ElementType element);
+
 
 struct TreeNode
 {
@@ -30,7 +31,10 @@ Position FindMin(SearchTree T);
 Position FindMax(SearchTree T);
 SearchTree Insert(ElementType X, SearchTree T);
 SearchTree Delete(ElementType X, SearchTree T);
-
+void InOrderTraverse(SearchTree T, VISIT visit);
+void PreOrderTraverse(SearchTree T, VISIT visit);
+void PostOrderTraverse(SearchTree T, VISIT visit);
+void InPre2PostOrder(char* pInOrder, char* pPreOrder, char** pPostOrder, int* iPostOrder);
 
 int main()
 {
@@ -135,6 +139,42 @@ SearchTree Delete(ElementType X, SearchTree T)
     }
     
     return T;
+}
+
+
+/* 中序遍历 */
+void InOrderTraverse(SearchTree T, VISIT visit)
+{
+    if(T)
+    {
+        InOrderTraverse(T->Left, visit);
+        visit(T->Element);
+        InOrderTraverse(T->Right, visit);
+    }
+}
+
+
+/* 前序遍历 */
+void PreOrderTraverse(SearchTree T, VISIT visit)
+{
+    if(T)
+    {
+        visit(T->Element);
+        PreOrderTraverse(T->Left, visit);
+        PreOrderTraverse(T->Right, visit);
+    }
+}
+
+
+/* 后序遍历 */
+void PostOrderTraverse(SearchTree T, VISIT visit)
+{
+    if(T)
+    {
+        PostOrderTraverse(T->Left, visit);
+        PostOrderTraverse(T->Right, visit);
+        visit(T->Element);
+    }
 }
 
 
