@@ -35,6 +35,10 @@ void InOrderTraverse(SearchTree T, VISIT visit);
 void PreOrderTraverse(SearchTree T, VISIT visit);
 void PostOrderTraverse(SearchTree T, VISIT visit);
 void InPre2PostOrder(char* pInOrder, char* pPreOrder, char** pPostOrder, int* iPostOrder);
+void InPost2PreOrder(char* pInOrder, char* pPostOrder, int iLen, char** pPreOrder, int* iPreOrder)
+bool FeasiblePostOrder(int* pPostOrder, int iLen)
+
+
 
 int main()
 {
@@ -176,5 +180,106 @@ void PostOrderTraverse(SearchTree T, VISIT visit)
         visit(T->Element);
     }
 }
+
+
+/* 已知前序和中序遍历序列，求对应的后序遍历序列 */
+void InPre2PostOrder(char* pInOrder, char* pPreOrder, int iLen, char** pPostOrder, int* iPostOrder)
+{
+    if(iLen == 0)
+    {
+        (*pPostOrder) = NULL;
+        return;
+    }
+        
+    if(iLen == 1)  // 如果前序和中序只有一个字符，那么说明该字符属于根结点
+    {
+        (*pPostOrder)[0] = *pPreOrder; // 此种情况下， 前序和中序等价
+        (*iPostOrder)++;
+        return;
+    }
+    int i = 0;
+    char root = *pPreOrder;  // 根结点字符
+    for(; i < iLen; i++)
+    {
+        if(root == pInOrder[i]) // 找到中序中的根结点，把中序序列分成两部分，对应左右子树的结点
+            break;
+    }
+    
+    // 对左右子树分别递归
+    // 中序 => 左子树中序 [pInOrder, pInOrder+i-1], 右子树[pInOrder+i+1, pInOrder+iLen]
+    // 前序 => 左子树前序 [pPreOrder+1, pPreOrder+i], 右子树[pPreOrder+i+1, pPreOrder+iLen]
+    InPre2PostOrder(pInOrder, pPreOrder+1, i, pPostOrder, iPostOrder); 
+    InPre2PostOrder(pInOrder+i+1, pPreOrder+i+1, iLen-i-1, pPorstOrder, iPostOrder)；
+    // 给根结点赋值
+    (*pPostOrder)[iPostOrder] = root;
+    iPostOrder++; 
+}
+
+
+
+/* 已知中序和后序遍历序列，求对应的前序遍历序列 */
+void InPost2PreOrder(char* pInOrder, char* pPostOrder, int iLen, char** pPreOrder, int* iPreOrder)
+{
+    if(iLen == 0)
+    {
+        (*pPreOrder) = NULL;
+        return;
+    }
+        
+    if(iLen == 1)  // 如果中序和后序只有一个字符，那么说明该字符属于根结点
+    {
+        (*pPreOrder)[0] = *pPostOrder; // 此种情况下， 中序和后序等价
+        (*iPreOrder)++;
+        return;
+    }
+
+    int i = 0;
+    char root = pPostOrder[iLen-1];  // 根结点字符
+    for(; i < iLen; i++)
+    {
+        if(root == pInOrder[i]) // 找到中序中的根结点，把中序序列分成两部分，对应左右子树的结点
+            break;
+    }
+    
+    // 给根结点赋值
+    (*pPreOrder)[iPreOrder] = root;
+    iPreOrder++;
+    // 对左右子树分别递归
+    // 中序 => 左子树中序 [pInOrder, pInOrder+i-1], 右子树[pInOrder+i+1, pInOrder+iLen]
+    // 后序 => 左子树前序 [pPostOrder, pPostOrder+i-1], 右子树[pPostOrder+i, pPostOrder+iLen-1]
+    InPre2PostOrder(pInOrder, pPostOrder, i, pPreOrder, iPreOrder); 
+    InPre2PostOrder(pInOrder+i+1, pPostOrder+i, iLen-i-1, pPreOrder, iPreOrder)；
+
+}
+
+
+/* 判断任意一个后序遍历序列是否是可行序列  */
+// 判断原理：由于后序遍历的最后一个元素为根结点，根据该结点，将数组分成前后两段，使得前半段都小于根结点，后半段都大于根结点；
+// 如果不存在这样的划分，则不可能是后序遍历的结果
+bool FeasiblePostOrder(int* pPostOrder, int iLen)
+{
+    if(iLen <= 1)
+        return true;
+
+    int root = pPostOrder[iLen-1];
+    int i,j;
+    for(i = 0; i <= iLen-2; i++) //从最左端开始找到大于root的第一个数
+    {
+        if(pPostOrder[i] > root)
+            break;
+    }
+    for(j = iLen-2; j >= 0; j--) //从最右端开始找到小于root的第一个数
+    {
+        if(pPostOrder[j] < root)
+            break;
+    }
+
+    if(i != j+1)
+        return false;  // 此时意味着无法根据root把序列分成两部分
+
+    return FeasiblePostOrder(pPostOrder, i) //左子树
+    && FeasiblePostOrder(pPostOrder+i, iLen-i-1); // 右子树
+}
+
 
 
