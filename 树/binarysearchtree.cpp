@@ -51,13 +51,14 @@ void PrintElement(ElementType X);
 void TraverseExample();
 void InPre2PostOrderExample();
 void InPost2PreOrderExample();
-
+void CheckPostOrderExample();
 
 int main()
 {
     TraverseExample();
     InPre2PostOrderExample();
     InPost2PreOrderExample();
+    CheckPostOrderExample();
     
     return 0;
 }
@@ -403,6 +404,7 @@ void InPre2PostOrderExample()
     delete[] pPostOrder;
 }
 
+
 /* 创建一个已知前序中序，求后序序列的例子 */
 void InPost2PreOrderExample()
 {
@@ -418,4 +420,14 @@ void InPost2PreOrderExample()
     delete[] pPreOrder;
 }
 
+
+
+/* 创建一个检查后序序列是否可行的例子 */
+void CheckPostOrderExample()
+{
+    std::cout<<"示例：检查后序序列是否可行"<<std::endl;
+    int array[] = {1, 2, 5, 4, 3};
+    bool result = FeasiblePostOrder(array, sizeof(array)/sizeof(int));
+    std::cout<<result<<std::endl;
+}
 
