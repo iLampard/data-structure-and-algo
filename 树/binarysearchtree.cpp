@@ -52,6 +52,8 @@ void TraverseExample();
 void InPre2PostOrderExample();
 void InPost2PreOrderExample();
 void CheckPostOrderExample();
+void ReverseBinaryTreeExample();
+
 
 int main()
 {
@@ -59,7 +61,7 @@ int main()
     InPre2PostOrderExample();
     InPost2PreOrderExample();
     CheckPostOrderExample();
-    
+    ReverseBinaryTreeExample();
     return 0;
 }
 
@@ -342,7 +344,7 @@ bool LargestBinarySearchTree(SearchTree T,   // 输入的整棵二叉树
 void Reverse(SearchTree *T)
 {
     
-    if(!T)
+    if(*T)
     {
         std::swap((*T)->Left, (*T)->Right);
         Reverse(&(*T)->Left);
@@ -431,3 +433,34 @@ void CheckPostOrderExample()
     std::cout<<result<<std::endl;
 }
 
+
+/* 创建一个二叉树翻转的例子    */
+void ReverseBinaryTreeExample()
+{
+    std::cout<<"示例：二叉树翻转"<<std::endl;
+    SearchTree T = NULL;
+    int element[] = {0, 24, 34, 41, 58, 67, 69, 78};
+    int iLen = sizeof(element)/sizeof(int);
+    /* 创建一棵二叉搜索树 */
+    T = CreateTree(element, iLen);
+    std::cout<<"翻转前中序遍历序列为"<<std::endl;
+    InOrderTraverse(T, PrintElement);
+    Reverse(&T);
+    std::cout<<"翻转后中序遍历序列为"<<std::endl;
+    InOrderTraverse(T, PrintElement);
+    
+}
+
+
+/* 创建一个最大二叉搜索树的例子    */
+void LargestBinaryTreeExample()
+{
+    std::cout<<"示例：最大二叉搜索树"<<std::endl;
+    SearchTree T = NULL;
+    int element[] = {0, 24, 34, 41, 58, 67, 69, 78};
+    int iLen = sizeof(element)/sizeof(int);
+    /* 创建一棵二叉搜索树 */
+    T = CreateTree(element, iLen);
+    
+    
+}
