@@ -53,6 +53,7 @@ void InPre2PostOrderExample();
 void InPost2PreOrderExample();
 void CheckPostOrderExample();
 void ReverseBinaryTreeExample();
+void LargestBinaryTreeExample();
 
 
 int main()
@@ -62,6 +63,7 @@ int main()
     InPost2PreOrderExample();
     CheckPostOrderExample();
     ReverseBinaryTreeExample();
+    LargestBinaryTreeExample();
     return 0;
 }
 
@@ -462,5 +464,18 @@ void LargestBinaryTreeExample()
     /* 创建一棵二叉搜索树 */
     T = CreateTree(element, iLen);
     
+    int iMinElement; // 二叉树T的最小结点值
+    int iMaxElement;  // 二叉树T的最大结点值
+    int iNbNode;   // 二叉搜索树的结点数总和
+    int iMaxNbNode = 0; // 保存的最大二叉搜索树的结点数总和
+    Position pNode; // 最大二叉搜索树的根结点
+    
+    bool found = LargestBinarySearchTree(T, &iMinElement, &iMaxElement, &iNbNode, &iMaxNbNode, &pNode);
+    
+    if(found)
+    {
+        std::cout<<"最大二叉搜索树的根结点的元素为"<<std::endl;
+        std::cout<<pNode->Element;
+    }
     
 }
