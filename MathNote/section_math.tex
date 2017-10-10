@@ -25,8 +25,34 @@
 
 
 \begin{exe}
-假设x,y,z均为整数，若$11|(7x+2y-5z)$，求证$11|3x-7y+12z$。
+假设x,y,z均为整数，若$11|\prt{7x+2y-5z}$，求证$11|\prt{3x-7y+12z}$。
 \end{exe}
 
 \begin{ans}
 \end{ans}
+\begin{proof}
+令$3x-7y+12z = m\prt{7x+2y-5z} + 11\prt{ax+by+cz } $， 其中$m,a,b,c$均为整数。
+
+如果等式要成立，则两边$x,y,z$的系数均要相等，得到
+
+
+\begin{eqnarray}
+\left\{
+	\begin{aligned}
+	7m+11a = 3 \\
+	2m+11b = -7 \\
+	-5m+11c = 12
+	\end{aligned}
+\right.
+\end{eqnarray}
+
+可知其中的一个解为$m=2, a=-1, b=-1, c=2$。 
+
+故可以得到$3x-7y+12z = 2\prt{7x+2y-5z} + 11\prt{-1x-1y+2z } $。 即$\prt{3x-7y+12z}$可以分解为$11$与$\prt{7x+2y-5z}$的加权之和。
+
+又因为$11|\prt{7x+2y-5z}$，以及$11|11$，故根据整除性的组合性质，$11|\prt{3x-7y+12z}$。
+
+
+\end{proof}
+
+
