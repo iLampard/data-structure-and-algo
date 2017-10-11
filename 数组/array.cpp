@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-／*  二分法搜索     *／
+/*  二分法搜索     */
 int binarySearch(int* array, int iLen, int iTarget)
 {
 	int iBegin = 0;
