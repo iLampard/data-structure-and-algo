@@ -9,9 +9,32 @@
 关于算法的复杂度本文使用如下定义
 
 \begin{enumerate}
-\item 如果存在正常数$c$和$n_0$，使得当$N \ge n_0$时， 都有$T(N) \le cf(N)$，则记为$ T(N) = \bigo(f(N))$。
-\item 如果存在正常数$c$和$n_0$，使得当$N \ge n_0$时， 都有$T(N) \ge cg(N)$，则记为$ T(N) = \Om(g(N))$。
-\item $ T(N) = \Th(h(N))$ 当且仅当$T(N) = \bigo(h(N))$且$T(N) = \Om(h(N))$。
-\item 如果$ T(N) = \bigo(p(N))$ 且$T(N) \neq \Th(p(N))$，则$T(N) = (p(N))$。
+\item 如果对于所有足够大的$n$，$T(N)$的上界由$f(N)$的常数倍决定，也就是说，如果存在正常数$c$和$n_0$，使得当$N \ge n_0$时， 都有$T(N) \le cf(N)$，则记为$ T(N) = \bigo(f(N))$。
+\item 对于所有足够大的$n$，$T(N)$的下界由$g(N)$的常数倍决定， 也就是说，如果存在正常数$c$和$n_0$，使得当$N \ge n_0$时， 都有$T(N) \ge cg(N)$，则记为$ T(N) = \Om(g(N))$。
+\item 如果对于所有足够大的$n$，$T(N)$的上界和下界由$h(N)$的常数倍决定，也就是说，如果存在正常数$c_1,c_2$和$n_0$，使得当$N \ge n_0$时， 都有$c_1 g(N) \le T(N) \le c_2 g(N)$，则记为$ T(N) = \Th(g(N))$。
+\item 如果$ T(N) = \bigo(p(N))$ 且$T(N) \neq \Th(p(N))$，则$T(N) = o(p(N))$。
 \end{enumerate}
 \end{definition}
+
+
+\subsection{算法复杂度的性质}
+
+
+\begin{theorem}
+如果$T_{1}(N) = \bigo(f(N))$且$T_{2}(N) = \bigo(g(N))$， 那么
+	\begin{itemize}
+	\item $T_{1}(N) + T_{2}(N) = \max \prt{\bigo(f(N)) + \bigo(g(N)) }$ 。
+	\item $T_{1}(N) T_{2}(N) =\bigo \prt{f(N)g(N)} $。
+	\end{itemize}
+\end{theorem}
+
+
+\begin{proof}
+
+\end{proof}
+
+
+\begin{theorem}
+\item 对于任意常数$k$， $\log^kN = \bigo(N)$。该条定理说明对数增长非常缓慢。
+\end{theorem}
+
