@@ -1,10 +1,7 @@
 \section{算法分析}
 
 
-
-
 \subsection{算法复杂度的数学定义}
-
 \begin{definition}
 关于算法的复杂度本文使用如下定义
 
@@ -16,10 +13,7 @@
 \end{enumerate}
 \end{definition}
 
-
 \subsection{算法复杂度的性质}
-
-
 \begin{theorem}
 如果$T_{1}(N) = \bigo(f(N))$且$T_{2}(N) = \bigo(g(N))$， 那么
 	\begin{itemize}
@@ -37,4 +31,60 @@
 \begin{theorem}
 \item 对于任意常数$k$， $\log^kN = \bigo(N)$。该条定理说明对数增长非常缓慢。
 \end{theorem}
+
+
+\subsection{复杂度方程的解法}
+\begin{lemma}
+假设定义在非负整数上的函数$f(n),g(n)$满足关系$f(n) = af(\frac{n}{b})+g(n)$， 其中实数$a\ge 1$，整数$b>1, n >0, k >0$且$n=b^k$，则有
+\begin{eqnarray*}
+f(n) = a^kf(1) + \sum_{j=1}^{k-1} a^j g(\frac{n}{b^j})
+\end{eqnarray*} 
+\end{lemma}
+
+\begin{proof}
+由$f(n),g(n)$的关系联立得到$k$个等式
+\begin{eqnarray*}
+f(n) &=& af(\frac{n}{b})+g(n) \\
+f(\frac{n}{b}) &=& af(\frac{n}{b^2})+g(\frac{n}{b}) \\
+&...& \\
+f(b) &=& af(1)+g(b) \\
+\end{eqnarray*} 
+
+对这$k$个等式依次两边分别乘以$1, a, a^1,...a^{k-1}$，再求和，消去相等的项，得到
+\begin{eqnarray*}
+f(n)  = a^kf(1) + \sum_{j=1}^{k-1} a^j g(\frac{n}{b^j})
+\end{eqnarray*} 
+
+\end{proof}
+
+
+\begin{theorem}[Master Theorem]\mbox{}\par
+$T(N)$是定义在非负整数的函数，满足
+\begin{eqnarray*}
+T(N) = aT(\frac{N}{b}) + cN^k
+\end{eqnarray*} 
+其中实数$a\ge 1$，整数$b>1, N >0, k >0$且$N=b^k$, 则
+
+\begin{eqnarray*}
+T(N) = \begin{cases}
+\bigo{(N^{\log_b a})} \quad a>b^k\\
+\bigo{(N^k\log N)} \quad a=b^k \\
+\bigo{(N^k)} \quad\quad a<b^k\\
+\end{cases}
+\end{eqnarray*} 
+
+\begin{proof}
+
+\end{proof}
+
+
+
+
+
+
+
+
+
+\end{theorem}
+
 
