@@ -70,7 +70,8 @@ bool isMultDiv(char s)
 
 char* convertToReversePolish(char* infix, int iLen, int* iOutLen)
 {
-    char* reversePolishExpression = new char[iLen];
+    //char* reversePolishExpression = new char[iLen];
+    char* reversePolishExpression;
     std::stack<char> s;
     std::map<char, int> priority;
     int i = 0;
