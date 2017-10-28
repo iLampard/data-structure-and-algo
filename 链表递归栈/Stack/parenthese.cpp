@@ -63,4 +63,48 @@ bool ParentheseStringMatch(char *p)
 
 
 /* 给定字符串，其仅包含左括号和右括号，找出最长匹配的括号子串 */
+/* 解法：*/
+/* 从前向后扫描字符串，遇到左括号x，就压栈，遇到右括号，
+   如果栈为空，字符串不匹配, 记录当前位置，为下一次匹配做准备 
+   如果栈不空，出栈，
+       如果此时栈为空，说明 i - start 为当前的匹配长度， 与储存的最长值做比较
+       如果此时栈不为空，说明 i - 栈顶元素对应的位置，为当前的匹配长度， 与储存的最长值做比较*/
+int LongestParenthese(char *p)
+{
+    int size = (int)strlen(p);
+    int length = 0;
+    int start = -1;
+    std::stack<int> s;  // 记录左括号位置的栈
+    
+    for(int i = 0; i < size; i++)
+    {
+        if(p[i] == '(') // 如果是左括号，入栈
+            s.push(p[i]);
+        else  // 如果是右括号
+        {
+            if(s.empty())
+                start = i;  // 如果是空栈，则从此处开始计数
+            else
+            {
+                s.pop();
+                if(s.empty())
+                    length = std::max(length, i - start);  // 如果此时是空栈，则 i-start 与保存的最长值比较
+                else
+                    length = std::max(length, i - s.top()); // 如果此时不是空栈，则s.top()是上次匹配的最后位置
+            }
+        }
+    }
+    
+    return length;
+}
+
+
+int main()
+{
+    char p[] = "()(())";
+    std::cout<<LongestParenthese(p);
+    std::cout<<ParentheseStringMatch(p);
+    return 0;
+}
+
 
