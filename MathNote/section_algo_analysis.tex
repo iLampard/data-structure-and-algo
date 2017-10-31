@@ -94,14 +94,14 @@ T(N) = \begin{cases}
 
 \begin{eqnarray}
 T(N) &=& a^mT(1) + c\sum_{j=0}^{m-1} a^j \left( \frac{N}{b^j}\right)^k \nonumber \\
-&=& a^{\log_{b} N}T(1) +  cN^k\sum_{j=0}^{\log_{b} N-1}  \left( \frac{a^j}{b^{jk}}\right)
+&=& a^{\log_{b} N}T(1) +  cN^k\sum_{j=0}^{\log_{b} N-1}  \left( \frac{a}{b^{k}}\right)^j
 \label{Master_theorem_T_base_formula}
 \end{eqnarray}
 
 
 当$a=b^k$, 公式(\ref{Master_theorem_T_base_formula})等价于
 \begin{eqnarray*}
-&&b^{k\log_{b} N}T(1) +  cN^k\sum_{j=0}^{\log_{b} N-1}  \left( \frac{b^{jk}}{b^{jk}}\right) \\
+&&b^{k\log_{b} N}T(1) +  cN^k\sum_{j=0}^{\log_{b} N-1}  \left( \frac{b^{k}}{b^{k}}\right)^j \\
 &=&\left(b^{\log_{b} N}\right)^kT(1) +cN^k\log_{b} N \\
 &=& N^kT(1) + +cN^k\log_{b} N
 \end{eqnarray*}
