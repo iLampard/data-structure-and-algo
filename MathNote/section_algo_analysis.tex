@@ -111,6 +111,42 @@ T(N) &=& a^mT(1) + c\sum_{j=0}^{m-1} a^j \left( \frac{N}{b^j}\right)^k \nonumber
 T(N) = \bigo(N^k \log_{b} N ) = \bigo(N^k \log N)
 \end{eqnarray*}
 
+
+
+当$a\ne b^k$时,
+\begin{eqnarray}
+T(N) &=& a^{\log_{b} N}T(1) + c\sum_{j=0}^{\log_{b} N-1}\left( \frac{a}{b^k}\right)^jN^k \nonumber \\
+&=& a^{\log_{b} N}T(1) + cN^k \frac{\frac{a}{b^k}\left[1-\left(\frac{a}{b^k}\right)^{\log_{b} {N}-1}\right]}{1-\frac{a}{b^k}} \nonumber \\
+&=& a^{\log_{b} N}T(1) + \frac{cN^k\left[a-\frac{a^{\log_{b}N}}{b^{k\left(\log_{b}N-1\right)}}\right]}{b^k-a} \nonumber \\
+&=& a^{\log_{b} N}T(1) + \frac{cN^k}{b^k-a}\left(a-\frac{a^{\log_{b} N} b^k}{b^{k\log_{b}N}}\right) \nonumber\\
+&=& a^{\log_{b} N}T(1) + \frac{acN^k}{b^k-a} - \frac{cN^ka^{\log_{b}N}b^k}{\left(b^k-a\right)b^{k\log_{b}N}} 
+\label{Master_theorem_T_dev_formula}
+\end{eqnarray}
+
+根据换底公式可知$a^{\log_{b}N} = N^{\log_{b}a}$ ，故公式(\ref{Master_theorem_T_dev_formula})第一项等价于 $N^{\log_{b}a}T(1)$。
+
+进一步化简公式(\ref{Master_theorem_T_dev_formula})第三项可得
+\begin{eqnarray*}
+\frac{cN^k a^{\log_{b}N}b^k}{\left(b^k - a\right) b^{k \log_{b}N}} = \frac{cN^k N^{\log_{b}a}b^k}{\left(b^k - a\right) N^k} = \frac{cb^k N^{\log_{b}a}}{b^k - a}
+\end{eqnarray*}
+
+所以公式(\ref{Master_theorem_T_dev_formula})可化简为
+\begin{eqnarray*}
+T(N) &=& N^{\log_{b}a}T(1) + \frac{acN^k}{b^k -a} - \frac{cb^k N^{\log_{b}a}}{b^k -a} \\
+&=& N^{\log_{b}a} \left( T(1) - \frac{cb^k}{b^k -a} \right) + N^k \left(\frac{ac}{b^k -a}\right)
+\end{eqnarray*}
+
+当$a<b^k$ ，$\log_{b}a < \log_{b}{b^k} = k$ 
+\begin{eqnarray*}
+T(N) = \bigo\prt{N^k \left(\frac{ac}{b^k-a}\right)} = \bigo(N^k)
+\end{eqnarray*}
+
+当$a>b^k$ ， $\log_{b}a > \log_{b}{b^k} = k$ 
+\begin{eqnarray*}
+T(N) = \bigo\prt{N^{\log_{b}a} \left(T(1) - \frac{cb^k}{b^k-a}\right)}= \bigo(N^{\log_{b}a})
+\end{eqnarray*}
+
+
 \end{proof}
 
 
