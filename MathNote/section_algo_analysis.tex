@@ -1,6 +1,19 @@
 \section{算法分析}
 
 
+
+\fontsize{9}{11}
+\selectfont
+
+[主定理的证明，http://blog.csdn.net/u014627430/article/details/53510696]
+
+[Mark Allen Weiss, 数据结构与算法分析，第十章]
+
+
+\fontsize{10}{11}
+\selectfont
+\vspace{0.5cm}
+
 \subsection{算法复杂度的数学定义}
 \begin{definition}
 关于算法的复杂度本文使用如下定义
@@ -20,6 +33,7 @@
 	\item $T_{1}(N) + T_{2}(N) = \max \prt{\bigo(f(N)) + \bigo(g(N)) }$ 。
 	\item $T_{1}(N) T_{2}(N) =\bigo \prt{f(N)g(N)} $。
 	\end{itemize}
+\label{theorem_property_1}
 \end{theorem}
 
 
@@ -39,6 +53,7 @@
 \begin{eqnarray*}
 f(n) = a^kf(1) + \sum_{j=1}^{k-1} a^j g(\frac{n}{b^j})
 \end{eqnarray*} 
+\label{lemma_f_n_solution}
 \end{lemma}
 
 \begin{proof}
@@ -52,7 +67,7 @@ f(b) &=& af(1)+g(b) \\
 
 对这$k$个等式依次两边分别乘以$1, a, a^1,...a^{k-1}$，再求和，消去相等的项，得到
 \begin{eqnarray*}
-f(n)  = a^kf(1) + \sum_{j=1}^{k-1} a^j g(\frac{n}{b^j})
+f(n)  = a^kf(1) + \sum_{j=0}^{k-1} a^j g(\frac{n}{b^j})
 \end{eqnarray*} 
 
 \end{proof}
@@ -63,7 +78,7 @@ $T(N)$是定义在非负整数的函数，满足
 \begin{eqnarray*}
 T(N) = aT(\frac{N}{b}) + cN^k
 \end{eqnarray*} 
-其中实数$a\ge 1$，整数$b>1, N >0, k >0$且$N=b^k$, 则
+其中$a, k$为实数， $b$为整数，且$a\ge 1, b>1$, 另外满足$N=b^m, m$为整数, 则
 
 \begin{eqnarray*}
 T(N) = \begin{cases}
@@ -74,6 +89,27 @@ T(N) = \begin{cases}
 \end{eqnarray*} 
 
 \begin{proof}
+
+根据引理(\ref{lemma_f_n_solution})可知
+
+\begin{eqnarray}
+T(N) &=& a^mT(1) + c\sum_{j=0}^{m-1} a^j \left( \frac{N}{b^j}\right)^k \nonumber \\
+&=& a^{\log_{b} N}T(1) +  cN^k\sum_{j=0}^{\log_{b} N-1}  \left( \frac{a^j}{b^{jk}}\right)
+\label{Master_theorem_T_base_formula}
+\end{eqnarray}
+
+
+当$a=b^k$, 公式(\ref{Master_theorem_T_base_formula})等价于
+\begin{eqnarray*}
+&&b^{k\log_{b} N}T(1) +  cN^k\sum_{j=0}^{\log_{b} N-1}  \left( \frac{b^{jk}}{b^{jk}}\right) \\
+&=&\left(b^{\log_{b} N}\right)^kT(1) +cN^k\log_{b} N \\
+&=& N^kT(1) + +cN^k\log_{b} N
+\end{eqnarray*}
+
+根据定理(\ref{theorem_property_1})算法的复杂度由具有较大增长次数的部分决定， 那么
+\begin{eqnarray*}
+T(N) = \bigo(N^k \log_{b} N ) = \bigo(N^k \log N)
+\end{eqnarray*}
 
 \end{proof}
 
