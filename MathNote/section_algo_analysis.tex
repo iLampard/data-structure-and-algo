@@ -30,7 +30,7 @@
 \begin{theorem}
 如果$T_{1}(N) = \bigo(f(N))$且$T_{2}(N) = \bigo(g(N))$， 那么
 	\begin{itemize}
-	\item $T_{1}(N) + T_{2}(N) = \max \prt{\bigo(f(N)) + \bigo(g(N)) }$ 。
+	\item $T_{1}(N) + T_{2}(N) = \bigo \prt{\max\{f(N), g(N) \}}$ 。
 	\item $T_{1}(N) T_{2}(N) =\bigo \prt{f(N)g(N)} $。
 	\end{itemize}
 \label{theorem_property_1}
@@ -38,6 +38,17 @@
 
 
 \begin{proof}
+因为$T_{1}(N) = \bigo(f(N))$，则存在正常数$c_1$和$n_1$，使得当$N \ge n_1$时， 都有$T_{2}(N) \le c_1f(N)$；又因为$T_{2}(N) = \bigo(g(N))$， 同理存在正常数$c_2$和$n_2$，使得当$N \ge n_2$时， 都有$T(N) \le c_2g(N)$。
+
+令$n=\max\{n_1, n_2\}$， 故当$N \ge n$时， 都有
+\begin{eqnarray*}
+T_{1}(N) + T_{2}(N) &\le& c_1f(N) + c_2g(N) \\
+&\le& \max\{c_1, c_2\}\prt{f(N) + g(N)} \\
+&\le&2 \max \{c_1, c_2\} \max\{f(N), g(N) \}
+\end{eqnarray*}
+
+令$c=2 \max \{c_1, c_2\}$，则说明当$N \ge n$，都有$ T_{1}(N) + T_{2}(N)\le c \max\{f(N), g(N) \}$， 即$T_{1}(N) + T_{2}(N) = \bigo \prt{\max\{f(N), g(N) \}}$ 。
+
 
 \end{proof}
 
