@@ -7,6 +7,7 @@
 //
 
 #include <iostream>
+#include <string>
 
 
 /*  计算字符串长度  */
@@ -38,6 +39,23 @@ bool find_char(char **strings, char value)
 }
 
 
+/* 判断一个字符串中是否包含另一个字符串 */
+/* 把字符串a中所有的字符放入hash表，然后循环字符串b进行查找 */
+bool StringContain(std::string &a, std::string &b)
+{
+    int hash = 0;
+    
+    for(int i = 0; i < a.length(); i++)
+        hash |= (1 << (a[i] - 'A')); 
+    
+    for (int i = 0; i < b.length(); i++)
+    {
+        if((hash & (1 << (b[i] - 'A'))) == 0)
+            return false;
+    }
+    return true;
+}
+
 
 int main()
 {
@@ -45,6 +63,8 @@ int main()
     char* strings[2] = {"hello", "world"};
     std::cout<<"find w?"<<std::endl;
     std::cout<<find_char(strings, 'w')<<std::endl;
-    
+    std::string a = "ABCD";
+    std::string b = "CD";
+    std::cout<<StringContain(a, b)<<std::endl;
     return 0;
 }

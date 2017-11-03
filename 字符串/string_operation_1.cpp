@@ -16,20 +16,30 @@ void ReverseString(char* s, int from, int to);
 void LeftRotateString(char* s, int iLen, int iRotate);
 void LeftRotateExample();
 
+/* 最大公共子序列  */
+const char* LongestCommonSubsequence(char* s1, char* s2);
+void LCSExample();
+
+
+/* 字符串的全排列  */
+void Permutation(int* x, int iBegin, int iEnd);
+void PermutationExample();
+
+
+void printVector(std::vector<int> x);
+void printArray(int* x, int iLen);
+
 
 
 
 int main()
 {    
 
-    LeftRotateExample(); 
+    LeftRotateExample();
     
-    std::cout<<"Longest common subsequence...."<<std::endl;
-    std::cout<<"input: TCGGATCGACTT and AGCCTACGTA"<<std::endl;
-    char s1[] = "TCGGATCGACTT";
-    char s2[] = "AGCCTACGTA";
-    const char* str = longestCommonSubsequence(s1, s2);
-    std::cout<<"output:"<<str<<std::endl;
+    LCSExample();
+    
+    PermutationExample();
     
     std::cout<<"Longest increasing subsequence...."<<std::endl;
     std::cout<<"input: 1,4,5,6,2,3,8,9,10,11,12,12,1"<<std::endl;
@@ -37,12 +47,6 @@ int main()
     std::vector<int> lis = longestIncreasingSubsequenceMain(x, sizeof(x)/sizeof(int));
     std::cout<<"output:"<<std::endl;
     printVector(lis);
-    
-    std::cout<<"String permutations using recursion...."<<std::endl;
-    std::cout<<"input: 1,2,3,4"<<std::endl;
-    int y[] = {1, 2, 3, 4};
-    std::cout<<"output:"<<std::endl;
-    permutation(y, 0, sizeof(y)/sizeof(int));
     
     std::cout<<"String permutations with duplicates using recursion...."<<std::endl;
     std::cout<<"input: 1,2,2,4"<<std::endl;
@@ -101,7 +105,7 @@ void LeftRotateExample()
 
 
 // 最长公共子序列
-const char* longestCommonSubsequence(char* s1, char* s2)
+const char* LongestCommonSubsequence(char* s1, char* s2)
 {
     int iLen1 = strlen(s1);
     int iLen2 = strlen(s2);
@@ -147,6 +151,18 @@ const char* longestCommonSubsequence(char* s1, char* s2)
     
     reverse(s.begin(), s.end());
     return s.c_str();
+}
+
+
+void LCSExample()
+{
+    std::cout<<"Longest common subsequence...."<<std::endl;
+    std::cout<<"input: TCGGATCGACTT and AGCCTACGTA"<<std::endl;
+    char s1[] = "TCGGATCGACTT";
+    char s2[] = "AGCCTACGTA";
+    const char* str = LongestCommonSubsequence(s1, s2);
+    std::cout<<"output:"<<str<<std::endl;
+    
 }
 
 
@@ -233,8 +249,9 @@ void printArray(int* x, int iLen)
 }
 
 
-// 字符串的全排列
-void permutation(int* x, int iBegin, int iEnd)
+/*  字符串的全排列（无重复的情况） */
+/*  解法：选出一个作为排列的第一个字符，对剩下的部分进行全排列，如此递归  */
+void Permutation(int* x, int iBegin, int iEnd)
 {
     if(iBegin == iEnd)
     {
@@ -243,14 +260,25 @@ void permutation(int* x, int iBegin, int iEnd)
     }
     for(int i = iBegin; i < iEnd; i++)
     {
-        std::swap(x[iBegin], x[i]);
-        permutation(x, iBegin+1, iEnd);
-        std::swap(x[iBegin], x[i]);
+        std::swap(x[iBegin], x[i]);  // 选出一个字符放在第一位
+        Permutation(x, iBegin+1, iEnd); // 对剩下的部分进行全排列
+        std::swap(x[iBegin], x[i]);  // 再换回到原来的位置
     }
 }
 
 
-// 字符串的全排列（有重复的情况）
+void PermutationExample()
+{
+    std::cout<<"String permutations using recursion...."<<std::endl;
+    std::cout<<"input: 1,2,3,4"<<std::endl;
+    int y[] = {1, 2, 3, 4};
+    std::cout<<"output:"<<std::endl;
+    Permutation(y, 0, sizeof(y)/sizeof(int));
+}
+
+
+
+/* 字符串的全排列（有重复的情况）*/
 bool isDuplicate(int* x, int iBegin, int iEnd)
 {
     int i = iBegin;
