@@ -16,6 +16,7 @@ void ReverseString(char* s, int from, int to);
 void LeftRotateString(char* s, int iLen, int iRotate);
 void LeftRotateExample();
 
+
 /* 最大公共子序列  */
 const char* LongestCommonSubsequence(char* s1, char* s2);
 void LCSExample();
@@ -26,8 +27,20 @@ void Permutation(int* x, int iBegin, int iEnd);
 void PermutationExample();
 
 
-void printVector(std::vector<int> x);
-void printArray(int* x, int iLen);
+/* 实现STL的全排列函数（非递归方法）  */
+void reverse(int* from, int* to);
+bool NextPermutation(int* x, int iLen);
+void NextPermutationExample();
+
+
+/* 字符串的全排列（有重复的情况，递归方法）*/
+bool IsDuplicate(int* x, int iBegin, int iEnd);
+void PermutationWithDuplicate(int* x, int iBegin, int iEnd);
+void PermutationWithDuplicateExample();
+
+    
+void PrintVector(std::vector<int> x);
+void PrintArray(int* x, int iLen);
 
 
 
@@ -41,27 +54,18 @@ int main()
     
     PermutationExample();
     
+    PermutationWithDuplicateExample();
+    
+    NextPermutationExample();
+    
     std::cout<<"Longest increasing subsequence...."<<std::endl;
     std::cout<<"input: 1,4,5,6,2,3,8,9,10,11,12,12,1"<<std::endl;
     int x[] = {1, 4, 5, 6, 2, 3, 8, 9, 10, 11, 12, 12, 1};
-    std::vector<int> lis = longestIncreasingSubsequenceMain(x, sizeof(x)/sizeof(int));
+    std::vector<int> lis = LongestIncreasingSubsequenceMain(x, sizeof(x)/sizeof(int));
     std::cout<<"output:"<<std::endl;
-    printVector(lis);
+    PrintVector(lis);
     
-    std::cout<<"String permutations with duplicates using recursion...."<<std::endl;
-    std::cout<<"input: 1,2,2,4"<<std::endl;
-    int z[] = {1, 2, 2, 4};
-    std::cout<<"output:"<<std::endl;
-    permutationWithDuplicate(z, 0, sizeof(z)/sizeof(int));
-    
-    std::cout<<"String permutations with duplicates using none-recursion...."<<std::endl;
-    std::cout<<"input: 1,2,2,4"<<std::endl;
-    std::cout<<"output:"<<std::endl;
-    while(permutationNext(z, sizeof(z)/sizeof(int)))
-    {
-        printArray(z, sizeof(z)/sizeof(int));
-    }
-    
+
     
 }
 
@@ -229,7 +233,7 @@ std::vector<int> longestIncreasingSubsequenceMain(int* array,
 }
 
 
-void printVector(std::vector<int> x)
+void PrintVector(std::vector<int> x)
 {
     for(int i = 0; i < x.size(); i++)
     {
@@ -239,7 +243,7 @@ void printVector(std::vector<int> x)
 }
 
 
-void printArray(int* x, int iLen)
+void PrintArray(int* x, int iLen)
 {
     for(int i = 0; i < iLen; i++)
     {
@@ -255,7 +259,7 @@ void Permutation(int* x, int iBegin, int iEnd)
 {
     if(iBegin == iEnd)
     {
-        printArray(x, iEnd);
+        PrintArray(x, iEnd);
         return;
     }
     for(int i = iBegin; i < iEnd; i++)
@@ -279,7 +283,9 @@ void PermutationExample()
 
 
 /* 字符串的全排列（有重复的情况）*/
-bool isDuplicate(int* x, int iBegin, int iEnd)
+
+/* 检查数组从iBegin到iEnd处是否有重复 */
+bool IsDuplicate(int* x, int iBegin, int iEnd)
 {
     int i = iBegin;
     while(i < iEnd)
@@ -292,28 +298,37 @@ bool isDuplicate(int* x, int iBegin, int iEnd)
 }
 
 
-void permutationWithDuplicate(int* x, int iBegin, int iEnd)
+void PermutationWithDuplicate(int* x, int iBegin, int iEnd)
 {
     if(iBegin == iEnd)
     {
-        printArray(x, iEnd);
+        PrintArray(x, iEnd);
         return;
     }
     for(int i = iBegin; i < iEnd; i++)
     {
-        if(isDuplicate(x, iBegin, i)) // 检查x[i]是否与x[iBegin, i)重复
+        if(IsDuplicate(x, iBegin, i)) // 检查x[i]是否与x[iBegin, i)重复
         {
             continue;
         }
-        std::swap(x[iBegin], x[i]);
-        permutationWithDuplicate(x, iBegin+1, iEnd);
+        std::swap(x[iBegin], x[i]); // 与最近的第一个不重复的元素交换
+        PermutationWithDuplicate(x, iBegin+1, iEnd);
         std::swap(x[iBegin], x[i]);
     }
 }
 
 
+void PermutationWithDuplicateExample()
+{
+    std::cout<<"String permutations with duplicates using recursion...."<<std::endl;
+    std::cout<<"input: 1,2,2,4"<<std::endl;
+    int z[] = {1, 2, 2, 4};
+    std::cout<<"output:"<<std::endl;
+    PermutationWithDuplicate(z, 0, sizeof(z)/sizeof(int));
+}
 
-// 非递归算法解全排序
+
+/*  字符串的翻转  */
 void reverse(int* from, int* to)
 {
     int temp = 0;
@@ -328,18 +343,19 @@ void reverse(int* from, int* to)
 }
 
 
-bool permutationNext(int* x, int iLen)
+/* 实现STL中的next_permutation算法 */
+bool NextPermutation(int* x, int iLen)
 {
-    // 找到最后一个升序的位置
+    // 从左往右找到最后一个升序的位置
     int i = iLen - 2;
     while((i >= 0) && (x[i] >= x[i+1]))
     {
         i--;
     }
     if(i < 0)
-        return false;
+        return false; // 已经找到所有的排列
     
-    // 在[i+1, iLen）中查找比x[i]大的最小的数
+    // 在idx = [i+1, iLen-1]中查找比x[i]大的最小的数
     int j = iLen - 1;
     while(x[j] <= x[i])
     {
@@ -357,4 +373,17 @@ bool permutationNext(int* x, int iLen)
     
 }
 
+
+void NextPermutationExample()
+{
+    int z[] = {1, 2, 2, 4};
+    std::cout<<"String permutations with duplicates using none-recursion...."<<std::endl;
+    std::cout<<"input: 1,2,2,4"<<std::endl;
+    std::cout<<"output:"<<std::endl;
+    while(NextPermutation(z, sizeof(z)/sizeof(int)))
+    {
+        PrintArray(z, sizeof(z)/sizeof(int));
+    }
+    
+}
 
