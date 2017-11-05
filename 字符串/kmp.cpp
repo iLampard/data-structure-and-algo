@@ -11,8 +11,8 @@
 
 // 查找text中首次出现pattern的位置
 
-
-int bruteForceSearch(char* text, char* pattern)
+/* 暴力查找法 */
+int BruteForceSearch(char* text, char* pattern)
 {
     int i = 0;  // index for text
     int j;  // index for pattern
@@ -37,23 +37,23 @@ int bruteForceSearch(char* text, char* pattern)
 
 
 
-// KMP
+/* KMP 算法 */
 
-// caculate "next" array
 
-int* calcNext(char* pattern)
+/* 计算 Next 数组 */
+/* 用递归法求解：已知next[0,,j], 求next[j+1]  */
+int* calcNext(char* pattern, int iLen)
 {
-    size_t iLen = strlen(pattern);
     int* next = new int[iLen];
     next[0] = -1;
     int j = 1;
     int k = -1;;
     while(j < iLen - 1)
     {
-        // k即是next[j-1], p[k]表示前缀， p[j]表示后缀
+        // k即是next[j], p[k]表示前缀， p[j]表示后缀
         if(k == - 1 || pattern[k] == pattern[j])
         {
-            next[j+1] = k + 1;
+            next[j+1] = k + 1;  // 当pattern[k] = pattern[j]时， next[j+1] = next[j] + 1
             k++;
             j++;
         }
@@ -67,27 +67,31 @@ int* calcNext(char* pattern)
 }
 
 
-int* calcNext2(char* pattern)
+/* 优化后的求解 Next 数组方法 */
+int* calcNext2(char* pattern, int iLen)
 {
-    size_t iLen = strlen(pattern);
     int* next = new int[iLen];
     next[0] = -1;
-    int j = 1;
+    int j = 0;
     int k = -1;;
     while(j < iLen - 1)
     {
-        // k即是next[j-1], p[k]表示前缀， p[j]表示后缀
+        // k即是next[j]，p[k]表示前缀， p[j]表示后缀
         if(k == - 1 || pattern[k] == pattern[j])
         {
             k++;
             j++;
+            
+            // 要避免出现P[j]==P[next[j]]这样的情况
+            // 因为P[j]和P[k]不匹配，如果P[j]==P[next[j]]， 那么下一步P[j]和P[k]必然还是不匹配，进入死循环
+            // 所以出现P[j]==P[next[j]], 要进一步递归， k=next[k]=next[next[k]
             if(pattern[k] == pattern[j])
             {
                 next[j] = next[k];
             }
             else
             {
-                next[j] = k;
+                next[j] = k;  // 实际上等价于 next[j+1] = next[j] + 1
             }
         }
         else
@@ -102,7 +106,7 @@ int* calcNext2(char* pattern)
 
 
 
-void printArray(int* array, int iLen)
+void PrintArray(int* array, int iLen)
 {
     for(int i = 0; i < iLen; i++)
         std::cout<<array[i]<<' ';
@@ -127,7 +131,7 @@ int KMP(char* text, char* pattern)
         else
         {
             //j = calcNext(pattern)[j];
-            j = calcNext2(pattern)[j];
+            j = calcNext2(pattern, (int)iLenPattern)[j];
         }
         if(j == iLenPattern)
             return (i - (int)iLenPattern);
@@ -143,7 +147,7 @@ int main(void)
     char pattern[] = "abaabcaba";
     std::cout<<"find pattern in text:...."<<std::endl;
     std::cout<<"brute force method gives start index"<<std::endl;
-    std::cout<<bruteForceSearch(text, pattern)<<std::endl;
+    std::cout<<BruteForceSearch(text, pattern)<<std::endl;
     
     //int* next;
     //next = calcNext(pattern);
