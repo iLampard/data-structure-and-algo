@@ -174,7 +174,7 @@ void printCharArray(char* expression, int iLen)
 }
 
 
-int main()
+void PolishExamples()
 {
     char reversePolish[] = {'2', '1', '+', '3', '*'};
     std::cout<<"calculate reverse polish expression of 21+3*:"<<std::endl;
@@ -186,5 +186,5 @@ int main()
     char* polish = convertToReversePolish(infix, sizeof(infix)/sizeof(char), &iPolishLen);
     printCharArray(polish, iPolishLen);
     
-    return 0;
+    return;
 }

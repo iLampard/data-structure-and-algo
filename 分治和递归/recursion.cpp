@@ -9,13 +9,7 @@
 #include <vector>
 #include <algorithm>
 
-
-/* 最大子序列和 */
-int MaxSubSum(int* a, int Left, int Right);
-
-
-/* 对分查找 */
-int BinarySearch(int* a, int iLen, int x);
+int BinarySearch(int* a, int StartIndex, int EndIndex, int Value);
 
 
 /* 围棋棋盘由M*N的正方形组成，计算这个区域一共由多少个正方形 */
@@ -27,6 +21,13 @@ int main()
 {
     std::cout<<"19*19的围棋棋盘包含的正方形数目为......"<<std::endl;
     std::cout<<NumOfRectangular(19, 19)<<std::endl;
+    
+    std::cout<<"最大子序列和"<<std::endl;
+    int a[] = {1, 3, -2, 4, -5};
+    std::cout<<MaxSubSum(a, 0, 4)<<std::endl;
+    
+    std::cout<<"二分查找 - 目标值 -2"<<std::endl;
+    std::cout<<BinarySearch(a, 0, 4, -2)<<std::endl;;
 }
 
 
@@ -71,15 +72,15 @@ int MaxSubSum(int* a, int Left, int Right)
     {
         if(a[Left] >= 0)
             return a[Left];
-        else:
+        else
             return 0;
     }        
 
-    Center = (Left + Right) / 2
+    Center = (Left + Right) / 2;
     
     // 左右半边递归求解最大子序列和
     MaxLeftSum = MaxSubSum(a, Left, Center);
-    MaxRightSum = MaxSubSum(a, Center + 1， Right);
+    MaxRightSum = MaxSubSum(a, Center + 1, Right);
 
     // 求解包含中间元素的左边最大子序列
     for(int i = Center; i >= Left; i--)
@@ -110,10 +111,10 @@ int BinarySearch(int* a, int StartIndex, int EndIndex, int Value)
     if(StartIndex > EndIndex)
         return -1;
 
-    if(x == a[MidIndex])
+    if(Value == a[MidIndex])
         return MidIndex;
-    else if(x > a[MidIndex])
-        return BinarySearch(a, MidIndex + 1, EndIndex, Value)
+    else if(Value > a[MidIndex])
+        return BinarySearch(a, MidIndex + 1, EndIndex, Value);
     else
-        return BinarySearch(a, StartIndex, MidIndex - 1, value);
+        return BinarySearch(a, StartIndex, MidIndex - 1, Value);
 }
