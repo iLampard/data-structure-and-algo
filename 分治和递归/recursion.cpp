@@ -14,6 +14,10 @@
 int MaxSubSum(int* a, int Left, int Right);
 
 
+/* 对分查找 */
+int BinarySearch(int* a, int iLen, int x);
+
+
 /* 围棋棋盘由M*N的正方形组成，计算这个区域一共由多少个正方形 */
 int NumOfRectangular(int M, int N);
 
@@ -92,4 +96,24 @@ int MaxSubSum(int* a, int Left, int Right)
     }
 
     return std::max(std::max(MaxLeftSum, MaxRightSum), MaxLeftBorderSum + MaxRightBorderSum);
+}
+
+
+
+/* 对分查找 */
+/* 在长度为iLen的已排序的数组中查找元素x        */
+int BinarySearch(int* a, int StartIndex, int EndIndex, int Value)
+{
+    int MidIndex = (StartIndex + EndIndex) / 2;
+    
+    // Base case
+    if(StartIndex > EndIndex)
+        return -1;
+
+    if(x == a[MidIndex])
+        return MidIndex;
+    else if(x > a[MidIndex])
+        return BinarySearch(a, MidIndex + 1, EndIndex, Value)
+    else
+        return BinarySearch(a, StartIndex, MidIndex - 1, value);
 }
