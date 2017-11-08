@@ -7,6 +7,7 @@
 //
 
 #include <algorithm>
+#include <iostream>
 
 
 
@@ -17,9 +18,16 @@ double MaxProductSubsequence(double* array, int iLen);
 int LongestIncreasingSubsequence(int* array, int iLen);
 
 
+/* 操作最小次数
+ 一个数从1开始到N，每次只能加1， 或者乘以2，如果想要变成2015，最少需要多少次变化 */
+int UpdateCount(int Value, int* pCount, int* pPreNumber);
+void UpdateCountExample();
+
+
 int main()
 {
-    
+    UpdateCountExample();
+    return 0;
 }
 
 
@@ -88,5 +96,63 @@ int LongestIncreasingSubsequence(int* array, int iLen)
 
 
 
+/* 操作最小次数
+ 一个数从1开始到N，每次只能加1， 或者乘以2，如果想要变成2015，最少需要多少次变化 */
+/* N为奇数时，上一步只能是加一得到N，dp[N] = dp[N-1] + 1 
+   N为偶数时，上一步为加一或者翻倍的最少步数， dp[N] = min(dp[N-1], dp[N/2])+1
+ */
+int UpdateCount(int N, int* pCount, int* pPreNumber)
+{
+    if(N == 1)
+        return 0;
+    else if(N % 2 == 1) // 奇数的情况
+    {
+        if(pCount[N-1] == 0)
+            pCount[N - 1] = UpdateCount(N-1, pCount, pPreNumber) ;
+        pPreNumber[N] = N - 1;  // N的前一步数字是N-1
+        pCount[N] = pCount[N-1] + 1;
+    }
+    else // 偶数的情况
+    {
+        int mid = N / 2;
+        if(pCount[mid] == 0)
+            pCount[mid] = UpdateCount(mid, pCount, pPreNumber);
+        if(pCount[N-1] == 0)
+            pCount[N-1] = UpdateCount(N-1, pCount, pPreNumber);
+        
+        if(pCount[mid] < pCount[N-1])
+        {
+            pPreNumber[N] = mid;
+            pCount[N] = pCount[mid] + 1;
+        }
+        else
+        {
+            pPreNumber[N] = N - 1;
+            pCount[N] = pCount[N-1] + 1;
+        }
+    }
+    
+    return pCount[N];
+}
 
+
+void UpdateCountExample()
+{
+    int N = 2015;
+    int* pCount = new int[N+1];
+    int* pPreNumber = new int[N+1];
+    
+    memset(pCount + 1, 0, sizeof(int)*N);
+    memset(pPreNumber + 1, 0, sizeof(int)*N);
+    
+    std::cout<<"2015: "<<UpdateCount(N, pCount, pPreNumber)<<std::endl;
+    
+    // 显示2015的变化过程
+    int n = N;
+    while(n != 1)
+    {
+        std::cout<<pPreNumber[n]<<" ";
+        n = pPreNumber[n];
+    }
+}
 
