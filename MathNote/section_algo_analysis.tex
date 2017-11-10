@@ -38,7 +38,7 @@
 
 
 \begin{proof}
-因为$T_{1}(N) = \bigo(f(N))$，则存在正常数$c_1$和$n_1$，使得当$N \ge n_1$时， 都有$T_{2}(N) \le c_1f(N)$；又因为$T_{2}(N) = \bigo(g(N))$， 同理存在正常数$c_2$和$n_2$，使得当$N \ge n_2$时， 都有$T(N) \le c_2g(N)$。
+因为$T_{1}(N) = \bigo(f(N))$，则存在正常数$c_1$和$n_1$，使得当$N \ge n_1$时， 都有$T_{1}(N) \le c_1f(N)$；又因为$T_{2}(N) = \bigo(g(N))$， 同理存在正常数$c_2$和$n_2$，使得当$N \ge n_2$时， 都有$T_{2}(N) \le c_2g(N)$。
 
 令$n=\max\{n_1, n_2\}$， 故当$N \ge n$时， 都有
 \begin{eqnarray*}
@@ -49,13 +49,36 @@ T_{1}(N) + T_{2}(N) &\le& c_1f(N) + c_2g(N) \\
 
 令$c=2 \max \{c_1, c_2\}$，则说明当$N \ge n$，都有$ T_{1}(N) + T_{2}(N)\le c \max\{f(N), g(N) \}$， 即$T_{1}(N) + T_{2}(N) = \bigo \prt{\max\{f(N), g(N) \}}$ 。
 
+对于第二条性质，令$d=c_1c_2$，则当$N \ge n$，都有$ T_{1}(N) T_{2}(N)\le d f(N)g(N)$， 即 $T_{1}(N) T_{2}(N) =\bigo \prt{f(N)g(N)} $。
 
 \end{proof}
 
 
 \begin{theorem}
-\item 对于任意常数$k$， $\log^kN = \bigo(N)$。该条定理说明对数增长非常缓慢。
+\item 对于任意整数$k$， $\log^kN = \bigo(N)$。该条定理说明对数增长非常缓慢。
 \end{theorem}
+
+\begin{proof}
+
+当$k<0$时，$\log^kN < 1 = \bigo(N)$。
+
+下面用数学归纳法证明$k \ge 0$ 的情况。
+
+\begin{itemize}
+\item $k=0$时， $\log^kN = 1 = \bigo(N)$
+
+\item 假设$k=i$时都有 $\log^kN = \bigo(N)$，当$k=i+1$时
+
+\begin{eqnarray*}
+\lim_{N \rightarrow \infty}\frac{\log^{i+1}N}{N} &=& \lim_{N \rightarrow \infty}(i+1)\frac{\log^{i}N}{N} \quad \prt{\textrm{根据洛必达法则} } \\
+&=&(i+1) \lim_{N \rightarrow \infty}\frac{\log^{i}N}{N} \\
+&=&(i+1) * 0 \quad \prt{\textrm{根据$\log^kN = \bigo(N)$可知$\lim_{N \rightarrow \infty}\frac{\log^{i}N}{N}=0$} }\\
+&=&0
+\end{eqnarray*}
+
+\end{itemize}
+所以对于任意整数$k$， 都有$\log^kN = \bigo(N)$。
+\end{proof}
 
 
 \subsection{复杂度方程的解法}
@@ -76,7 +99,7 @@ f(\frac{n}{b}) &=& af(\frac{n}{b^2})+g(\frac{n}{b}) \\
 f(b) &=& af(1)+g(b) \\
 \end{eqnarray*} 
 
-对这$k$个等式依次两边分别乘以$1, a, a^1,...a^{k-1}$，再求和，消去相等的项，得到
+对这$k$个等式依次两边分别乘以$1, a, a^1,...a^{k-1}$，再求和，消去等式两边相等的项，得到
 \begin{eqnarray*}
 f(n)  = a^kf(1) + \sum_{j=0}^{k-1} a^j g(\frac{n}{b^j})
 \end{eqnarray*} 
