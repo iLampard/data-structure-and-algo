@@ -10,19 +10,21 @@
 #include <map>
 #include <iostream>
 
-bool isOperator(char s)
+
+/* 只有加减乘除，计算逆波兰表达式的值 */
+bool IsOperator(char s)
 {
     return (s == '+')||(s == '-')||(s == '*')||(s == '/');
 }
 
-int calcReversePolish(char* expression, int iLen)
+int CalcReversePolish(char* expression, int iLen)
 {
     std::stack<int> s;
     int i = 0;
     int a,b;
     while(i < iLen)
     {
-        if(isOperator(expression[i]))
+        if(IsOperator(expression[i])) // 如果是运算符，那么最上面两个数字出栈，计算完再入栈
         {
             a = s.top();
             s.pop();
@@ -39,7 +41,7 @@ int calcReversePolish(char* expression, int iLen)
         }
         else
         {
-            s.push(int(expression[i] - '0'));
+            s.push(int(expression[i] - '0')); // 数字入栈
         }
         i++;
     }
@@ -49,28 +51,32 @@ int calcReversePolish(char* expression, int iLen)
 
 
 // 假设只允许加减乘除以及括号操作
-bool isParentheses(char s)
+bool IsParentheses(char s)
 {
     return (s == '(') || (s == ')');
 }
 
 
-bool isPlusMinus(char s)
+bool IsPlusMinus(char s)
 {
     return (s == '+') || (s == '-');
 }
 
 
-bool isMultDiv(char s)
+bool IsMultDiv(char s)
 {
     return (s == '*') || (s == '/');
 }
 
 
 
-char* convertToReversePolish(char* infix, int iLen, int* iOutLen)
+/*  中缀向后缀表达式的转换  */
+/*  数字进入输出流， 运算符入栈 
+    如果遇见右括号，那么栈元素出栈，一直到遇见左括号，但是左括号只被弹出，并不输出，
+    如果遇见其他运算符， 那么栈元素出栈，知道出现优先级更低的为止
+    例外是除非处理右括号，否则左括号不出栈*/
+char* ConvertToReversePolish(char* infix, int iLen, int* iOutLen)
 {
-    //char* reversePolishExpression = new char[iLen];
     char* reversePolishExpression;
     std::stack<char> s;
     std::map<char, int> priority;
@@ -90,16 +96,16 @@ char* convertToReversePolish(char* infix, int iLen, int* iOutLen)
     
     while(i < iLen)
     {
-        if(isOperator(infix[i])||isParentheses(infix[i]))
+        if(IsOperator(infix[i])||IsParentheses(infix[i])) // 运算符或者括号
         {
             if(s.empty())
             {
-                s.push(infix[i]);
+                s.push(infix[i]); // 左括号入栈
             }
             else
             {
                 topOperator = s.top();
-                if((priority[topOperator] < priority[infix[i]]) && infix[i] != ')')
+                if((priority[topOperator] < priority[infix[i]]) && infix[i] != ')') // 运算符不是右括号，且优先级低于栈顶元素
                 {
                     // 栈顶优先级低 =》 入栈
                     s.push(infix[i]);
@@ -143,7 +149,7 @@ char* convertToReversePolish(char* infix, int iLen, int* iOutLen)
         }
         else
         {
-            reversePolishExpression[j] = infix[i];
+            reversePolishExpression[j] = infix[i]; // 数字直接进入输出流
             j++;
         }
         i++;
@@ -178,12 +184,12 @@ void PolishExamples()
 {
     char reversePolish[] = {'2', '1', '+', '3', '*'};
     std::cout<<"calculate reverse polish expression of 21+3*:"<<std::endl;
-    std::cout<<calcReversePolish(reversePolish, sizeof(reversePolish)/sizeof(char))<<std::endl;
+    std::cout<<CalcReversePolish(reversePolish, sizeof(reversePolish)/sizeof(char))<<std::endl;
     
     std::cout<<"convert a+b*c+(d*e+f)*g to reverse polish expression of:"<<std::endl;
     int iPolishLen = 0;
     char infix[] = {'a', '+', 'b', '*', 'c', '+', '(', 'd', '*', 'e', '+', 'f', ')', '*', 'g'};
-    char* polish = convertToReversePolish(infix, sizeof(infix)/sizeof(char), &iPolishLen);
+    char* polish = ConvertToReversePolish(infix, sizeof(infix)/sizeof(char), &iPolishLen);
     printCharArray(polish, iPolishLen);
     
     return;
