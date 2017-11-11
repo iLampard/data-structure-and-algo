@@ -77,7 +77,7 @@ bool IsMultDiv(char s)
     例外是除非处理右括号，否则左括号不出栈*/
 char* ConvertToReversePolish(char* infix, int iLen, int* iOutLen)
 {
-    char* reversePolishExpression;
+    char* expression = new char[iLen];
     std::stack<char> s;
     std::map<char, int> priority;
     int i = 0;
@@ -100,44 +100,39 @@ char* ConvertToReversePolish(char* infix, int iLen, int* iOutLen)
         {
             if(s.empty())
             {
-                s.push(infix[i]); // 左括号入栈
+                s.push(infix[i]); // 左括号入栈, 此种情况只可能是左括号
             }
             else
             {
                 topOperator = s.top();
-                if((priority[topOperator] < priority[infix[i]]) && infix[i] != ')') // 运算符不是右括号，且优先级低于栈顶元素
+                if(infix[i] == ')')  // 当栈外是右括号时
                 {
-                    // 栈顶优先级低 =》 入栈
-                    s.push(infix[i]);
-                }
-                else if(infix[i] == ')')
-                {
-                    // 当栈外是右括号时，不断出栈 =》 直至左括号出栈
+                    // 不断出栈 =》 直至左括号出栈
                     while(topOperator != '(')
                     {
                         s.pop();
-                        reversePolishExpression[j] = topOperator;
+                        expression[j] = topOperator;
                         j++;
                         topOperator = s.top();
                     }
                     s.pop();
                     
                 }
-                else
+                else if(priority[topOperator] < priority[infix[i]])
+                    // 运算符不是右括号，且优先级低于栈顶元素
                 {
-                    while(priority[topOperator] >= priority[infix[i]])
+                    // 运算符入栈
+                    s.push(infix[i]);
+                }
+                else // 运算符不是右括号，且优先级高于等于栈顶元素，那么栈内元素要一直出栈直至栈顶元素优先级更低
+                {
+                    while(priority[topOperator] >= priority[infix[i]] && topOperator != '(')
                     {
-                        
-                        
-                        if(topOperator != '(')
-                        {
-                            // 栈顶优先级高 =》 出栈
-                            s.pop();
-                            reversePolishExpression[j] = topOperator;
-                            j++;
-                        }
-                        else
-                            break;
+                        // 特殊情况： 如果栈顶是左括号，那么直接入栈
+                        // 栈顶优先级高 =》 出栈
+                        s.pop();
+                        expression[j] = topOperator;
+                        j++;
                         
                         if(s.empty())
                             break;
@@ -149,7 +144,7 @@ char* ConvertToReversePolish(char* infix, int iLen, int* iOutLen)
         }
         else
         {
-            reversePolishExpression[j] = infix[i]; // 数字直接进入输出流
+            expression[j] = infix[i]; // 数字直接进入输出流
             j++;
         }
         i++;
@@ -160,16 +155,16 @@ char* ConvertToReversePolish(char* infix, int iLen, int* iOutLen)
     {
         topOperator = s.top();
         s.pop();
-        reversePolishExpression[j] = topOperator;
+        expression[j] = topOperator;
         j++;
     }
     
     (*iOutLen) = j;
-    return reversePolishExpression;
+    return expression;
 }
 
 
-void printCharArray(char* expression, int iLen)
+void PrintCharArray(char* expression, int iLen)
 {
     int i = 0;
     while(i < iLen)
@@ -190,7 +185,14 @@ void PolishExamples()
     int iPolishLen = 0;
     char infix[] = {'a', '+', 'b', '*', 'c', '+', '(', 'd', '*', 'e', '+', 'f', ')', '*', 'g'};
     char* polish = ConvertToReversePolish(infix, sizeof(infix)/sizeof(char), &iPolishLen);
-    printCharArray(polish, iPolishLen);
+    PrintCharArray(polish, iPolishLen);
     
     return;
 }
+
+
+int main()
+{
+    PolishExamples();
+}
+
