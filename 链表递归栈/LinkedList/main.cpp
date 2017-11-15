@@ -24,13 +24,117 @@ struct Node
 };
 
 
-int isLast(Position P)
+/* 判断是否是最后一个节点 */
+int IsLast(Position P);
+
+/* 打印列表所有元素 */
+void PrintLinkedList(List L);
+
+/* 链表上前进若干步 */
+Position Advance(Position P, int iStep);
+
+/* 给定链表，要求翻转从m到n的位置，不能申请新空间 */
+void Reverse(List L, int from, int to);
+
+/* 在制定位置处插入一个元素 */
+void InsertElement(ElementType X, Position P)
+
+int main(int argc, const char * argv[]) {
+    std::cout<<"Add two linked list............"<<std::endl;
+    ElementType L1_Array[] = {4, 9, 0, 4, 7, 1};
+    List L1 = initLinkedList(L1_Array, sizeof(L1_Array)/sizeof(ElementType));
+    ElementType L2_Array[] = {1, 7, 1, 5, 5, 4, 2, 8};
+    List L2 = initLinkedList(L2_Array, sizeof(L2_Array)/sizeof(ElementType));
+    List L = add(L1, L2);
+    std::cout<<"input: "<<std::endl;
+    PrintLinkedList(L1);
+    PrintLinkedList(L2);
+    std::cout<<"output: "<<std::endl;
+    PrintLinkedList(L);
+    deleteList(L);
+    deleteList(L1);
+    deleteList(L2);
+    
+    std::cout<<std::endl;
+    std::cout<<"Partially reverse a linked list........"<<std::endl;
+    ElementType L3_Array[] = {64, 62, 58, 78, 24, 69, 0, 34, 67, 41};
+    List L3 = initLinkedList(L3_Array, sizeof(L3_Array)/sizeof(ElementType));
+    std::cout<<"input: "<<std::endl;
+    PrintLinkedList(L3);
+    std::cout<<"output: "<<std::endl;
+    Reverse(L3, 4, 8);
+    PrintLinkedList(L3);
+    deleteList(L3);
+    
+    std::cout<<std::endl;
+    std::cout<<"Drop duplicates in a linked list(keep first duplicate element)........"<<std::endl;
+    ElementType L4_Array[] = {2, 3, 3, 5, 7, 8, 8, 8, 9, 9, 10};
+    List L4 = initLinkedList(L4_Array, sizeof(L4_Array)/sizeof(ElementType));
+    std::cout<<"input: "<<std::endl;
+    PrintLinkedList(L4);
+    std::cout<<"output: "<<std::endl;
+    dropDuplicate(L4);
+    PrintLinkedList(L4);
+    deleteList(L4);
+    
+    
+    std::cout<<std::endl;
+    std::cout<<"Drop duplicates in a linked list(remove all duplicate element)........"<<std::endl;
+    ElementType L5_Array[] = {2, 3, 3, 5, 7, 8, 8, 8, 9, 9, 10};
+    List L5 = initLinkedList(L5_Array, sizeof(L5_Array)/sizeof(ElementType));
+    std::cout<<"input: "<<std::endl;
+    PrintLinkedList(L5);
+    std::cout<<"output: "<<std::endl;
+    dropDuplicate2(L5);
+    PrintLinkedList(L5);
+    deleteList(L5);
+    
+    std::cout<<std::endl;
+    std::cout<<"Partition in a linked list given a pivot value........"<<std::endl;
+    ElementType L6_Array[] = {1, 4, 3, 2, 5, 2};
+    List L6 = initLinkedList(L6_Array, sizeof(L6_Array)/sizeof(ElementType));
+    std::cout<<"input: "<<std::endl;
+    PrintLinkedList(L6);
+    std::cout<<"output: "<<std::endl;
+    partition(L6, 3);
+    PrintLinkedList(L6);
+    deleteList(L6);
+    
+    std::cout<<std::endl;
+    std::cout<<"Find the first shared node of two lists........"<<std::endl;
+    List L7 = new Node(0);
+    List L8 = new Node(0);
+    Position P1 = new Node(1);
+    Position P2 = new Node(2);
+    Position P3 = new Node(3);
+    Position P4 = new Node(4);
+    Position P5 = new Node(5);
+    L7->Next = P1;
+    P1->Next = P2;
+    P2->Next = P3;
+    P3->Next = P4;
+    P4->Next = P5;
+    L8->Next = P4;
+    std::cout<<"input: "<<std::endl;
+    PrintLinkedList(L7);
+    PrintLinkedList(L8);
+    std::cout<<"output: "<<std::endl;
+    std::cout<< findFirstSharedNode(L7, L8)->Element<<std::endl;
+    deleteList(L7);
+    
+    return 0;
+}
+
+
+/* 判断是否是最后一个节点 */
+int IsLast(Position P)
 {
     return P->Next == NULL;
 };
 
 
-void printLinkedList(List L)
+/* 打印列表所有元素 */
+void PrintLinkedList(List L)
 {
     Position P = L->Next;
     while(!isLast(P))
@@ -42,7 +146,8 @@ void printLinkedList(List L)
 };
 
 
-Position advance(Position P, int iStep)
+/* 链表上前进若干步 */
+Position Advance(Position P, int iStep)
 {
     int i = 0;
     Position PCur = P;
@@ -56,7 +161,7 @@ Position advance(Position P, int iStep)
 }
 
 
-void insertElement(ElementType X, Position P)
+void InsertElement(ElementType X, Position P)
 {
     if(P!=NULL)
     {
@@ -78,7 +183,7 @@ List initLinkedList(ElementType ElementArray[], int iSize)
     int i = 0;
     while(i < iSize)
     {
-        insertElement(ElementArray[i], P);
+        InsertElement(ElementArray[i], P);
         P = P->Next;
         i++;
     }
@@ -129,7 +234,7 @@ List add(List L1, List L2)
         element = P1->Element + P2->Element + carry;
         carry = element / 10;
         element %= 10;
-        insertElement(element, P);
+        InsertElement(element, P);
         P = P->Next;
         P1 = P1->Next;
         P2 = P2->Next;
@@ -142,14 +247,14 @@ List add(List L1, List L2)
         element = PLong->Element + carry;
         carry = element / 10;
         element %= 10;
-        insertElement(element, P);
+        InsertElement(element, P);
         P = P->Next;
         PLong = PLong->Next;
     }
     
     if(carry > 0)
     {
-        insertElement(carry, P);
+        InsertElement(carry, P);
     }
     return L;
     
@@ -157,10 +262,10 @@ List add(List L1, List L2)
 
 
 // 给定链表，要求翻转从m到n的位置，不能申请新空间
-void reverse(List L, int from, int to)
+void Reverse(List L, int from, int to)
 {
     Position Head = L;
-    Head = advance(L, from-1);
+    Head = Advance(L, from-1);
     Position Prev = Head->Next;
     Position P = Prev->Next;
     Position temp = NULL;
@@ -247,12 +352,12 @@ void partition(List L, ElementType pivot)
     {
         if(P->Element < pivot)
         {
-            insertElement(P->Element, PLeft);
+            InsertElement(P->Element, PLeft);
             PLeft = PLeft->Next;
         }
         else
         {
-            insertElement(P->Element, PRight);
+            InsertElement(P->Element, PRight);
             PRight = PRight->Next;
         }
         P = P->Next;
@@ -284,7 +389,7 @@ Position findFirstSharedNode(List L1, List L2)
     }
     
     // 先空转 iLenL2 - iLenL1 次
-    P2 = advance(P2, iLenL2-iLenL1);
+    P2 = Advance(P2, iLenL2-iLenL1);
     while(P1)
     {
         if(P1 == P2)
@@ -299,88 +404,3 @@ Position findFirstSharedNode(List L1, List L2)
 }
 
 
-int main(int argc, const char * argv[]) {
-    std::cout<<"Add two linked list............"<<std::endl;
-    ElementType L1_Array[] = {4, 9, 0, 4, 7, 1};
-    List L1 = initLinkedList(L1_Array, sizeof(L1_Array)/sizeof(ElementType));
-    ElementType L2_Array[] = {1, 7, 1, 5, 5, 4, 2, 8};
-    List L2 = initLinkedList(L2_Array, sizeof(L2_Array)/sizeof(ElementType));
-    List L = add(L1, L2);
-    std::cout<<"input: "<<std::endl;
-    printLinkedList(L1);
-    printLinkedList(L2);
-    std::cout<<"output: "<<std::endl;
-    printLinkedList(L);
-    deleteList(L);
-    deleteList(L1);
-    deleteList(L2);
-    
-    std::cout<<std::endl;
-    std::cout<<"Partially reverse a linked list........"<<std::endl;
-    ElementType L3_Array[] = {64, 62, 58, 78, 24, 69, 0, 34, 67, 41};
-    List L3 = initLinkedList(L3_Array, sizeof(L3_Array)/sizeof(ElementType));
-    std::cout<<"input: "<<std::endl;
-    printLinkedList(L3);
-    std::cout<<"output: "<<std::endl;
-    reverse(L3, 4, 8);
-    printLinkedList(L3);
-    deleteList(L3);
-    
-    std::cout<<std::endl;
-    std::cout<<"Drop duplicates in a linked list(keep first duplicate element)........"<<std::endl;
-    ElementType L4_Array[] = {2, 3, 3, 5, 7, 8, 8, 8, 9, 9, 10};
-    List L4 = initLinkedList(L4_Array, sizeof(L4_Array)/sizeof(ElementType));
-    std::cout<<"input: "<<std::endl;
-    printLinkedList(L4);
-    std::cout<<"output: "<<std::endl;
-    dropDuplicate(L4);
-    printLinkedList(L4);
-    deleteList(L4);
-    
-    
-    std::cout<<std::endl;
-    std::cout<<"Drop duplicates in a linked list(remove all duplicate element)........"<<std::endl;
-    ElementType L5_Array[] = {2, 3, 3, 5, 7, 8, 8, 8, 9, 9, 10};
-    List L5 = initLinkedList(L5_Array, sizeof(L5_Array)/sizeof(ElementType));
-    std::cout<<"input: "<<std::endl;
-    printLinkedList(L5);
-    std::cout<<"output: "<<std::endl;
-    dropDuplicate2(L5);
-    printLinkedList(L5);
-    deleteList(L5);
-    
-    std::cout<<std::endl;
-    std::cout<<"Partition in a linked list given a pivot value........"<<std::endl;
-    ElementType L6_Array[] = {1, 4, 3, 2, 5, 2};
-    List L6 = initLinkedList(L6_Array, sizeof(L6_Array)/sizeof(ElementType));
-    std::cout<<"input: "<<std::endl;
-    printLinkedList(L6);
-    std::cout<<"output: "<<std::endl;
-    partition(L6, 3);
-    printLinkedList(L6);
-    deleteList(L6);
-    
-    std::cout<<std::endl;
-    std::cout<<"Find the first shared node of two lists........"<<std::endl;
-    List L7 = new Node(0);
-    List L8 = new Node(0);
-    Position P1 = new Node(1);
-    Position P2 = new Node(2);
-    Position P3 = new Node(3);
-    Position P4 = new Node(4);
-    Position P5 = new Node(5);
-    L7->Next = P1;
-    P1->Next = P2;
-    P2->Next = P3;
-    P3->Next = P4;
-    P4->Next = P5;
-    L8->Next = P4;
-    std::cout<<"input: "<<std::endl;
-    printLinkedList(L7);
-    printLinkedList(L8);
-    std::cout<<"output: "<<std::endl;
-    std::cout<< findFirstSharedNode(L7, L8)->Element<<std::endl;
-    deleteList(L7);
-    
-    return 0;
-}
