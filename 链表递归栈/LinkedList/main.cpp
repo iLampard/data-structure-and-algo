@@ -39,12 +39,16 @@ void Reverse(List L, int from, int to);
 /* 在制定位置处插入一个元素 */
 void InsertElement(ElementType X, Position P)
 
+/* 以一个列表初始化一个链表 */
+List InitLinkedList(ElementType ElementArray[], int iSize)
+
+
 int main(int argc, const char * argv[]) {
     std::cout<<"Add two linked list............"<<std::endl;
     ElementType L1_Array[] = {4, 9, 0, 4, 7, 1};
-    List L1 = initLinkedList(L1_Array, sizeof(L1_Array)/sizeof(ElementType));
+    List L1 = InitLinkedList(L1_Array, sizeof(L1_Array)/sizeof(ElementType));
     ElementType L2_Array[] = {1, 7, 1, 5, 5, 4, 2, 8};
-    List L2 = initLinkedList(L2_Array, sizeof(L2_Array)/sizeof(ElementType));
+    List L2 = InitLinkedList(L2_Array, sizeof(L2_Array)/sizeof(ElementType));
     List L = add(L1, L2);
     std::cout<<"input: "<<std::endl;
     PrintLinkedList(L1);
@@ -58,7 +62,7 @@ int main(int argc, const char * argv[]) {
     std::cout<<std::endl;
     std::cout<<"Partially reverse a linked list........"<<std::endl;
     ElementType L3_Array[] = {64, 62, 58, 78, 24, 69, 0, 34, 67, 41};
-    List L3 = initLinkedList(L3_Array, sizeof(L3_Array)/sizeof(ElementType));
+    List L3 = InitLinkedList(L3_Array, sizeof(L3_Array)/sizeof(ElementType));
     std::cout<<"input: "<<std::endl;
     PrintLinkedList(L3);
     std::cout<<"output: "<<std::endl;
@@ -69,7 +73,7 @@ int main(int argc, const char * argv[]) {
     std::cout<<std::endl;
     std::cout<<"Drop duplicates in a linked list(keep first duplicate element)........"<<std::endl;
     ElementType L4_Array[] = {2, 3, 3, 5, 7, 8, 8, 8, 9, 9, 10};
-    List L4 = initLinkedList(L4_Array, sizeof(L4_Array)/sizeof(ElementType));
+    List L4 = InitLinkedList(L4_Array, sizeof(L4_Array)/sizeof(ElementType));
     std::cout<<"input: "<<std::endl;
     PrintLinkedList(L4);
     std::cout<<"output: "<<std::endl;
@@ -81,7 +85,7 @@ int main(int argc, const char * argv[]) {
     std::cout<<std::endl;
     std::cout<<"Drop duplicates in a linked list(remove all duplicate element)........"<<std::endl;
     ElementType L5_Array[] = {2, 3, 3, 5, 7, 8, 8, 8, 9, 9, 10};
-    List L5 = initLinkedList(L5_Array, sizeof(L5_Array)/sizeof(ElementType));
+    List L5 = InitLinkedList(L5_Array, sizeof(L5_Array)/sizeof(ElementType));
     std::cout<<"input: "<<std::endl;
     PrintLinkedList(L5);
     std::cout<<"output: "<<std::endl;
@@ -92,7 +96,7 @@ int main(int argc, const char * argv[]) {
     std::cout<<std::endl;
     std::cout<<"Partition in a linked list given a pivot value........"<<std::endl;
     ElementType L6_Array[] = {1, 4, 3, 2, 5, 2};
-    List L6 = initLinkedList(L6_Array, sizeof(L6_Array)/sizeof(ElementType));
+    List L6 = InitLinkedList(L6_Array, sizeof(L6_Array)/sizeof(ElementType));
     std::cout<<"input: "<<std::endl;
     PrintLinkedList(L6);
     std::cout<<"output: "<<std::endl;
@@ -161,6 +165,7 @@ Position Advance(Position P, int iStep)
 }
 
 
+/* 在制定位置处插入一个元素 */
 void InsertElement(ElementType X, Position P)
 {
     if(P!=NULL)
@@ -168,7 +173,7 @@ void InsertElement(ElementType X, Position P)
         Position temp = new Node(X, P->Next);
         P->Next = temp;
     }
-    else
+    else  // 如果是尾部
     {
         Position temp = new Node(X);
         P = temp;
@@ -176,7 +181,7 @@ void InsertElement(ElementType X, Position P)
 }
 
 
-List initLinkedList(ElementType ElementArray[], int iSize)
+List InitLinkedList(ElementType ElementArray[], int iSize)
 {
     List L = new Node(0);
     Position P = L;
