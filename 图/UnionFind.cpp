@@ -6,12 +6,12 @@
 class UF
 {
 public:
-	UD(int N)
+	UF(int N)
 	{
 		nbDisjointSets = N;
 		id = new int[N];
 		size = new int[N];
-		for(int i = 0; i++; i < N)
+		for(int i = 0; i < N; i++)
 		{
 			id[i] = i;     // 初始化时，id数组的值全部为自身
 			size[i] = 1;   // 初始化时，每个组的大小都是1  
@@ -19,7 +19,7 @@ public:
 			
 	}
 
-	int nbDisjountSets()    // 返回非连通集合的数量
+	int NbDisjointSets()    // 返回非连通集合的数量
 	{return nbDisjointSets;} 
 
 	int find(int p);  // 寻找p节点所在组的根节点，根节点具有性质id[root] = root 
@@ -27,9 +27,9 @@ public:
 	bool connected(int p, int q) 
 	{return id[p] == id[q];}  // 判断p与q节点是否相连 
 	
-	void union(int p, int q);  // 设置p与q节点相连
+	void merge(int p, int q);  // 设置p与q节点相连
 
-	~UD()
+	~UF()
 	{
 		delete[] id;
 		delete[] size;
@@ -38,7 +38,7 @@ private:
 	int* id;             // 记录两点连通情况的数组，如果两点连通，那么他们对应的id值一样 
 	int* size;           // 每个连通集的大小 
 	int nbDisjointSets;  // 非连通集合的数量
-}
+};
 
 
 /* 寻找p节点所在组的根节点，根节点具有性质id[root] = root  */
@@ -55,7 +55,7 @@ int UF::find(int p)
 }
 
 
-void UF::union(int p, int q)
+void UF::merge(int p, int q)
 {
 	// 获得p和q对应的id
 	int pID = find(p);
@@ -82,11 +82,12 @@ void UF::union(int p, int q)
 
 
 
-void main()
+int main()
 {
 	UF test(5);
-	test.union(2, 3);
-	test.union(3, 4);
+	test.merge(2, 3);
+	test.merge(3, 4);
 	std::cout<<test.find(4)<<std::endl;;
-	std::cout<<test.nbDisjointSets()<<std::endl;
+	std::cout<<test.NbDisjointSets()<<std::endl;
+    return 0;
 }
