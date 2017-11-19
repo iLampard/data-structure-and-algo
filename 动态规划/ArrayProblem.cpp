@@ -17,6 +17,9 @@ double MaxProductSubsequence(double* array, int iLen);
 /* 最长递增子序列数组（不一定连续） */
 int LongestIncreasingSubsequence(int* array, int iLen);
 
+/* 最大连续子数组和   */
+int MaxSumSubsequence(int* array, int iLen);
+void MaxSumSubsequenceExample();
 
 /* 操作最小次数
  一个数从1开始到N，每次只能加1， 或者乘以2，如果想要变成2015，最少需要多少次变化 */
@@ -27,6 +30,7 @@ void UpdateCountExample();
 int main()
 {
     UpdateCountExample();
+    MaxSumSubsequenceExample();
     return 0;
 }
 
@@ -154,5 +158,34 @@ void UpdateCountExample()
         std::cout<<pPreNumber[n]<<" ";
         n = pPreNumber[n];
     }
+    std::cout<<std::endl;
 }
 
+
+
+/* 最大连续子数组和   */
+/* 遍历数组，CurrentSum[i] 表示以元素i结尾的最大连续子数组的和；CurrentSum[i] = max(CurrentSum[i-1] + a[i], 0)  */
+int MaxSumSubsequence(int* array, int iLen)
+{
+    int MaxSum = array[0];
+    int CurrentSum = 0;
+    
+    for(int i = 0; i < iLen; i++)
+    {
+        if(CurrentSum < 0)
+            CurrentSum = array[i];
+        else
+            CurrentSum += array[i];
+        MaxSum = CurrentSum > MaxSum? CurrentSum: MaxSum; // 记录CurrentSum的最大值
+    }
+    
+    return MaxSum;
+}
+
+
+void MaxSumSubsequenceExample()
+{
+    int array[] = {1, -2, 3, 10, -4, 7, 2, -5};
+    std::cout<<"The max sum of subsequence is"<<std::endl;
+    std::cout<<MaxSumSubsequence(array, sizeof(array)/sizeof(int))<<std::endl;
+}
