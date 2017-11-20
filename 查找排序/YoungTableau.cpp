@@ -14,17 +14,17 @@
 class YoungTableau
 {
 public:
-    YoungTableau(int row, int col)
+    YoungTableau(int NbRow, int NbCol)
     {
-        Row = row;
-        Col = col;
-        if(!tableau)
+        NbRow_ = NbRow;
+        NbCol_ = NbCol;
+        if(!Tableau)
         {
-            Tableau = new int* [row];
-            for(int i = 0; i < row; i++)
+            Tableau = new int* [NbRow_];
+            for(int i = 0; i < NbRow_; i++)
             {
-                Tableau[i] = new int[col];
-                for(int j = 0; j < col; j++)
+                Tableau[i] = new int[NbCol_];
+                for(int j = 0; j < NbCol_; j++)
                 {
                     Tableau[i][j] = INT_MAX;    // 初始化成正无穷
                 }
@@ -34,23 +34,29 @@ public:
 
     ~YoungTableau()
     {
-        for(int i = 0; i < Row; i++)
+        for(int i = 0; i < NbRow_; i++)
         {
-            delete [] Tableau[i]
+            delete [] Tableau[i];
         }
         delete [] Tableau;
     }
 
     void PrintTableau();   // 打印杨氏矩阵
+    bool InsertByNonRecursion(int value); // 非递归方法插入元素
+    bool IsBig(int a, int b){return rand() % 2 == 0 ? a >= b: a > b;};
+    bool InsertByNonRecursionBalanced(int value); // 非递归方法插入元素 - 返回更分布均衡的矩阵
+    bool InsertByRecursion(int value);   // 递归方法插入元素
     
+    bool Find(int value, int& row, int & col);  // 从右下角开始搜索指定值
 
+    void Delete(int row, int col); // 删除指定行列中的元素，重新排序
 
 private:
-    int Row;
-    int Col;
+    int NbRow_;
+    int NbCol_;
     int** Tableau;
 
-}
+};
 
 
 int main()
@@ -64,13 +70,144 @@ void YoungTableau::PrintTableau()
 {
     if(!Tableau)
     {
-        for(int i = 0; i < Row; i++)
+        for(int i = 0; i < NbRow_; i++)
         {
-            for(int j = 0; j < Col; j++)
+            for(int j = 0; j < NbCol_; j++)
             {
                 std::cout<<Tableau[i][j]<<" ";
             }
         }
         std::cout<<std::endl;    
     }
+}
+
+
+bool YoungTableau::InsertByNonRecursion(int value)
+{
+    
+    if(Tableau[NbRow_-1][NbCol_-1] < INT_MAX) // 矩阵已满
+        return false;
+    
+    int RowIndex = NbRow_ - 1;
+    int ColIndex = NbCol_ - 1;
+    int RowLargest = RowIndex;
+    int ColLargest = ColIndex;
+    Tableau[RowIndex][ColIndex] = value; // 首先赋值给最右下角的元素
+    
+    while(RowIndex >= 0 || ColIndex >=0)
+    {
+        if(RowIndex >= 1 && Tableau[RowIndex-1][ColIndex] > Tableau[RowLargest][ColLargest])
+        {
+            RowLargest = RowIndex - 1;
+            ColLargest = ColIndex;    // 上一行的元素更大， 标记为临时最大值
+        }
+        
+        if(ColIndex >= 1 && Tableau[RowIndex][ColIndex-1] > Tableau[RowLargest][ColLargest])
+        {
+            RowLargest = RowIndex;
+            ColLargest = ColIndex - 1; // 左边一列元素更大，标记为临时最大值
+        }
+        
+        if(RowIndex == RowLargest && ColIndex == ColLargest) // 不满足以上两个判断条件，则说明已经处于正确位置
+            break;
+        
+        std::swap(Tableau[RowIndex][ColIndex], Tableau[RowLargest][ColLargest]); // 互换位置
+        /* 到新的位置后继续 判断是否需要调整位置  */
+        RowIndex = RowLargest;
+        ColIndex = ColLargest;
+        
+    }
+    return true;
+}
+
+
+/* 对上一方法的微调，使得矩阵更趋近于三角矩阵，而不是非空行均集中于上半部分 */
+bool YoungTableau::InsertByNonRecursionBalanced(int value)
+{
+    if(Tableau[NbRow_-1][NbCol_-1] < INT_MAX) // 矩阵已满
+        return false;
+    
+    int RowIndex = NbRow_ - 1;
+    int ColIndex = NbCol_ - 1;
+    int RowLargest = RowIndex;
+    int ColLargest = ColIndex;
+    Tableau[RowIndex][ColIndex] = value; // 首先赋值给最右下角的元素
+    
+    while(RowIndex >= 0 || ColIndex >=0)
+    {
+        if(RowIndex >= 1 && Tableau[RowIndex-1][ColIndex] > Tableau[RowLargest][ColLargest])
+        {
+            RowLargest = RowIndex - 1;
+            ColLargest = ColIndex;    // 上一行的元素更大， 标记为临时最大值
+        }
+        
+        // 如果上一个判断条件为真，此处Tableau[RowIndex][ColIndex] 指的是上一行的元素
+        if(ColIndex >= 1 && IsBig(Tableau[RowIndex][ColIndex-1], Tableau[RowLargest][ColLargest]))
+        {
+            RowLargest = RowIndex;
+            ColLargest = ColIndex - 1; // 左边一列元素更大，标记为临时最大值
+        }
+        
+        if(RowIndex == RowLargest && ColIndex == ColLargest) // 不满足以上两个判断条件，则说明已经处于正确位置
+            break;
+        
+        std::swap(Tableau[RowIndex][ColIndex], Tableau[RowLargest][ColLargest]); // 互换位置
+        /* 到新的位置后继续 判断是否需要调整位置  */
+        RowIndex = RowLargest;
+        ColIndex = ColLargest;
+        
+    }
+    return true;
+}
+
+/* 从右下角开始搜索  */
+bool YoungTableau::Find(int value, int& row, int& col)
+{
+    row = NbRow_;
+    col = NbCol_;
+    while(row >= 0 && col >= 0)
+    {
+        if(Tableau[row][col] > value)
+            row--;
+        if(Tableau[row][col] > value)
+            col--;
+        if(Tableau[row][col] == value)
+            return true;
+    }
+    
+    return false;
+}
+
+
+/* 删除某行某列的元素 */
+void YoungTableau::Delete(int row, int col)
+{
+    int RowIndex = row;
+    int ColIndex = col;
+    int RowLargest = RowIndex;
+    int ColLargest = ColIndex;
+    while(RowIndex < NbRow_ && ColIndex < NbCol_)
+    {
+        if(Tableau[RowIndex][ColIndex] == INT_MAX) // 已经移除（设置为最大值）
+            break;
+        
+        if(RowIndex < NbRow_ - 1)
+        {
+            RowLargest = RowIndex + 1;
+            ColLargest = ColIndex;
+        }
+        
+        if((ColIndex < NbCol_ - 1) &&(Tableau[RowIndex][ColIndex + 1] < Tableau[RowLargest][ColLargest]))
+        {
+            RowLargest = RowIndex;
+            ColLargest = ColLargest + 1;
+        }
+        
+        if(RowIndex == RowLargest && ColIndex == ColLargest)
+            break;
+        RowIndex = RowLargest;
+        ColIndex = ColLargest;
+    }
+    
+    Tableau[NbRow_][NbCol_] = INT_MAX;
 }
