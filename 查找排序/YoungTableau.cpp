@@ -41,22 +41,8 @@ public:
         delete [] Tableau;
     }
 
-    void PrintTableau()
-    {
-        if(!Tableau)
-        {
-            for(int i = 0; i < Row; i++)
-            {
-                for(int j = 0; j < Col; j++)
-                {
-                    std::cout<<Tableau[i][j]<<" ";
-                }
-            }
-            std::cout<<std::endl;    
-        }
-    }
-
-
+    void PrintTableau();   // 打印杨氏矩阵
+    
 
 
 private:
@@ -64,4 +50,27 @@ private:
     int Col;
     int** Tableau;
 
+}
+
+
+int main()
+{
+    return 0;
+}
+
+
+
+void YoungTableau::PrintTableau()
+{
+    if(!Tableau)
+    {
+        for(int i = 0; i < Row; i++)
+        {
+            for(int j = 0; j < Col; j++)
+            {
+                std::cout<<Tableau[i][j]<<" ";
+            }
+        }
+        std::cout<<std::endl;    
+    }
 }
