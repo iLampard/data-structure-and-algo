@@ -18,20 +18,34 @@ public:
     {
         NbRow_ = NbRow;
         NbCol_ = NbCol;
-        if(!Tableau)
+        Tableau = new int* [NbRow_];
+        for(int i = 0; i < NbRow_; i++)
         {
-            Tableau = new int* [NbRow_];
-            for(int i = 0; i < NbRow_; i++)
+            Tableau[i] = new int[NbCol_];
+            for(int j = 0; j < NbCol_; j++)
             {
-                Tableau[i] = new int[NbCol_];
-                for(int j = 0; j < NbCol_; j++)
-                {
-                    Tableau[i][j] = INT_MAX;    // 初始化成正无穷
-                }
+                Tableau[i][j] = INT_MAX;    // 初始化成正无穷
             }
         }
     }
 
+    YoungTableau(int NbRow, int NbCol, int** array)
+    {
+        NbRow_ = NbRow;
+        NbCol_ = NbCol;
+        Tableau = new int* [NbRow_];
+        for(int i = 0; i < NbRow_; i++)
+        {
+            Tableau[i] = new int[NbCol_];
+            for(int j = 0; j < NbCol_; j++)
+            {   
+                if(!array[i][j])
+                    Tableau[i][j] = array[i][j];    // 初始化成array对应的值
+                else
+                    Tableau[i][j] = INT_MAX;
+            }
+        }
+    }
     ~YoungTableau()
     {
         for(int i = 0; i < NbRow_; i++)
@@ -42,6 +56,7 @@ public:
     }
 
     void PrintTableau();   // 打印杨氏矩阵
+    void InitFromArray(int** array);  // 给定一个二维数组，生成杨氏矩阵 
     bool InsertByNonRecursion(int value); // 非递归方法插入元素
     bool IsBig(int a, int b){return rand() % 2 == 0 ? a >= b: a > b;};
     bool InsertByNonRecursionBalanced(int value); // 非递归方法插入元素 - 返回更分布均衡的矩阵
@@ -59,8 +74,11 @@ private:
 };
 
 
+void YoungTableauExample();
+
 int main()
 {
+    YoungTableauExample();
     return 0;
 }
 
@@ -210,4 +228,19 @@ void YoungTableau::Delete(int row, int col)
     }
     
     Tableau[NbRow_][NbCol_] = INT_MAX;
+}
+
+
+void YoungTableauExample()
+{
+    std::cout<<"The tableau is initilized to...."<<std::endl;
+    int data[4][4] = {{1,2,8,9},{2,4,9,12},{4,7,10,13},{6,8,11,15}};
+    tableau = YoungTableau(4, 4, data);
+    tableau.PrintTableau()
+    std::cout<<"After deleting element 11, the tableau changes to...."<<std::endl;
+    tableau.Delete(11);
+    tableau.PrintTableau();
+    std::cout<<"After adding element 20, the tableau changes to...."<<std::endl;
+    tableau.InsertByNonRecursion(20);
+    tableau.PrintTableau();
 }
