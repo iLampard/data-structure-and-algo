@@ -38,14 +38,12 @@ public:
         {
             Tableau[i] = new int[NbCol_];
             for(int j = 0; j < NbCol_; j++)
-            {   
-                if(!array[i][j])
-                    Tableau[i][j] = array[i][j];    // 初始化成array对应的值
-                else
-                    Tableau[i][j] = INT_MAX;
+            {
+                Tableau[i][j] = *((int*)array + i * NbCol_ + j);    // 初始化成array对应的值
             }
         }
     }
+    
     ~YoungTableau()
     {
         for(int i = 0; i < NbRow_; i++)
@@ -76,6 +74,7 @@ private:
 
 void YoungTableauExample();
 
+
 int main()
 {
     YoungTableauExample();
@@ -86,7 +85,7 @@ int main()
 
 void YoungTableau::PrintTableau()
 {
-    if(!Tableau)
+    if(Tableau)
     {
         for(int i = 0; i < NbRow_; i++)
         {
@@ -94,8 +93,9 @@ void YoungTableau::PrintTableau()
             {
                 std::cout<<Tableau[i][j]<<" ";
             }
+            
+            std::cout<<std::endl;
         }
-        std::cout<<std::endl;    
     }
 }
 
@@ -198,10 +198,8 @@ bool YoungTableau::Find(int value, int& row, int& col)
 
 
 /* 删除某行某列的元素 */
-void YoungTableau::Delete(int row, int col)
+void YoungTableau::Delete(int RowIndex, int ColIndex)
 {
-    int RowIndex = row;
-    int ColIndex = col;
     int RowLargest = RowIndex;
     int ColLargest = ColIndex;
     while(RowIndex < NbRow_ && ColIndex < NbCol_)
@@ -209,38 +207,43 @@ void YoungTableau::Delete(int row, int col)
         if(Tableau[RowIndex][ColIndex] == INT_MAX) // 已经移除（设置为最大值）
             break;
         
-        if(RowIndex < NbRow_ - 1)
+        if(RowIndex < NbRow_ - 1)  // 先与下面一个元素比较: 下方元素肯定比目标元素要大，暂时记作最大值
         {
             RowLargest = RowIndex + 1;
             ColLargest = ColIndex;
         }
         
-        if((ColIndex < NbCol_ - 1) &&(Tableau[RowIndex][ColIndex + 1] < Tableau[RowLargest][ColLargest]))
+        // 将最大值与目标的右边元素比大小
+        // 如果右边元素更大，则需要与之前的最大值互换（与插入操作相反）
+        if((ColIndex < NbCol_ - 1) && (Tableau[RowIndex][ColIndex + 1] > Tableau[RowLargest][ColLargest]))
         {
             RowLargest = RowIndex;
-            ColLargest = ColLargest + 1;
+            ColLargest = ColIndex + 1;
         }
         
         if(RowIndex == RowLargest && ColIndex == ColLargest)
             break;
+        
+        Tableau[RowIndex][ColIndex] = Tableau[RowLargest][ColLargest]; // 交换元素
+        
         RowIndex = RowLargest;
         ColIndex = ColLargest;
     }
     
-    Tableau[NbRow_][NbCol_] = INT_MAX;
+    Tableau[NbRow_ - 1][NbCol_ - 1] = INT_MAX;
 }
 
 
 void YoungTableauExample()
 {
-    std::cout<<"The tableau is initilized to...."<<std::endl;
+    std::cout<<"The tableau is initialized to...."<<std::endl;
     int data[4][4] = {{1,2,8,9},{2,4,9,12},{4,7,10,13},{6,8,11,15}};
-    tableau = YoungTableau(4, 4, data);
-    tableau.PrintTableau()
-    std::cout<<"After deleting element 11, the tableau changes to...."<<std::endl;
-    tableau.Delete(11);
+    YoungTableau tableau(4, 4, (int**)data);
     tableau.PrintTableau();
-    std::cout<<"After adding element 20, the tableau changes to...."<<std::endl;
-    tableau.InsertByNonRecursion(20);
+    std::cout<<"After deleting element 10, the tableau changes to...."<<std::endl;
+    tableau.Delete(2, 2);
+    tableau.PrintTableau();
+    std::cout<<"After adding element 10, the tableau changes to...."<<std::endl;
+    tableau.InsertByNonRecursion(10);
     tableau.PrintTableau();
 }
