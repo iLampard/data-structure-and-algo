@@ -22,6 +22,8 @@ void InsertSort(int* a, int start, int end);
 /* 冒泡排序 */
 void BubbleSort(int* a, int start, int end);
 
+/* 希尔排序 */
+void ShellSort(int* a, int start, int end);
 
 int main()
 {
@@ -111,4 +113,30 @@ void BubbleSort(int* a, int start, int end)
             if(a[j] > a[j+1])
                 std::swap(a[j], a[j+1]);
         }
+}
+
+
+/* 希尔排序 */
+void ShellSort(int* a, int start, int end)
+{
+    // 以 n/2^i 作为步长序列
+    for(int gap = n >> 1; gap > 0; gap >>= 1)
+    {
+        for(int i = 0; i < gap; i++)
+        {
+            for(int j = i + gap; j < end - start; j += gap) // 同属一列的元素
+            {
+                // 使用插入排序法
+                int temp = a[j];
+                int k = j - gap;
+                while(a[k] > temp && k >= i)
+                {
+                    a[k + gap] = a[k];
+                    k -= gap;
+                }   
+                a[k + gap] = temp;
+            }
+        }
+    }
+
 }
