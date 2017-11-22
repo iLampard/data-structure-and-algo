@@ -9,6 +9,42 @@
 #include <iostream>
 
 
+
+void PrintArray(int* a, int size);
+
+/* 归并排序 */
+void MergeArray(int* a, int start, int mid, int end);
+void MergeSort(int* a, int start, int end);
+
+/* 插入排序 */
+void InsertSort(int* a, int start, int end);
+
+/* 冒泡排序 */
+void BubbleSort(int* a, int start, int end);
+
+
+int main()
+{
+    int a[] = {3, 56, 2, 7, 45, 8, 1};
+    int size = sizeof(a) / sizeof(int);
+    std::cout<<"Before merge sort:"<<std::endl;
+    PrintArray(a, size);
+    std::cout<<"After merge sort"<<std::endl;
+    MergeSort(a, 0, size - 1);
+    PrintArray(a, size);
+    
+    return 0;
+}
+
+
+void PrintArray(int* a, int size)
+{
+    for(int i = 0; i < size; i++)
+        std::cout<<a[i]<<" ";
+    std::cout<<std::endl;
+}
+
+
 /* 归并排序 */
 void MergeArray(int* a, int start, int mid, int end)
 {
@@ -50,22 +86,29 @@ void MergeSort(int* a, int start, int end)
 }
 
 
-void PrintArray(int* a, int size)
+/* 插入排序 */
+void InsertSort(int* a, int start, int end)
 {
-    for(int i = 0; i < size; i++)
-        std::cout<<a[i]<<" ";
-    std::cout<<std::endl;
+    for(int i = start + 1; i < end; i++)
+    {
+        temp = a[i];
+        j = i - 1;
+        while(a[j] > temp && j >= start)
+        {
+            a[j + 1] = a[j--];
+        }
+        a[j++] = temp;
+    }
 }
 
-int main()
+
+/* 冒泡排序 */
+void BubbleSort(int* a, int start, int end)
 {
-    int a[] = {3, 56, 2, 7, 45, 8, 1};
-    int size = sizeof(a) / sizeof(int);
-    std::cout<<"Before merge sort:"<<std::endl;
-    PrintArray(a, size);
-    std::cout<<"After merge sort"<<std::endl;
-    MergeSort(a, 0, size - 1);
-    PrintArray(a, size);
-    
-    return 0;
+    for(int i = start; i < end; i++)
+        for(int j = start; j < end - i; j++)
+        {
+            if(a[j] > a[j+1])
+                std::swap(a[j], a[j+1]);
+        }
 }
