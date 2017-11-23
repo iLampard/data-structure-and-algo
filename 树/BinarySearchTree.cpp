@@ -137,6 +137,9 @@ SearchTree Insert(ElementType X, SearchTree T)
 
 
 /* 使用递归方法：在二叉查找树中删除元素 */
+/* 分为三种情况：删除节点没有左右子树，则直接删除
+                若只有一个子树，则令其父节点指向其子节点
+                若有两个孩子，找到右子树的最小元素，替换要删除的节点，同时再递归删除这个最小元素的节点 */
 SearchTree Delete(ElementType X, SearchTree T)
 {
     Position Temp = NULL;
@@ -377,17 +380,17 @@ void PrintElement(ElementType X)
 /* 创建一个前中后遍历的例子  */
 void TraverseExample()
 {
-    std::cout<<"示例：前中后遍历"<<std::endl;
+    std::cout<<"Linked List Traverse Example"<<std::endl;
     SearchTree T = NULL;
     int element[] = {15, 5, 3, 12, 16, 20, 23, 13, 18, 10, 6, 7};
     int iLen = sizeof(element)/sizeof(int);
     /* 创建一棵二叉搜索树，并且尝试中序，前序以及后序遍历（打印）*/
     T = CreateTree(element, iLen);
-    std::cout<<"中序遍历序列为"<<std::endl;
+    std::cout<<"In-order traverse"<<std::endl;
     InOrderTraverse(T, PrintElement);
-    std::cout<<"前序遍历序列为"<<std::endl;
+    std::cout<<"Pre-order traverse"<<std::endl;
     PreOrderTraverse(T, PrintElement);
-    std::cout<<"后序遍历序列为"<<std::endl;
+    std::cout<<"Post-order traverse"<<std::endl;
     PostOrderTraverse(T, PrintElement);
     
 }
@@ -396,7 +399,7 @@ void TraverseExample()
 /* 创建一个已知前序中序，求后序序列的例子 */
 void InPre2PostOrderExample()
 {
-    std::cout<<"示例：已知前序中序，求后序序列"<<std::endl;
+    std::cout<<"Given pre-order and in-order, find post-order"<<std::endl;
     char pPreOrder[] = "GDAFEMHZ";
     char pInOrder[] = "ADEFGHMZ";
     int iLen = sizeof(pInOrder)/sizeof(char);
