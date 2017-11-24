@@ -10,6 +10,39 @@
 \selectfont
 \vspace{0.5cm}
 
+\subsection{二叉树}
+
+\begin{lemma}
+深度为$d$的二叉树最多有$2^{d-1}$片树叶。
+\label{tree_lemma_depth}
+\end{lemma}
+
+\begin{proof}
+用数学归纳法证明。 
+
+\begin{enumerate}
+\item 当深度$d=1$时，二叉树只有一个根，最多存在一个树叶（就是根自己），所以基准情况为真。
+\item 假设当深度为$d-1$时($d$是大于1的整数)，二叉树最有$2^{d-2}$片树叶。
+
+那么对于深度为$d$的树$T$，其左右子树$T_1,T_2$，每一个的深度最多是$d-1$。根据假设，其左右子树最多有$2^{d-2}$个树叶。
+
+$T$的树叶等于左右子树的树叶之和，其最多等于$2^{d-2} + 2^{d-2}  = 2^{d-1} $。
+
+
+\end{enumerate}
+\end{proof}
+
+
+
+\begin{lemma}
+具有$L$片树叶的二叉树深度至少是$ \lceil \log L \rceil$
+\end{lemma}
+
+\begin{proof}
+由引理(\ref{tree_lemma_depth})可立即得出。
+\end{proof}
+
+
 
 \subsection{二叉查找树}
 
