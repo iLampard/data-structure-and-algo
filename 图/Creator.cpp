@@ -1,93 +1,99 @@
 
 #include <iostream>
 
-// ref: http://blog.csdn.net/dm_vincent/article/details/7655764
+// ref: http://www.cnblogs.com/nigang/p/3599334.html
+typedef struct Edge *pEdge;
+typedef struct Edge **ppEdge;
 
-class UF
+
+/* 边由到达顶点、到达权重以及纸箱由同一个顶点出发的下一条边的指针 */
+struct Edge
 {
-public:
-	UF(int N)
-	{
-		nbDisjointSets = N;
-		id = new int[N];
-		size = new int[N];
-		for(int i = 0; i < N; i++)
-		{
-			id[i] = i;     // 初始化时，id数组的值全部为自身
-			size[i] = 1;   // 初始化时，每个组的大小都是1  
-		}
-			
-	}
-
-	int NbDisjointSets()    // 返回非连通集合的数量
-	{return nbDisjointSets;} 
-
-	int find(int p);  // 寻找p节点所在组的根节点，根节点具有性质id[root] = root 
-
-	bool connected(int p, int q) 
-	{return id[p] == id[q];}  // 判断p与q节点是否相连 
-	
-	void merge(int p, int q);  // 设置p与q节点相连
-
-	~UF()
-	{
-		delete[] id;
-		delete[] size;
-	}
-private:
-	int* id;             // 记录两点连通情况的数组，如果两点连通，那么他们对应的id值一样 
-	int* size;           // 每个连通集的大小 
-	int nbDisjointSets;  // 非连通集合的数量
+    int Vertex;
+    int Weight;
+    pEdge Next;
+    Edge(){};
 };
 
-
-/* 寻找p节点所在组的根节点，根节点具有性质id[root] = root  */
-int UF::find(int p)
+/* 创建图的邻接表：需要知道顶点个数，以及边的数目 */
+ppEdge CreateGraph(int* NumVertex, int* NumEdge)
 {
-	while(id[p] != p)
+	int NumVertex_, NumEdge_;
+	int v1, v2, w;
+	std::cout<<"Input the number of vertex and edges"<<std::endl;
+	std::cin>>NumVertex_>>NumEdge_;
+
+	// 每个顶点都有一个链表，记录该顶点的连接情况
+	ppEdge G = new pEdge [NumVertex_];
+	for(int i = 0; i < NumVertex_; i++)
+		G[i] = NULL;
+
+	std::cout<<"Input the edge: vertex left, vertex right, weight"<<std::endl;
+	for(int i = 0; i < NumEdge_; i++)
 	{
-		// 将p节点的父节点设置为它的爷爷节点 
-		id[p] = id[id[p]];
-		p = id[p];
+		std::cin>>v1>>v2>>w;
+		// 初始化一个边结构，指向v2
+		pEdge e = new Edge;
+		e->Next = NULL;
+		e->Vertex = v2;
+		e->Weight = w;
+
+		pEdge temp = G[v1 - 1];
+		/* 如果G[v1]还没有被初始化过，说明是第一次初始化以 v1 为头结点的邻接链表*/
+		if(temp == NULL)
+			G[v1 - 1] = e;
+		else
+		{
+			while(temp->Next != NULL)
+				temp = temp->Next;  // 找到该链表的末尾
+			temp->Next = e;
+		}
 	}
-		
-	return p;
+
+	*NumVertex = NumVertex_;
+	*NumEdge = NumEdge_;
+
+	return G;
 }
 
 
-void UF::merge(int p, int q)
+/* 遍历图的邻接表 */
+void TraverseVertex(ppEdge G, int NumVertex)
 {
-	// 获得p和q对应的id
-	int pID = find(p);
-	int qID = find(q);
-	
-	// 如果两个id相等，则返回
-	if(pID == qID)
-		return;
-
-	// 将小树作为大树的子树   
-	if(size[pID] < size[qID])
+	// 对每一个结点开始循环
+	for(int i = 0; i < NumVertex; i++)
 	{
-		id[pID] = qID;
-		size[qID] += size[pID];
+		pEdge temp = G[i];
+		std::cout<<i + 1;
+		while(temp != NULL)
+		{
+			std::cout<<"---"<<temp->Weight<<"--->"<<temp->Vertex;
+			temp = temp->Next;
+		}
+		std::cout<<"--->NULL"<<std::endl;
 	}
-	else
-	{
-		id[qID] = pID;
-		size[pID] += size[qID];
-	}
-
-	nbDisjointSets--; 
 }
-
 
 
 int main()
 {
-	UF test(5);
-	test.merge(2, 3);
-	test.merge(3, 4);
-	std::cout<<test.find(4)<<std::endl;;
-	std::cout<<test.NbDisjointSets()<<std::endl;
-    return 0;
+	int NumVertex, NumEdge;
+	ppEdge G = CreateGraph(&NumVertex, &NumEdge);
+	TraverseVertex(G, NumVertex);
+	return 0;
 }
+
+/*  
+ Input number of vertex and dedge: Vertex Edge.
+ 4 5
+ Input edge data:Vertex Vertex Weight.
+ 1 3 7
+ 1 4 9
+ 1 2 5
+ 2 4 6
+ 4 3 8
+ 1----7--->3----9--->4----5--->2----->NULL
+ 2----6--->4----->NULL
+ 3----->NULL
+ 4----8--->3----->NULL
+ */
