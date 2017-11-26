@@ -27,12 +27,15 @@ void BubbleSortExample();
 
 /* 希尔排序 */
 void ShellSort(int* a, int iLen);
+void ShellSortExample();
+
 
 int main()
 {
 	MergeSortExample();
 	InsertSortExample();
 	BubbleSortExample();
+    ShellSortExample();
 	system("pause");
 	return 0;
 }
@@ -166,7 +169,7 @@ void ShellSort(int* a, int iLen)
 	{
 		for(int i = 0; i < gap; i++)
 		{
-			for(int j = i + gap; j < end - start; j += gap) // 同属一列的元素
+			for(int j = i + gap; j < iLen; j += gap) // 同属一列的元素
 			{
 				// 使用插入排序法
 				int temp = a[j];
@@ -180,5 +183,16 @@ void ShellSort(int* a, int iLen)
 			}
 		}
 	}
+}
 
+
+void ShellSortExample()
+{
+    int a[] = {4, 1, 2, 5, 3, 6, 7, 1};
+    int size = sizeof(a) / sizeof(int);
+    std::cout<<"Before Shell sort:"<<std::endl;
+    PrintArray(a, size);
+    std::cout<<"After Shell sort"<<std::endl;
+    ShellSort(a, size);
+    PrintArray(a, size);
 }
