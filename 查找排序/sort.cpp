@@ -163,8 +163,6 @@ void BubbleSortExample()
 void ShellSort(int* a, int iLen)
 {
 	// 以 n/2^i 作为步长序列
-	int start = 0;
-	int end = iLen - 1;
 	for(int gap = iLen >> 1; gap > 0; gap >>= 1)
 	{
 		for(int i = 0; i < gap; i++)
