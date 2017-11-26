@@ -43,7 +43,7 @@ public:
             }
         }
     }
-    
+     
     ~YoungTableau()
     {
         for(int i = 0; i < NbRow_; i++)
@@ -125,7 +125,8 @@ bool YoungTableau::InsertByNonRecursion(int value)
             RowLargest = RowIndex;
             ColLargest = ColIndex - 1; // 左边一列元素更大，标记为临时最大值
         }
-        
+        /* 上面的含义是指要和上方以及左侧两个元素中最大的一个交换位置 */
+       
         if(RowIndex == RowLargest && ColIndex == ColLargest) // 不满足以上两个判断条件，则说明已经处于正确位置
             break;
         
@@ -181,8 +182,8 @@ bool YoungTableau::InsertByNonRecursionBalanced(int value)
 /* 从右下角开始搜索  */
 bool YoungTableau::Find(int value, int& row, int& col)
 {
-    row = NbRow_;
-    col = NbCol_;
+    row = NbRow_ - 1;
+    col = NbCol_ - 1;
     while(row >= 0 && col >= 0)
     {
         if(Tableau[row][col] > value)
@@ -240,6 +241,10 @@ void YoungTableauExample()
     int data[4][4] = {{1,2,8,9},{2,4,9,12},{4,7,10,13},{6,8,11,15}};
     YoungTableau tableau(4, 4, (int**)data);
     tableau.PrintTableau();
+    std::cout<<"Is 13 in the tableau ? "<<std::endl;
+    int row, col;
+    tableau.Find(13, row, col);
+    std::cout<<"13 is in row "<<row<<" and col "<<col<<std::endl;
     std::cout<<"After deleting element 10, the tableau changes to...."<<std::endl;
     tableau.Delete(2, 2);
     tableau.PrintTableau();
