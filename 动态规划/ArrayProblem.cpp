@@ -27,10 +27,14 @@ int UpdateCount(int Value, int* pCount, int* pPreNumber);
 void UpdateCountExample();
 
 
+/* 跳台阶问题：n级台阶，一次可以跳1级或者2级，总共多少种跳法 */
+int ClimbStairs(int n);
+
 int main()
 {
     UpdateCountExample();
     MaxSumSubsequenceExample();
+    std::cout<<ClimbStairs(5)<<std::endl;
     return 0;
 }
 
@@ -188,4 +192,25 @@ void MaxSumSubsequenceExample()
     int array[] = {1, -2, 3, 10, -4, 7, 2, -5};
     std::cout<<"The max sum of subsequence is"<<std::endl;
     std::cout<<MaxSumSubsequence(array, sizeof(array)/sizeof(int))<<std::endl;
+}
+
+
+
+/* 跳台阶问题：n级台阶，一次可以跳1级或者2级，总共多少种跳法 
+ f(n) = f(n-1) + f(n-2)
+ f(n) 表示n级台阶的跳法：第一次如果是跳1级，那么还有f(n-1) 种跳法，如果是跳2级，那么还有f(n-2)种跳法
+ 1, 1, 2, 3, 5, 8, 13, 21
+*/
+
+int ClimbStairs(int n)
+{
+    int dp[3] = {1, 1, 0};
+    for(int i = 2; i <= n; i++)
+    {
+        dp[2] = dp[0] + dp[1];
+        dp[0] = dp[1];
+        dp[1] = dp[2]; 
+    }
+
+    return dp[2];
 }
