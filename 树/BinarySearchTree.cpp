@@ -303,7 +303,7 @@ bool FeasiblePostOrder(int* pPostOrder, int iLen)
 
 /* 找到一颗二叉树里面的最大二叉搜索树 */
 // 规定： 如果某子树拥有更多的结点，则该子树更大
-// 算法： 如果某结点的左右子树均是二叉搜索树，且能够计算该结点左子树的最大值max和右子树的最小值，集该结点的值为value
+// 算法： 如果某结点的左右子树均是二叉搜索树，且能够计算该结点左子树的最大值max和右子树的最小值，设该结点的值为value
 //       若value > max && value < min, 则该结点形成了更大的二叉搜索树
 bool LargestBinarySearchTree(SearchTree T,   // 输入的整棵二叉树
                              int* iMinElement, // 二叉树T的最小结点值
@@ -415,7 +415,7 @@ void InPre2PostOrderExample()
 /* 创建一个已知前序中序，求后序序列的例子 */
 void InPost2PreOrderExample()
 {
-    std::cout<<"示例：已知中序后序，求前序序列"<<std::endl;
+    std::cout<<"Given post-order and in-order, find pre-order"<<std::endl;
     char pPostOrder[] = "AEFDHZMG";
     char pInOrder[] = "ADEFGHMZ";
     int iLen = sizeof(pInOrder)/sizeof(char);
@@ -432,7 +432,7 @@ void InPost2PreOrderExample()
 /* 创建一个检查后序序列是否可行的例子 */
 void CheckPostOrderExample()
 {
-    std::cout<<"示例：检查后序序列是否可行"<<std::endl;
+    std::cout<<"Find whether the post-order is feasible"<<std::endl;
     int array[] = {1, 2, 5, 4, 3};
     bool result = FeasiblePostOrder(array, sizeof(array)/sizeof(int));
     std::cout<<result<<std::endl;
@@ -442,16 +442,16 @@ void CheckPostOrderExample()
 /* 创建一个二叉树翻转的例子    */
 void ReverseBinaryTreeExample()
 {
-    std::cout<<"示例：二叉树翻转"<<std::endl;
+    std::cout<<"Reverse the binary search tree"<<std::endl;
     SearchTree T = NULL;
     int element[] = {0, 24, 34, 41, 58, 67, 69, 78};
     int iLen = sizeof(element)/sizeof(int);
     /* 创建一棵二叉搜索树 */
     T = CreateTree(element, iLen);
-    std::cout<<"翻转前中序遍历序列为"<<std::endl;
+    std::cout<<"In-order before reversing the tree"<<std::endl;
     InOrderTraverse(T, PrintElement);
     Reverse(&T);
-    std::cout<<"翻转后中序遍历序列为"<<std::endl;
+    std::cout<<"In-order after reversing the tree"<<std::endl;
     InOrderTraverse(T, PrintElement);
     
 }
@@ -460,7 +460,7 @@ void ReverseBinaryTreeExample()
 /* 创建一个最大二叉搜索树的例子    */
 void LargestBinaryTreeExample()
 {
-    std::cout<<"示例：最大二叉搜索树"<<std::endl;
+    std::cout<<"Find out the biggest binary search tree"<<std::endl;
     SearchTree T = NULL;
     int element[] = {0, 24, 34, 41, 58, 67, 69, 78};
     int iLen = sizeof(element)/sizeof(int);
@@ -477,7 +477,7 @@ void LargestBinaryTreeExample()
     
     if(found)
     {
-        std::cout<<"最大二叉搜索树的根结点的元素为"<<std::endl;
+        std::cout<<"The key node of the found tree is "<<std::endl;
         std::cout<<pNode->Element;
     }
     
