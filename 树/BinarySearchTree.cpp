@@ -216,7 +216,7 @@ void InPre2PostOrder(char* pInOrder, char* pPreOrder, int iLen, char** pPostOrde
     if(iLen == 1)  // 如果前序和中序只有一个字符，那么说明该字符属于根结点
     {
         (*pPostOrder)[(*iPostOrder)] = *pPreOrder; // 此种情况下， 前序和中序等价
-        (*iPostOrder)++;
+        (*iPostOrder)++;   // 后序长度加一
         return;
     }
     int i = 0;

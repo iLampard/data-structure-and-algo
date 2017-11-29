@@ -16,6 +16,12 @@
         4. 链表的划分
         5. 找到两个单向链表的公共结点
     - [队列](https://github.com/iLampard/data-structure-and-algo/blob/master/链表递归栈/Queue/main.cpp)
+
+- 树
+    - [二叉查找树](https://github.com/iLampard/data-structure-and-algo/blob/master/树/BinarySearchTree.cpp)
+        1. 常规操作：插入、删除、查找、翻转
+        2. 遍历：前中后序遍历, 已知前序中序求后序，已知中序后序求前序，判断后序序列是否是可行序列
+        3. 从二叉树中搜寻最大二叉查找树
     
 参考资源
 > Mark Allen Weiss, 数据结构与算法分析(C语言描述)，第二版
