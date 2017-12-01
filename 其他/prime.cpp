@@ -36,7 +36,7 @@ void Eratosthenes(bool* a, int n)
     a[1] = false; // a[0] 不用
 
     /* 默认后面所有数都是素数 */
-    for(i = 2; i <= n; i++)
+    fro(i = 2; i <= n; i++)
         a[i] = true;
 
     while(j <= n)
