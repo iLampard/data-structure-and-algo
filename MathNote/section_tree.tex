@@ -56,11 +56,16 @@ $T$的树叶等于左右子树的树叶之和，其最多等于$2^{d-1} + 2^{d-1}  = 2^d $。
 \end{enumerate}
 
 
-二叉查找树相对于其他数据结构的优势在于查找、插入的时间复杂度较低，为$\bigo{\prt{\log N}}$。
+\subsubsection{平均深度}
 
+定义一颗树的\emph{内部路径长}为所有节点的深度的和。
 
 \begin{lemma}
-假设定义在非负整数上的函数$f(n)$满足$nf(n) = (n+1)f(n-1) + cn$, 那么$f(n) = \frac{(n+1)}{2} f(1) + (n+1)\prt{\log_e(n+1) + \g - \frac{3}{2}}$
+假设定义在非负整数上的函数$f(n)$满足$nf(n) = (n+1)f(n-1) + cn$, 那么
+\begin{eqnarray*}
+f(n) = \frac{(n+1)}{2} f(1) + c(n+1)\prt{\log_e(n+1) + \g - \frac{3}{2}}
+\end{eqnarray*}
+
 \end{lemma}
 
 \begin{proof}
@@ -84,8 +89,8 @@ $T$的树叶等于左右子树的树叶之和，其最多等于$2^{d-1} + 2^{d-1}  = 2^d $。
 
 于是根据公式(\ref{lemma_tree_average_cost_1})，得到$f(n)$的解
 \begin{eqnarray*}
-f(n) = \frac{(n+1)}{2} f(1) + (n+1)\prt{\log_e(n+1) + \g - \frac{3}{2}}
-\end{eqnarra*}
+f(n) = \frac{(n+1)}{2} f(1) + c(n+1)\prt{\log_e(n+1) + \g - \frac{3}{2}}
+\end{eqnarray*}
 
 
 
@@ -93,9 +98,9 @@ f(n) = \frac{(n+1)}{2} f(1) + (n+1)\prt{\log_e(n+1) + \g - \frac{3}{2}}
 \end{proof}
 
 
-定义一颗树的\emph{内部路径长}为所有节点的深度的和。
+
 \begin{theorem}
-二叉查找树的平均深度为$\bigo{\prt{\log N}}$
+二叉查找树任意节点的平均深度为$\bigo{\prt{\log N}}$
 \end{theorem}
 
 \begin{proof}
@@ -106,7 +111,7 @@ f(n) = \frac{(n+1)}{2} f(1) + (n+1)\prt{\log_e(n+1) + \g - \frac{3}{2}}
 那么可以得到递归关系
 
 \begin{eqnarray}
-D(N) = D(N_L) + D(N-N_L-1) + N - 1
+    D(N) = D(N_L) + D(N-N_L-1) + N - 1
 \label{bst_inner_length}
 \end{eqnarray}
 
@@ -115,17 +120,49 @@ D(N) = D(N_L) + D(N-N_L-1) + N - 1
 为求得内部路径长的平均值，以$\E [D(N_L)]$和$\E [D(N-N_L-1)]$来代替公式(\ref{bst_inner_length})中的$ D(N_L)$和$ D(N-N_L-1)$
 
 那么根据公式(\ref{bst_inner_length})可以得到
+\begin{eqnarray}
+    D(N) &=& \E [D(N_L)] + \E[D(N-N_L-1)] + N - 1  \nonumber \\
+    &=& \frac{1}{N} \sum_{i=0}^{N-1}D(i) + \frac{1}{N} \sum_{i=0}^{N-1}D(i) + N-1\nonumber \\
+    &=&\frac{2}{N} \sum_{i=0}^{N-1}D(i) +N-1 \nonumber \\
+    \Rightarrow&& ND(N) = 2 \sum_{i=0}^{N-1}D(i) + N(N-1)
+\label{bst_innter_length_recursion}
+\end{eqnarray}
+
+根据公式(\ref{bst_innter_length_recursion}), 同理有如下等式成立
+\begin{eqnarray}
+    (N-1)D(N-1) = 2 \sum_{i=0}^{N-2}D(i) + (N-1)(N-2)
+\label{bst_innter_length_recursion_2}    
+\end{eqnarray}
+
+公式(\ref{bst_innter_length_recursion})减去公式(\ref{bst_innter_length_recursion_2})得到
+\begin{eqnarray}
+    ND(N) - (N-1)D(N-1) = 2D(N-1) + 2N-2 
+\label{bst_innter_length_recursion_3}
+\end{eqnarray}
+
+
+整理公式(\ref{bst_innter_length_recursion_3})得到
+\begin{eqnarray}
+    ND(N) = (N+1) D(N-1)   + 2N-2   
+\end{eqnarray}
+
+
+
+根据引理(\ref{lemma_tree_average_cost_1}), 可解得 
 \begin{eqnarray*}
-D(N) &=& \E [D(N_L)] + \E[D(N-N_L-1)] + N - 1 \\
-&=& \frac{1}{N} \sum_{i=0}^{N-1}D(i) + \frac{1}{N} \sum_{i=0}^{N-1}D(i) + N-1\\
-&=&\frac{2}{N} \sum_{i=0}^{N-1}D(i) +N-1
+    D(N) &=& \frac{(N+1)}{2} D(1) + 2(N+1)\prt{\log_e(N+1) + \g - \frac{3}{2}}   -2\\
+    &\approx&  (N+1)\log_e(N+1)\\
+    &=& \bigo\prt{{N\log N}}
 \end{eqnarray*}
 
-
-
-
+故任意节点的期望深度为$\bigo\prt{{\log N}}$
 
 
 
 
 \end{proof}
+
+
+
+
+二叉查找树相对于其他数据结构的优势在于查找、插入的时间复杂度较低，为$\bigo{\prt{\log N}}$。
