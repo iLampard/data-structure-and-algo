@@ -59,6 +59,39 @@ $T$的树叶等于左右子树的树叶之和，其最多等于$2^{d-1} + 2^{d-1}  = 2^d $。
 二叉查找树相对于其他数据结构的优势在于查找、插入的时间复杂度较低，为$\bigo{\prt{\log N}}$。
 
 
+\begin{lemma}
+假设定义在非负整数上的函数$f(n)$满足$nf(n) = (n+1)f(n-1) + cn$, 那么$f(n) = \frac{(n+1)}{2} f(1) + (n+1)\prt{\log_e(n+1) + \g - \frac{3}{2}}$
+\end{lemma}
+
+\begin{proof}
+
+
+因为$f(n)$满足$nf(n) = (n+1)f(n-1) + cn$，故有如下$n-1$个等式成立
+\begin{eqnarray*}
+&&\frac{f(n)}{n+1} = \frac{f(n-1)}{n} + \frac{c}{n+1} \\
+&&\frac{f(n-1)}{n} = \frac{f(n-2)}{n} + \frac{c}{n} \\
+&&...\\
+&&\frac{f(2)}{3} = \frac{f(1)}{2} + \frac{c}{3}
+\end{eqnarray*}
+
+将这$n-1$个等式相加，两边去除相等的项，得到
+\begin{eqnarray}
+    \frac{f(n)}{n+1} =  \frac{f(1)}{2} + c\sum_{i=3}^{n+1} \frac{1}{i}
+\label{lemma_tree_average_cost_1}
+\end{eqnarray}
+
+根据定理(\ref{theorem_array}) ，可知$\sum\limits_{i=3}^{n+1} \frac{1}{i} = \log_e(n+1) + \g - \frac{3}{2}$, 其中$\g$是欧拉常数。
+
+于是根据公式(\ref{lemma_tree_average_cost_1})，得到$f(n)$的解
+\begin{eqnarray*}
+f(n) = \frac{(n+1)}{2} f(1) + (n+1)\prt{\log_e(n+1) + \g - \frac{3}{2}}
+\end{eqnarra*}
+
+
+
+
+\end{proof}
+
 
 定义一颗树的\emph{内部路径长}为所有节点的深度的和。
 \begin{theorem}
@@ -77,13 +110,13 @@ D(N) = D(N_L) + D(N-N_L-1) + N - 1
 \label{bst_inner_length}
 \end{eqnarray}
 
-
-
 因为二叉查找树的子树的节点数仅由根节点的秩决定，而根节点是等概率随机出现的，所以二叉查找树的子树的节点数在$[0, N-1]$上均匀分布，即$N_L$是在$[0, N-1]$上服从均匀分布的随机变量，$N-N_L-1$也是相同分布。
 
-对公式(\ref{bst_inner_length})两边同时取期望， 得到
+为求得内部路径长的平均值，以$\E [D(N_L)]$和$\E [D(N-N_L-1)]$来代替公式(\ref{bst_inner_length})中的$ D(N_L)$和$ D(N-N_L-1)$
+
+那么根据公式(\ref{bst_inner_length})可以得到
 \begin{eqnarray*}
-\E[D(N)] &=& \E [D(N_L)] + \E[D(N-N_L-1)] + N - 1 \\
+D(N) &=& \E [D(N_L)] + \E[D(N-N_L-1)] + N - 1 \\
 &=& \frac{1}{N} \sum_{i=0}^{N-1}D(i) + \frac{1}{N} \sum_{i=0}^{N-1}D(i) + N-1\\
 &=&\frac{2}{N} \sum_{i=0}^{N-1}D(i) +N-1
 \end{eqnarray*}

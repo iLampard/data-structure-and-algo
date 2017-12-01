@@ -1,6 +1,8 @@
-\section{初等数论基础}
+\section{数学基础}
 
 
+
+\subsection{初等数论基础}
 
 \fontsize{9}{11}
 \selectfont
@@ -11,8 +13,6 @@
 \selectfont
 \vspace{0.5cm}
 
-
-\subsection{基本概念}
 
 \subsubsection{整除性}
 若$a,b$为整数，$a$整除$b$是指$b$是$a$的倍数，$a$是$b$的约数，记做$a|b$。 关于整除的性质有
@@ -56,3 +56,15 @@
 \end{proof}
 
 
+\subsection{数列}
+
+\begin{theorem}
+\begin{eqnarray*}
+&&\sum_{i=1}^N i^2 = \frac{N(N+1)(2N+1)}{6} \approx \frac{N^3}{3} \\
+&&\sum_{i=1}^N i^k \approx \frac{N^{k+1}}{\abs{k+1}} , k \neq -1  \\
+&&H_N=\sum_{i=1}^N \frac{1}{i} \approx \log_e N
+\end{eqnarray*}
+
+其中$H_N$叫做调和数，其和叫做调和和，其近似误差$\sum_{i=1}^N \frac{1}{i} - \log_e N = \g$。 $\g \approx 0.57721$ 称作欧拉常数。
+\label{theorem_array}
+\end{theorem}
