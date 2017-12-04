@@ -16,26 +16,36 @@ https://www.cnblogs.com/demonxian3/p/7112577.html
 
 #define MAX_SIZE 100
 
+
 struct Node;
-typedef struct Node List[MAX_SIZE];
+typedef struct Node CursorSpace[MAX_SIZE];
 typedef int ElementType;
+typedef int PtrToNode;
+typedef PtrToNode List;
+typedef PtrtoNode Position;
 
 
 struct Node
 {
     ElementType Element;   // 数据
-    int Curor;   // 游标
+    Position Next;        // 游标
 };
 
 
 /* 初始化链表 */
-void InitLinkedList(List L);
+void InitCursorSpace();
 
 /* 分配备用空间 */
-int MallocNode(List L);
+int CursorAlloc();
+
+/* 释放备用空间 */
+void CursorFree(Position P);
+
+/* 判断是否是一个空链表 */
+int IsEmpty(const List L);
 
 /* 判断是否是最后一个节点 */
-int IsLast(Position P);
+int IsLast(const Position P, const List L);
 
 /* 打印列表所有元素 */
 void PrintLinkedList(List L);
@@ -48,22 +58,47 @@ int main()
 
 
 /* 初始化链表 */
-void InitLinkedList(List L)
+void InitCursorSpace()
 {
     for(int i = 0; i < MAX_SIZE - 1; i++)
-        L[i].Curor = i + 1;   // 每个节点的游标指向下一个节点
-    L[MAX_SIZE - 1].Curor = 0;  // 最后一个结点的游标指向第一个节点
+        CursorSpace[i].Next = i + 1;   // 每个节点的游标指向下一个节点
+    CursorSpace[MAX_SIZE - 1].Next = 0;  // 最后一个结点的游标指向第一个节点
 }
 
 
 /* 分配备用空间 */
 /* 若备用节点非空，那么返回备用节点的下标 */
-int MallocSpace(List L)
+/* 将Freelist表头后的第一个元素删除 */
+int CursorAlloc()
 {
-    int i = L[0].Curor;
-    if(L[0].Curor)
-        L[0].Cursor = L[i].Cursor;  // 如果取出成功，第一个节点的指针向后移动
-    return i;
+    Position P = CursorSpace[0].Next;
+    CursorSpace[0].Next = CursorSpace[P].Next; // 如果取出成功，第一个节点的指针向后移动
+    return P;
+}
+
+
+
+/* 释放备用空间 */
+/* 将该元素放在 Freelist 前端 */
+void CursorFree(Position P)
+{
+    CursorSpace[P].Next = CursorSpace[0].Next;
+    CursorSpace[0].Next = P;
+}
+
+
+/* 判断是否是一个空链表 */
+int IsEmpty(const List L)
+{
+    return CursorSpace[L].Next == 0;
+}
+
+
+
+/* 判断是否是最后一个节点 */
+int IsLast(const Position P, const List L)
+{
+    return CursorSpace[P].Next == 0;
 }
 
 
