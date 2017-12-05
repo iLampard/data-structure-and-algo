@@ -17,19 +17,20 @@ https://www.cnblogs.com/demonxian3/p/7112577.html
 #define MAX_SIZE 100
 
 
+
 struct Node;
-typedef struct Node CursorSpace[MAX_SIZE];
 typedef int ElementType;
 typedef int PtrToNode;
 typedef PtrToNode List;
-typedef PtrtoNode Position;
-
+typedef PtrToNode Position;
 
 struct Node
 {
     ElementType Element;   // 数据
     Position Next;        // 游标
 };
+
+struct Node CursorSpace[MAX_SIZE];
 
 
 /* 初始化链表 */
@@ -47,12 +48,53 @@ int IsEmpty(const List L);
 /* 判断是否是最后一个节点 */
 int IsLast(const Position P, const List L);
 
+/* 找到某个元素   */
+Position Find(ElementType X, List L);
+
+/* 找到某个元素的前一个节点, 假设L为头节点   */
+Position FindPrevious(ElementType X, List L);
+
+/* 删除某个元素（第一次出现的）   */
+void Delete(ElementType X, List L);
+
+/* 插入某个元素，在位置P之后， 假设L为头节点   */
+void Insert(ElementType X, List L, Position P);
+
+/* 为链表初始指定个数的随机值  */
+void CreateElement(int NumElement);
+
+/* 获取链表的长度 */
+int ListLength(List L);
+
 /* 打印列表所有元素 */
 void PrintLinkedList(List L);
 
 
 int main()
 {
+    int num;
+    int value, index;
+    InitCursorSpace();
+    std::cout<<"Static Linked List has been initalized"<<std::endl;
+    PrintLinkedList(0);
+    
+    std::cout<<"Create elements: enter number"<<std::endl;
+    std::cin>>num;
+    std::cout<<"Static Linked List has been updated to "<<std::endl;
+    PrintLinkedList(0);
+
+    std::cout<<"Insert an element: enter value and index"<<std::endl;
+    std::cin>>value>>index;
+    std::cout<<"Static Linked List has been updated to "<<std::endl;
+    Insert(value, 0, index);
+    PrintLinkedList(0);
+
+    std::cout<<"Delete an elements: enter value"<<std::endl;
+    std::cin>>value;
+    Delete(value, 0);
+    std::cout<<"Static Linked List has been updated to "<<std::endl;
+    PrintLinkedList(0);
+
     return 0;
 }
 
@@ -102,79 +144,94 @@ int IsLast(const Position P, const List L)
 }
 
 
+
+/* 找到某个元素, 假设L为头节点   */
+Position Find(ElementType X, List L)
+{
+    Position P = CursorSpace[L].Next;
+    while(P && CursorSpace[P].Element != X)
+        P = CursorSpace[P].Next;
+    return P;
+
+}
+
+
+/* 找到某个元素的前一个节点, 假设L为头节点   */
+Position FindPrevious(ElementType X, List L)
+{
+    Position P = Find(X, L);
+    return P - 1;
+}
+
+
+/* 删除某个元素（第一次出现的），假设L为头节点   */
+void Delete(ElementType X, List L)
+{
+    Position P, Temp;
+    P = FindPrevious(X, L);
+    if(!IsLast(P, L))
+    {
+        Temp = CursorSpace[P].Next;
+        CursorSpace[P].Next = CursorSpace[Temp].Next;
+        CursorFree(Temp);
+    }
+
+}
+
+
+
+/* 插入某个元素，在位置P之后， 假设L为头节点   */
+void Insert(ElementType X, List L, Position P)
+{
+    Position Temp;
+    Temp = CursorAlloc();
+
+    CursorSpace[Temp].Element = X;
+    CursorSpace[Temp].Next = CursorSpace[P].Next;
+    CursorSpace[P].Next = Temp;
+}
+
+
 /* 获取链表的长度 */
 int ListLength(List L)
 {
-    int Position = 0;
     int j = 0;
-    while(L[Position].Cursor)
+    Position P = CursorSpace[L].Next;
+    while(P)
     {
-        Position = L[Position].Cursor;
-        j++;
+        P = CursorSpace[P].Next;
+        j += 1;
     }
+
     return j;
 }
 
 /* 为链表初始指定个数的随机值  */
-bool CreateElement(List L, int NumElement)
+void CreateElement(int NumElement)
 {
     srand(time(0));
-    int Position = MAX_SIZE - 1;
-    L[Position].Cursor = 1;
+    Position P = MAX_SIZE - 1;
+    CursorSpace[P].Next = 1;
     for(int i = 0; i < NumElement; i++)
     {
-        Position = L[Position].Cursor;
-        L[Position].Element = rand() % 100 + 1; // 初始化随机数
+        P = CursorSpace[P].Next;
+        CursorSpace[P].Element = rand() % 100 + 1; // 初始化随机数
     }
 
-    L[0].Cursor = L[Position].Cursor; // 第一节点游标指向备用节点
-    L[Position].Cursor = 0;   // 最后一个已用节点指向头节点 
+    CursorSpace[0].Next = CursorSpace[P].Next; // 第一节点游标指向备用节点
+    CursorSpace[P].Next = 0;   // 最后一个已用节点指向头节点 
 
-    return true;
-}
-
-
-/* 为链表插入节点   */
-bool InsertNode(List, L, int Position, ElementType X)
-{
-    if(Position < 1 || Position > ListLength(L))
-        return false;
-
-    int Position_ = 0;
-    int NewNode = MallocSpace(L);
-
-    if(NewNode)
-    {
-        L[NewNode].Element = X;
-        /* 定位到插入节点的前一节点 */
-        for(int i = 1; i < Position; i++)
-            Position_ = L[Position_].Cursor;
-
-        L[Position].Cursor = L[Position_].Cursor;
-        L[Position_].Cursor = L[Position];
-        return true;
-    }
-
-    return false;
-}
-
-
-/* 释放节点 */
-void FreeNode(List L, int Position)
-{
-    L[Position].Cursor = L[0].Cursor;   // 节点指向第一备用节点
-    L[0].Cursor = Position;
 }
 
 
 /* 打印链表  */
 void PrintLinkedList(List L)
 {
-    int Position = 0;
-    while(L[Position].Cursor)
+    Position P = CursorSpace[L].Next;
+    while(P)
     {
-        Position = L[Position].Cursor;
-        std::cout<<L[Position].data<<" "<<L[Position].Cursor<<std::endl;
+        std::cout<<CursorSpace[P].Element<<" "<<CursorSpace[P].Next<<std::endl;
+        P = CursorSpace[P].Next;
     }
     std::cout<<std::endl;
 }
