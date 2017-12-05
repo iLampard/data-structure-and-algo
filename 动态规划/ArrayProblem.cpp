@@ -30,6 +30,11 @@ void UpdateCountExample();
 /* 跳台阶问题：n级台阶，一次可以跳1级或者2级，总共多少种跳法 */
 int ClimbStairs(int n);
 
+
+/* 区间最值查询 */
+void RMQSimpleDP(int* array, int iLen);
+void RMQ(int* array, int iLen);
+
 int main()
 {
     UpdateCountExample();
@@ -213,4 +218,12 @@ int ClimbStairs(int n)
     }
 
     return dp[2];
+}
+
+
+
+/* 区间最值查询 */
+void RMQ(int* array, int iLen)
+{
+
 }
