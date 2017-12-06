@@ -14,7 +14,7 @@ https://www.cnblogs.com/demonxian3/p/7112577.html
 #include <iostream>
 #include <algorithm>
 
-#define MAX_SIZE 100
+#define MAX_SIZE 10
 
 
 
@@ -67,7 +67,12 @@ void CreateElement(int NumElement);
 int ListLength(List L);
 
 /* 打印列表所有元素 */
-void PrintLinkedList(List L);
+void PrintLinkedList();
+
+/* 打印整个静态表 */
+void PrintCursorSpace();
+
+
 
 
 int main()
@@ -76,25 +81,35 @@ int main()
     int value, index;
     InitCursorSpace();
     std::cout<<"Static Linked List has been initalized"<<std::endl;
-    PrintLinkedList(0);
+    PrintLinkedList();
+    std::cout<<"The CursorSpace is "<<std::endl;
+    PrintCursorSpace();
     
     std::cout<<"Create elements: enter number"<<std::endl;
     std::cin>>num;
     std::cout<<"Static Linked List has been updated to "<<std::endl;
-    PrintLinkedList(0);
+    CreateElement(num);
+    PrintLinkedList();
+    std::cout<<"The CursorSpace is "<<std::endl;
+    PrintCursorSpace();
+    
 
     std::cout<<"Insert an element: enter value and index"<<std::endl;
     std::cin>>value>>index;
     std::cout<<"Static Linked List has been updated to "<<std::endl;
     Insert(value, 0, index);
-    PrintLinkedList(0);
-
+    PrintLinkedList();
+    std::cout<<"The CursorSpace is "<<std::endl;
+    PrintCursorSpace();
+    
     std::cout<<"Delete an elements: enter value"<<std::endl;
     std::cin>>value;
     Delete(value, 0);
     std::cout<<"Static Linked List has been updated to "<<std::endl;
-    PrintLinkedList(0);
-
+    PrintLinkedList();
+    std::cout<<"The CursorSpace is "<<std::endl;
+    PrintCursorSpace();
+    
     return 0;
 }
 
@@ -209,7 +224,7 @@ int ListLength(List L)
 /* 为链表初始指定个数的随机值  */
 void CreateElement(int NumElement)
 {
-    srand(time(0));
+    srand((int)time(0));
     Position P = MAX_SIZE - 1;
     CursorSpace[P].Next = 1;
     for(int i = 0; i < NumElement; i++)
@@ -225,12 +240,30 @@ void CreateElement(int NumElement)
 
 
 /* 打印链表  */
-void PrintLinkedList(List L)
+void PrintLinkedList()
 {
-    Position P = CursorSpace[L].Next;
+    Position P = MAX_SIZE - 1;
+    std::cout<<"index"<<" "<<"Element"<<" "<<"Next"<<std::endl;
     while(P)
     {
-        std::cout<<CursorSpace[P].Element<<" "<<CursorSpace[P].Next<<std::endl;
+        std::cout<<P<<"      "<<CursorSpace[P].Element<<"      "<<CursorSpace[P].Next<<std::endl;
+        P = CursorSpace[P].Next;
+    }
+    std::cout<<std::endl;
+
+    
+}
+
+
+
+void PrintCursorSpace()
+{
+    Position P = CursorSpace[0].Next;
+    std::cout<<"index"<<" "<<"Element"<<" "<<"Next"<<std::endl;
+    std::cout<<0<<"      "<<CursorSpace[0].Element<<"      "<<CursorSpace[0].Next<<std::endl;
+    while(P)
+    {
+        std::cout<<P<<"      "<<CursorSpace[P].Element<<"      "<<CursorSpace[P].Next<<std::endl;
         P = CursorSpace[P].Next;
     }
     std::cout<<std::endl;
