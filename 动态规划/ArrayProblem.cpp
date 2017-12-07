@@ -32,14 +32,17 @@ int ClimbStairs(int n);
 
 
 /* 区间最值查询 */
-void RMQSimpleDP(int* array, int iLen);
+void RMQByDP(int* array, int iLen);
 void RMQ(int* array, int iLen);
+void RMQExample();
 
 int main()
 {
     UpdateCountExample();
     MaxSumSubsequenceExample();
     std::cout<<ClimbStairs(5)<<std::endl;
+    std::cout<<"RMQ Example......."<<std::endl;
+    RMQExample();
     return 0;
 }
 
@@ -222,8 +225,49 @@ int ClimbStairs(int n)
 
 
 
-/* 区间最值查询 */
-void RMQ(int* array, int iLen)
+/* 区间最值查询 */  
+/* dp[i][j] 表示 array[i] - array[j]的最小值的下标
+　dp[i][i] = i 
+  dp[i][j] = min(dp[i][j-1], array[j]) */
+void RMQByDP(int* array, int iLen)
 {
+    int i, j;
+   
+    int **M = new int *[iLen];
+    for(i = 0; i < iLen; i++)
+    {
+        M[i] = new int [iLen];
+        for(j = 0; j < iLen; j++)
+            M[i][j] = 0;
+        M[i][i] = i;
+    }
 
+    for(i = 0; i < iLen; i++)
+    {   
+        for(j = i + 1; j < iLen; j++)
+        {
+            if(array[j] > array[M[i][j-1]])
+                M[i][j] = M[i][j-1];
+            else
+                M[i][j] = j;
+
+        }
+    }
+
+    for(int i = 0; i < iLen; i++)
+    {
+        for(int j = 0; j < iLen; j++)
+            std::cout<<M[i][j]<<" ";
+        std::cout<<std::endl;
+    }
+        
+    std::cout<<std::endl;
+
+}
+
+
+void RMQExample()
+{
+    int array[] = {1, 2, 4, 6, 3, 1};
+    RMQByDP(array, sizeof(array)/sizeof(int));
 }
