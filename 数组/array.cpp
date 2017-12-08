@@ -4,15 +4,47 @@
 #include <iostream>
 
 
+void PrintArray(int* array, int iLen);
+
 /*  二分法搜索     */
-int binarySearch(int* array, int iLen, int iTarget)
+int BinarySearch(int* array, int iLen, int iTarget);
+void BinarySearchExample();
+
+
+/* 已知给定的N个整数存在绝对众数，以最低的时空复杂度计算该绝对众数  */
+/* 众数出现次数大于N/2 => 绝对众数   */
+// 算法：删除数组中两个不同的数，绝对众数不变；依据此原则遍历数组
+int AbsMode(int* array, int iLen);
+void AbsModeExample();
+
+
+int main()
+{
+	
+	
+	return 0;
+}
+
+
+void PrintArray(int* array, int iLen)
+{
+	std::cout<<"The array is "<<std::endl;
+	for(int i = 0; i < sizeof(array)/sizeof(int); i++)
+	{
+		std::cout<<array[i]<<" ";
+	}
+	std::cout<<std::endl;
+}
+
+/*  二分法搜索     */
+int BinarySearch(int* array, int iLen, int iTarget)
 {
 	int iBegin = 0;
 	int iEnd = iLen - 1;
 	int iMid = 0;
 	while(iBegin <= iEnd)
 	{
-		iMid = (iBegin + iEnd) / 2
+		iMid = (iBegin + iEnd) / 2;
 		if(array[iMid] == iTarget)
 		{
 			return iMid;
@@ -23,13 +55,19 @@ int binarySearch(int* array, int iLen, int iTarget)
 		}
 		else
 		{
-			iEnd = iMid - 1；
+			iEnd = iMid - 1;
 		}
 	}
 	return -1;
 }
 
-
+void BinarySearchExample()
+{
+	std::cout<<"BinarySearch"<<std::endl;
+	int a[] = {1, 2, 3, 4, 5, 10, 12, 8}; 
+	PrintArray(a, sizeof(a)/sizeof(int));
+	std::cout<<"Find out index of value 10 is "<<BinarySearch(a, sizeof(a)/sizeof(int), 10)<<std::endl;	
+}
 
 /* 已知给定的N个整数存在绝对众数，以最低的时空复杂度计算该绝对众数  */
 /* 众数出现次数大于N/2 => 绝对众数   */
