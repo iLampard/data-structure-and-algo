@@ -8,7 +8,8 @@
 
 #include <algorithm>
 #include <iostream>
-
+#include <cmath>
+#define MAX_SIZE 100
 
 
 /* 最大连续乘积子数组 */
@@ -32,9 +33,13 @@ int ClimbStairs(int n);
 
 
 /* 区间最值查询 */
+int RMQPre[MAX_SIZE][MAX_SIZE];
+void PrintMatrix(int M[][MAX_SIZE], int iLen);
 void RMQByDP(int* array, int iLen);
-void RMQ(int* array, int iLen);
+void RMQByST(int* array, int iLen);
+void RMQBySTPreprocess(int* array, int iLen);
 void RMQExample();
+void RMQSTExample();
 
 int main()
 {
@@ -43,6 +48,9 @@ int main()
     std::cout<<ClimbStairs(5)<<std::endl;
     std::cout<<"RMQ Example......."<<std::endl;
     RMQExample();
+    std::cout<<"RMQ ST Example......."<<std::endl;
+    RMQSTExample();
+    
     return 0;
 }
 
@@ -226,17 +234,31 @@ int ClimbStairs(int n)
 
 
 /* 区间最值查询 */  
-/* dp[i][j] 表示 array[i] - array[j]的最小值的下标
-　dp[i][i] = i 
-  dp[i][j] = min(dp[i][j-1], array[j]) */
+
+void PrintMatrix(int M[][MAX_SIZE], int iLen)
+{
+    for(int i = 0; i < iLen; i++)
+    {
+        for(int j = 0; j < iLen; j++)
+            std::cout<<M[i][j]<<" ";
+        std::cout<<std::endl;
+    }
+    
+}
+
+
+/* M[i][j] 表示 array[i] - array[j]的最小值的下标
+　  M[i][i] = i 
+   M[i][j] = min(M[i][j-1], array[j]) 
+*/
 void RMQByDP(int* array, int iLen)
 {
     int i, j;
-   
-    int **M = new int *[iLen];
+    int M[MAX_SIZE][MAX_SIZE];
+
+    /* 把M矩阵初始化，对角线为i 其余全部为零  */
     for(i = 0; i < iLen; i++)
     {
-        M[i] = new int [iLen];
         for(j = 0; j < iLen; j++)
             M[i][j] = 0;
         M[i][i] = i;
@@ -254,17 +276,84 @@ void RMQByDP(int* array, int iLen)
         }
     }
 
-    for(int i = 0; i < iLen; i++)
-    {
-        for(int j = 0; j < iLen; j++)
-            std::cout<<M[i][j]<<" ";
-        std::cout<<std::endl;
-    }
-        
+    PrintMatrix(M, iLen);    
     std::cout<<std::endl;
 
 }
 
+
+/* M[i][j] 表示 array[i] - array[i+2^j-1]的最小值的下标
+　 M[i][0] = i 
+  M[i][j] = min(M[i][j-1], M[i+2^(j-1)][j-1]) 
+  M[i][j-1] 对应区间[i, i + 2^(j-1) - 1]
+  M[i+2^(j-1)][j-1] 对应区间[i + 2^(j-1), i + 2^(j-1) + 2^(j-1) - 1]
+*/
+void RMQBySTPreprocess(int* array, int iLen)
+{
+    int i, j;
+
+    /* 把 RMQPre 矩阵初始化，对角线为i 其余全部为零  */
+    for(i = 0; i < iLen; i++)
+    {
+        for(j = 0; j < iLen; j++)
+            RMQPre[i][j] = 0;
+        RMQPre[i][0] = i;
+    }
+
+    /* 确定有多少个 j 可以循环 */
+    for(j = 1; 1 << j <= iLen; j++)
+    {
+        for(i = 0; i + (1 << j) - 1 < iLen; i++)
+        {
+            if(array[RMQPre[i][j-1]] > array[RMQPre[i + (1 << (j - 1))][j-1]])
+                RMQPre[i][j] = RMQPre[i + (1 << (j - 1))][j-1];
+            else
+                RMQPre[i][j] = RMQPre[i][j-1];
+        }
+    }
+}
+
+
+void RMQByST(int* array, int iLen)
+{
+    int i, j, k;
+    int RMQ[MAX_SIZE][MAX_SIZE];
+
+    /* 把M矩阵初始化，对角线为i 其余全部为零  */
+    for(i = 0; i < iLen; i++)
+    {
+        for(j = 0; j < iLen; j++)
+            RMQ[i][j] = 0;
+        RMQ[i][i] = i;
+    }
+
+    for(i = 0; i < iLen; i++)
+    {   
+        for(j = i + 1; j < iLen; j++)
+        {
+            k = (int)log2(j - i + 1);
+            if(array[RMQPre[i][k]] > array[RMQPre[j - 2^k + 1][k]])
+                RMQ[i][j] = RMQPre[j - 2^k + 1][k];
+            else
+                RMQ[i][j] = RMQPre[i][k];
+
+        }
+    }
+
+    PrintMatrix(RMQ, iLen);    
+    std::cout<<std::endl;
+
+
+}
+
+
+
+void RMQSTExample()
+{
+    int array[] = {1, 2, 4, 6, 3, 1, 10, 15, 21, 3, 7};
+    int M[MAX_SIZE][MAX_SIZE];
+    RMQByST(array, sizeof(array)/sizeof(int));
+}
 
 void RMQExample()
 {
