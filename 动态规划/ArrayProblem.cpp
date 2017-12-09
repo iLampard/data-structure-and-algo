@@ -331,9 +331,9 @@ void RMQByST(int* array, int iLen)
     {   
         for(j = i + 1; j < iLen; j++)
         {
-            k = (int)log2(j - i + 1);
-            if(array[RMQPre[i][k]] > array[RMQPre[j - 2^k + 1][k]])
-                RMQ[i][j] = RMQPre[j - 2^k + 1][k];
+            k = log2(j - i + 1);
+            if(array[RMQPre[i][k]] > array[RMQPre[j - (int)pow(2.0, (float)k) + 1][k]])
+                RMQ[i][j] = RMQPre[j - (int)pow(2.0, (float)k) + 1][k];
             else
                 RMQ[i][j] = RMQPre[i][k];
 
@@ -350,13 +350,13 @@ void RMQByST(int* array, int iLen)
 
 void RMQSTExample()
 {
-    int array[] = {1, 2, 4, 6, 3, 1, 10, 15, 21, 3, 7};
-    int M[MAX_SIZE][MAX_SIZE];
+    int array[] = {1, 2, 4, 6, 3, 1, 8, 7};
+    RMQBySTPreprocess(array, sizeof(array)/sizeof(int));
     RMQByST(array, sizeof(array)/sizeof(int));
 }
 
 void RMQExample()
 {
-    int array[] = {1, 2, 4, 6, 3, 1};
+    int array[] = {1, 2, 4, 6, 3, 1, 8, 7};
     RMQByDP(array, sizeof(array)/sizeof(int));
 }
