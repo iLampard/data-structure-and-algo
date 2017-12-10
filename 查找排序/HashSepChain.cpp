@@ -33,10 +33,29 @@ int main()
 }
 
 
+/* 求接下来的一个素数 */
+int NextPrime(int n)
+{
+	int i, j;
+	for(i = n + 1; ; i++)
+	{
+		for(j = 2; j * j < i; j++)
+			if(i % j == 0)
+				break;
+		return i;
+	}
+
+	return -1;
+}
+
+
 HashTable InitTable(int TalbeSize)
 {
 	int i;
 	HashTable H = new HashTbl;
 	H->TalbeSize = NextPrime(TableSize);
+
+	/* 为 TheList 分配空间 */
+	
 
 }
