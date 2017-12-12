@@ -1,25 +1,25 @@
-/* Hash Table: Seperate Chaining */
+/* Hash Table: 平方探测 */
 
 #include <iostream>
 
-
-typedef struct ListNode *Position;
-typedef Position List;
+typedef unsigned int Index;
+typedef Index Position;
 typedef struct HashTbl *HashTable;
 typedef int ElementType;
+typedef struct HashEntry Cell;
 
-struct ListNode
+enum KindOfEntry {Legitimate, Empty, Deleted};
+
+struct HashEntry
 {
-	ElementType Element;
-	Position Next;
-	ListNode(Element_):Element(Element_), Next(NULL){};
-	ListNode(){};
+	ElementType Elmenent;
+	enum KindOfEntry Info;
 };
 
 struct HashTbl
 {
 	int TableSize;
-	List *TheLists;  // 指向ListNode结构的指针的指针
+	Cell *TheCells;
 };
 
 
@@ -68,35 +68,41 @@ HashTable InitTable(int TalbeSize)
 	HashTable H = new HashTbl;
 	H->TalbeSize = NextPrime(TableSize);
 
-	/* 为 TheList 分配空间 */
-	H->TheLists = new List * [H->TableSize];
+	/* 为 TheCells 分配空间 */
+	H->TheCells = new Cell * [H->TableSize];
 
 
-	/* 为每个List安排空间 */
+	/* 为每个Cell确定初始状态 */
 	for(int i = 0; i < H->TableSize; i++)
-		H->TheLists[i] = new ListNode;
+		H->TheCells[i].Info = Empty;
 
 	return H;
 }
 
 
 /* 搜索指定元素 */
+/* F(i) = F(i-1) + 2i - 1 */
 Position Find(ElementType X, HashTable H)
 {
 	Position P;
-	List L = H->TheLists[Hash(X, H->TableSize)];
-	P = L->Next;
+	int CollisionNum = 0;
 
-	while(P->Element != X && P->Next != NULL)
-		P = P->Next;
+	P = Hash(X, H->TableSize);
+
+	while(H->TheCells[P].Info != Empty && H->TheCells[P].Elmenent != X)
+	{
+		CollisionNum++;
+		P += 2 * CollisionNum - 1;
+		if(P >= H->TableSize)
+			P -= H->TableSize;
+	}
 
 	return P;
-
 }
 
 
 /* 元素的插入 */
-/* 插入的元素放在表的前端 */
+/* 插入的元素放在找到的地方 */
 void Insert(ElementType X, HashTable H)
 {
 	Position P, Temp;
@@ -104,31 +110,24 @@ void Insert(ElementType X, HashTable H)
 
 	P = Find(X, H);
 	/* 如果 X 没有找到 */
-	if(!P)
+	if(H->TheCells[P].Info != Legitimate)
 	{
-		Temp = new ListNode(X);
-		L = H->TheLists[Hash(X, H->TableSize)];
-		Temp->Next = L->Next;
-		L->Next = Temp;
+		H->TheCells[P].Elmenent = X;
+		H->TheCells[P].Info = Legitimate;
 	}
 
-
 }
-
 
 
 /* 打印表格 */
 void PrintHashTable(HashTable H)
 {
-	Position P;
 	for(int i = 0; i < H->TableSize; i++)
 	{
-		P = H->TheLists[i]->Next;
-		while(P)
-		{
-			std::cout<<P->Element<<" ";
-			P = P->Next;
-		}
-		std::cout<<std::endl;
+		std::cout<<i<<" ";
+		if(H->TheCells[i].Info == Legitimate)
+			std::cout<<H->TheCells[i].Element<<std::endl;
+		else
+			std::cout<<" "<<std::endl;
 	}
 }
