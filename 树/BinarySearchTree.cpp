@@ -380,7 +380,7 @@ void PrintElement(ElementType X)
 /* 创建一个前中后遍历的例子  */
 void TraverseExample()
 {
-    std::cout<<"Linked List Traverse Example"<<std::endl;
+    std::cout<<"Binary Tree Traverse Example"<<std::endl;
     SearchTree T = NULL;
     int element[] = {15, 5, 3, 12, 16, 20, 23, 13, 18, 10, 6, 7};
     int iLen = sizeof(element)/sizeof(int);
