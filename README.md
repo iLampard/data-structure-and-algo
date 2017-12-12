@@ -25,6 +25,9 @@
         1. 常规操作：插入、删除、查找、翻转
         2. 遍历：前中后序遍历, 已知前序中序求后序，已知中序后序求前序，判断后序序列是否是可行序列
         3. 从二叉树中搜寻最大二叉查找树
+    - [AVL树](https://github.com/iLampard/data-structure-and-algo/blob/master/%E6%A0%91/AVLTree.cpp)
+        1. 子树的翻转：左左翻转、左右翻转、右左翻转、右右翻转
+        2. 常规操作：插入、删除
 
 - 动态规划
     - [数列问题](https://github.com/iLampard/data-structure-and-algo/blob/master/动态规划/ArrayProblem.cpp)
