@@ -12,7 +12,7 @@ enum KindOfEntry {Legitimate, Empty, Deleted};
 
 struct HashEntry
 {
-	ElementType Elmenent;
+	ElementType Element;
 	enum KindOfEntry Info;
 };
 
@@ -23,7 +23,9 @@ struct HashTbl
 };
 
 
-int Hash(ElementType X, int TableSize) {return X % TableSize;};
+int Hash(ElementType X, int TableSize)
+//{return X % 10;};  // for simple test
+{return X % TableSize;};
 
 /* 求接下来的一个素数 */
 int NextPrime(int n);
@@ -42,6 +44,12 @@ void PrintHashTable(HashTable H);
 
 int main()
 {
+    HashTable H = InitTable(10);
+    Insert(89, H);
+    Insert(18, H);
+    Insert(49, H);
+    Insert(58, H);
+    PrintHashTable(H);
 	return 0;
 }
 
@@ -55,21 +63,21 @@ int NextPrime(int n)
 		for(j = 2; j * j < i; j++)
 			if(i % j == 0)
 				break;
-		return i;
+		if(j * j >= i)
+            return i;
 	}
 
 	return -1;
 }
 
 
-HashTable InitTable(int TalbeSize)
+HashTable InitTable(int TableSize)
 {
-	int i;
 	HashTable H = new HashTbl;
-	H->TalbeSize = NextPrime(TableSize);
-
+	H->TableSize = NextPrime(TableSize);
+    
 	/* 为 TheCells 分配空间 */
-	H->TheCells = new Cell * [H->TableSize];
+	H->TheCells = new Cell [H->TableSize];
 
 
 	/* 为每个Cell确定初始状态 */
@@ -89,7 +97,7 @@ Position Find(ElementType X, HashTable H)
 
 	P = Hash(X, H->TableSize);
 
-	while(H->TheCells[P].Info != Empty && H->TheCells[P].Elmenent != X)
+	while(H->TheCells[P].Info != Empty && H->TheCells[P].Element != X)
 	{
 		CollisionNum++;
 		P += 2 * CollisionNum - 1;
@@ -105,14 +113,12 @@ Position Find(ElementType X, HashTable H)
 /* 插入的元素放在找到的地方 */
 void Insert(ElementType X, HashTable H)
 {
-	Position P, Temp;
-	List L;
-
+	Position P;
 	P = Find(X, H);
 	/* 如果 X 没有找到 */
 	if(H->TheCells[P].Info != Legitimate)
 	{
-		H->TheCells[P].Elmenent = X;
+		H->TheCells[P].Element = X;
 		H->TheCells[P].Info = Legitimate;
 	}
 

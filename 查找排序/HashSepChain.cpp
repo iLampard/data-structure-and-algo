@@ -12,7 +12,7 @@ struct ListNode
 {
 	ElementType Element;
 	Position Next;
-	ListNode(Element_):Element(Element_), Next(NULL){};
+	ListNode(ElementType Element_):Element(Element_), Next(NULL){};
 	ListNode(){};
 };
 
@@ -23,7 +23,9 @@ struct HashTbl
 };
 
 
-int Hash(ElementType X, int TableSize) {return X % TableSize;};
+int Hash(ElementType X, int TableSize)
+{return X % 10;}; // for test
+//{return X % TableSize;};
 
 /* 求接下来的一个素数 */
 int NextPrime(int n);
@@ -42,6 +44,14 @@ void PrintHashTable(HashTable H);
 
 int main()
 {
+    HashTable H = InitTable(9);
+    Insert(4371, H);
+    Insert(1323, H);
+    Insert(6173, H);
+    Insert(4344, H);
+    Insert(9679, H);
+    Insert(1989, H);
+    PrintHashTable(H);
 	return 0;
 }
 
@@ -55,21 +65,21 @@ int NextPrime(int n)
 		for(j = 2; j * j < i; j++)
 			if(i % j == 0)
 				break;
-		return i;
+		if(j * j >= i)
+            return i;
 	}
 
 	return -1;
 }
 
 
-HashTable InitTable(int TalbeSize)
+HashTable InitTable(int TableSize)
 {
-	int i;
 	HashTable H = new HashTbl;
-	H->TalbeSize = NextPrime(TableSize);
+	H->TableSize = NextPrime(TableSize);
 
 	/* 为 TheList 分配空间 */
-	H->TheLists = new List * [H->TableSize];
+	H->TheLists = new List [H->TableSize];
 
 
 	/* 为每个List安排空间 */
@@ -87,7 +97,7 @@ Position Find(ElementType X, HashTable H)
 	List L = H->TheLists[Hash(X, H->TableSize)];
 	P = L->Next;
 
-	while(P->Element != X && P->Next != NULL)
+	while(P!= NULL && P->Element != X)
 		P = P->Next;
 
 	return P;
@@ -123,6 +133,7 @@ void PrintHashTable(HashTable H)
 	Position P;
 	for(int i = 0; i < H->TableSize; i++)
 	{
+        std::cout<<i<<" ";
 		P = H->TheLists[i]->Next;
 		while(P)
 		{
