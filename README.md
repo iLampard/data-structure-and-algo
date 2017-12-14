@@ -3,7 +3,7 @@
 
 以C++语言实现了一些常用算法。为了方便调试，每个cpp文件都单独可以运行。
 
-- [分治和递归]
+- 分治和递归
     - [经典递归问题](https://github.com/iLampard/data-structure-and-algo/blob/master/分治和递归/recursion.cpp)：
        1. 最大子序列和
        2. 二分法查找 
