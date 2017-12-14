@@ -2,7 +2,8 @@
 //  main.cpp
 //  algo
 //
-//  Created on 2017/9/13.
+//  Created by Siqiao on 2017/9/13.
+//  Copyright © 2017年 Siqiao. All rights reserved.
 //
 
 #include <iostream>
