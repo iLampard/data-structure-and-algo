@@ -18,6 +18,9 @@ int BinarySearch(int* a, int StartIndex, int EndIndex, int Value);
 /* 围棋棋盘由M*N的正方形组成，计算这个区域一共由多少个正方形 */
 int NumOfRectangular(int M, int N);
 
+/* 最大子序列和 */
+int MaxSubSum(int* a, int Left, int Right);
+
 /* 汉诺塔 */
 void Hanoi(int n, char a, char b, char c);
 
@@ -35,7 +38,7 @@ int main()
     std::cout<<BinarySearch(a, 0, 4, -2)<<std::endl;
 
     std::cout<<"汉诺塔"<<std::endl;
-    Hanoi(3, "a", "b", "c");
+    Hanoi(3, 'a', 'b', 'c');
 }
 
 
@@ -139,7 +142,7 @@ void Hanoi(int n, char a, char b, char c)
     if(n == 1)
     {
         std::cout<<a<<" --> "<<c<<std::endl;
-        return
+        return;
     }
 
     // 先将 n - 1 个盘子从 a 移动到 b
