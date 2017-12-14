@@ -9,12 +9,17 @@
 #include <vector>
 #include <algorithm>
 
+
+/* 对分查找 */
+/* 用递归方法：在长度为iLen的已排序的数组中查找元素x        */
 int BinarySearch(int* a, int StartIndex, int EndIndex, int Value);
 
 
 /* 围棋棋盘由M*N的正方形组成，计算这个区域一共由多少个正方形 */
 int NumOfRectangular(int M, int N);
 
+/* 汉诺塔 */
+void Hanoi(int n, char a, char b, char c);
 
 
 int main()
@@ -27,7 +32,10 @@ int main()
     std::cout<<MaxSubSum(a, 0, 4)<<std::endl;
     
     std::cout<<"二分查找 - 目标值 -2"<<std::endl;
-    std::cout<<BinarySearch(a, 0, 4, -2)<<std::endl;;
+    std::cout<<BinarySearch(a, 0, 4, -2)<<std::endl;
+
+    std::cout<<"汉诺塔"<<std::endl;
+    Hanoi(3, "a", "b", "c");
 }
 
 
@@ -117,4 +125,31 @@ int BinarySearch(int* a, int StartIndex, int EndIndex, int Value)
         return BinarySearch(a, MidIndex + 1, EndIndex, Value);
     else
         return BinarySearch(a, StartIndex, MidIndex - 1, Value);
+}
+
+
+/* 汉诺塔 */
+/* 
+当有 N 个圆盘在 a 上，假设已经找到办法将其移到 c 杠上了 
+首先用将 N 个圆盘移动到 c 上的方法将 N 个圆盘都移动到 b 上，然后再把第 N+1 个圆盘（最后一个）移动到 c 上，再用同样的方法将在 b 杠上的 N 个圆盘移动到 c 上
+*/    
+void Hanoi(int n, char a, char b, char c)
+{
+    // 终止条件
+    if(n == 1)
+    {
+        std::cout<<a<<" --> "<<c<<std::endl;
+        return
+    }
+
+    // 先将 n - 1 个盘子从 a 移动到 b
+    Hanoi(n-1, a, c, b); 
+
+    // 再将第 n 个盘子从 a 移动到 c
+    Hanoi(1, a, b, c);
+
+    // 最后将 n - 1 个盘子从 b 移动到 c
+    Hanoi(n-1, b, a, c);
+
+    return;
 }

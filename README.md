@@ -3,6 +3,11 @@
 
 以C++语言实现了一些常用算法。为了方便调试，每个cpp文件都单独可以运行。
 
+- [分治和递归]
+    - [经典递归问题](https://github.com/iLampard/data-structure-and-algo/blob/master/分治和递归/recursion.cpp)：
+       1. 最大子序列和
+       2. 二分法查找 
+       3. 汉诺塔
 
 - [字符串](https://github.com/iLampard/data-structure-and-algo/blob/master/字符串/string_1.cpp)
     - 最长公共子序列
@@ -34,6 +39,7 @@
         1. 最大连续乘积子数组、最长递增子序列数组（不一定连续）、最大连续子数组和
         2. 从0变化到2015的最小操作次数问题、跳台阶问题
         3. 区间最小值问题（RMQ）：简单动态规划法
+
 
     
 参考资源
