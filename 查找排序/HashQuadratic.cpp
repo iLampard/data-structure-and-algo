@@ -1,31 +1,31 @@
-/* Hash Table: Seperate Chaining */
+/* Hash Table: 平方探测 */
 
 #include <iostream>
 
-
-typedef struct ListNode *Position;
-typedef Position List;
+typedef unsigned int Index;
+typedef Index Position;
 typedef struct HashTbl *HashTable;
 typedef int ElementType;
+typedef struct HashEntry Cell;
 
-struct ListNode
+enum KindOfEntry {Legitimate, Empty, Deleted};
+
+struct HashEntry
 {
 	ElementType Element;
-	Position Next;
-	ListNode(ElementType Element_):Element(Element_), Next(NULL){};
-	ListNode(){};
+	enum KindOfEntry Info;
 };
 
 struct HashTbl
 {
 	int TableSize;
-	List *TheLists;  // 指向ListNode结构的指针的指针
+	Cell *TheCells;
 };
 
 
 int Hash(ElementType X, int TableSize)
-{return X % 10;}; // for test
-//{return X % TableSize;};
+//{return X % 10;};  // for simple test
+{return X % TableSize;};
 
 /* 求接下来的一个素数 */
 int NextPrime(int n);
@@ -44,13 +44,11 @@ void PrintHashTable(HashTable H);
 
 int main()
 {
-    HashTable H = InitTable(9);
-    Insert(4371, H);
-    Insert(1323, H);
-    Insert(6173, H);
-    Insert(4344, H);
-    Insert(9679, H);
-    Insert(1989, H);
+    HashTable H = InitTable(10);
+    Insert(89, H);
+    Insert(18, H);
+    Insert(49, H);
+    Insert(58, H);
     PrintHashTable(H);
 	return 0;
 }
@@ -77,69 +75,65 @@ HashTable InitTable(int TableSize)
 {
 	HashTable H = new HashTbl;
 	H->TableSize = NextPrime(TableSize);
+    
+	/* 为 TheCells 分配空间 */
+	H->TheCells = new Cell [H->TableSize];
 
-	/* 为 TheList 分配空间 */
-	H->TheLists = new List [H->TableSize];
 
-
-	/* 为每个List安排空间 */
+	/* 为每个Cell确定初始状态 */
 	for(int i = 0; i < H->TableSize; i++)
-		H->TheLists[i] = new ListNode;
+		H->TheCells[i].Info = Empty;
 
 	return H;
 }
 
 
 /* 搜索指定元素 */
+/* F(i) = F(i-1) + 2i - 1 */
 Position Find(ElementType X, HashTable H)
 {
 	Position P;
-	List L = H->TheLists[Hash(X, H->TableSize)];
-	P = L->Next;
+	int CollisionNum = 0;
 
-	while(P!= NULL && P->Element != X)
-		P = P->Next;
+	P = Hash(X, H->TableSize);
+
+	while(H->TheCells[P].Info != Empty && H->TheCells[P].Element != X)
+	{
+		CollisionNum++;
+		P += 2 * CollisionNum - 1;
+		if(P >= H->TableSize)
+			P -= H->TableSize;
+	}
 
 	return P;
-
 }
 
 
 /* 元素的插入 */
-/* 插入的元素放在表的前端 */
+/* 插入的元素放在找到的地方 */
 void Insert(ElementType X, HashTable H)
 {
-	Position P, Temp;
-	List L;
-
+	Position P;
 	P = Find(X, H);
 	/* 如果 X 没有找到 */
-	if(!P)
+	if(H->TheCells[P].Info != Legitimate)
 	{
-		Temp = new ListNode(X);
-		L = H->TheLists[Hash(X, H->TableSize)];
-		Temp->Next = L->Next;
-		L->Next = Temp;
+		H->TheCells[P].Element = X;
+		H->TheCells[P].Info = Legitimate;
 	}
 
-
 }
-
 
 
 /* 打印表格 */
 void PrintHashTable(HashTable H)
 {
-	Position P;
 	for(int i = 0; i < H->TableSize; i++)
 	{
-        std::cout<<i<<" ";
-		P = H->TheLists[i]->Next;
-		while(P)
-		{
-			std::cout<<P->Element<<" ";
-			P = P->Next;
-		}
-		std::cout<<std::endl;
+		std::cout<<i<<" ";
+		if(H->TheCells[i].Info == Legitimate)
+			std::cout<<H->TheCells[i].Element<<std::endl;
+		else
+			std::cout<<" "<<std::endl;
 	}
 }
