@@ -47,17 +47,27 @@ int IsFull(PriorityQueue H);
 /* 打印堆数组 */
 void PrintPriorityQueue(PriorityQueue H);
 
+/* 打印堆数组 */
+void InsertArrayIntoPriorityQueue(ElementType* a, int size, PriorityQueue H);
+
 
 int main() {
   
     std::cout << "Insert elements\n";
-    PriorityQueue H = Init(6);
-    Insert(1, H);
-    Insert(2, H);
-    Insert(3, H);
-    Insert(4, H);
-    Insert(5, H);
+    PriorityQueue H = Init(100);
+    ElementType a[] = {10, 12, 1, 14, 6, 5, 8, 15, 3, 9, 7, 4, 11, 13, 2};
+    int size = sizeof(a) / sizeof(ElementType);
+    InsertArrayIntoPriorityQueue(a, size, H);
+    std::cout << "The heap array becomes \n";
     PrintPriorityQueue(H);
+    
+    std::cout << "After three DeleteMins, the heap array becomes \n";
+    ElementType MinElement;
+    MinElement = DeleteMin(H);
+    MinElement = DeleteMin(H);
+    MinElement = DeleteMin(H);
+    PrintPriorityQueue(H);
+    
     return 0;
 }
 
@@ -84,16 +94,16 @@ ElementType DeleteMin(PriorityQueue H)
 	MinElement = H->Elements[1];
 	LastElement = H->Elements[H->Size--];
 
-	for(i = 1; i * 2 < H->Size; i++)
+	for(i = 1; i * 2 <= H->Size; i = Child)
 	{
 		// 找到更小的子节点
 		Child = i * 2;
 		if(Child != H->Size && H->Elements[Child + 1] < H->Elements[Child])
 			Child++;
 
-		// 根节点下沉
+		// 根节点上浮
 		if(LastElement > H->Elements[Child])
-			H->Elements[Child] = H->Elements[i];
+			H->Elements[i] = H->Elements[Child];
 		else
 			break;
 	}
@@ -104,9 +114,10 @@ ElementType DeleteMin(PriorityQueue H)
 
 void Insert(ElementType X, PriorityQueue H)
 {
-	for(int i = ++H->Size; X > H->Elements[i] && i >= 1; i /= 2)
+    int i;
+	for(i = ++H->Size; X < H->Elements[i / 2] && i >= 1; i /= 2)
 	{
-		H->ELements[i] = H->Elements[i / 2];  // 父节点下移
+		H->Elements[i] = H->Elements[i / 2];  // 父节点下移
 	}
 	H->Elements[i] = X;
 }
@@ -134,9 +145,17 @@ ElementType FindMin(PriorityQueue H)
 /* 打印堆数组 */
 void PrintPriorityQueue(PriorityQueue H)
 {
-	for(int i = 0; i < H->Size; i++)
+	for(int i = 0; i <= H->Size; i++)
 	{
-		std::cout<<H->Elements[i];
+		std::cout<<H->Elements[i]<<" ";
 	}
 	std::cout<<std::endl;
+}
+
+
+/* 打印堆数组 */
+void InsertArrayIntoPriorityQueue(ElementType* a, int size, PriorityQueue H)
+{
+    for(int i = 0; i < size; i++)
+        Insert(a[i], H);
 }
