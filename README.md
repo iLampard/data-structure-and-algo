@@ -23,14 +23,15 @@
     - [静态链表（游标链表）](https://github.com/iLampard/data-structure-and-algo/blob/master/链表递归栈/LinkedList/StaticLinkedList.cpp)
         1. 游标空间的初始化、分配空间、释放空间
         2. 链表元素的插入、删除、初始化
-    - [队列](https://github.com/iLampard/data-structure-and-algo/blob/master/链表递归栈/Queue/main.cpp)
+    - [队列](https://github.com/iLampard/data-structure-and-algo/blob/master/链表递归栈/Queue/BinaryHeap.cpp)
+        1. 二叉堆(完全二叉树)的初始化、插入、删除最小值
 
 - 树
     - [二叉查找树](https://github.com/iLampard/data-structure-and-algo/blob/master/树/BinarySearchTree.cpp)
         1. 常规操作：插入、删除、查找、翻转
         2. 遍历：前中后序遍历, 已知前序中序求后序，已知中序后序求前序，判断后序序列是否是可行序列
         3. 从二叉树中搜寻最大二叉查找树
-    - [AVL树](https://github.com/iLampard/data-structure-and-algo/blob/master/%E6%A0%91/AVLTree.cpp)
+    - [AVL树](https://github.com/iLampard/data-structure-and-algo/blob/master/树/AVLTree.cpp)
         1. 子树的翻转：左左翻转、左右翻转、右左翻转、右右翻转
         2. 常规操作：插入、删除
 
@@ -38,7 +39,7 @@
     - [数列问题](https://github.com/iLampard/data-structure-and-algo/blob/master/动态规划/ArrayProblem.cpp)
         1. 最大连续乘积子数组、最长递增子序列数组（不一定连续）、最大连续子数组和
         2. 从0变化到2015的最小操作次数问题、跳台阶问题
-        3. 区间最小值问题（RMQ）：简单动态规划法
+        3. 区间最小值问题（RMQ）：简单动态规划法、预处理动规法
 
 
     
