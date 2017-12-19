@@ -24,7 +24,7 @@
         1. 游标空间的初始化、分配空间、释放空间
         2. 链表元素的插入、删除、初始化
     - [队列](https://github.com/iLampard/data-structure-and-algo/blob/master/链表递归栈/Queue/BinaryHeap.cpp)
-        1. 二叉堆(完全二叉树)的初始化、插入、删除最小值
+        1. 二叉堆(完全二叉树)的初始化、插入、删除最小值、上滤和下滤
 
 - 树
     - [二叉查找树](https://github.com/iLampard/data-structure-and-algo/blob/master/树/BinarySearchTree.cpp)
