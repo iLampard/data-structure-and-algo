@@ -26,8 +26,15 @@ struct HeapStruct
 	ElementType *Elements;
 };
 
+
 /* 初始化一个给定长度的堆（用数组表示） */
 PriorityQueue Init(int MaxElements);
+
+/* 值更小的根节点上滤 */
+void PercolateUp(int Pos, PriorityQueue H);
+
+/* 值更大的根节点下滤 */
+void PercolateDown(int Pos, PriorityQueue H);
 
 /* 删除最小元素（根节点） */
 ElementType DeleteMin(PriorityQueue H);
@@ -50,14 +57,20 @@ void PrintPriorityQueue(PriorityQueue H);
 /* 打印堆数组 */
 void InsertArrayIntoPriorityQueue(ElementType* a, int size, PriorityQueue H);
 
+/* 建立堆数组：通过Percolate方法 */
+void BuildHeap(ElementType* a, int size, PriorityQueue H);
+
 
 int main() {
   
     std::cout << "Insert elements\n";
     PriorityQueue H = Init(100);
-    ElementType a[] = {10, 12, 1, 14, 6, 5, 8, 15, 3, 9, 7, 4, 11, 13, 2};
+    //ElementType a[] = {10, 12, 1, 14, 6, 5, 8, 15, 3, 9, 7, 4, 11, 13, 2};
+    //ElementType a[] = {1, 4, 5, 3, 2};
+    ElementType a[] = {150, 80, 40, 30, 10, 70, 110, 100, 20, 90, 60, 50, 120, 140, 130};
     int size = sizeof(a) / sizeof(ElementType);
-    InsertArrayIntoPriorityQueue(a, size, H);
+    //InsertArrayIntoPriorityQueue(a, size, H);
+    BuildHeap(a, size, H);
     std::cout << "The heap array becomes \n";
     PrintPriorityQueue(H);
     
@@ -85,6 +98,39 @@ PriorityQueue Init(int MaxElements)
 	return H;
 }
 
+
+/* 值更小的根节点上滤 */
+void PercolateUp(int Pos, PriorityQueue H)
+{
+	int i;
+	ElementType X = H->Elements[Pos];
+	for(i = Pos; H->Elements[i / 2] > X; i /= 2)
+		H->Elements[i] = H->Elements[i / 2]; // 父节点下移
+	H->Elements[i] = X;
+}
+
+
+/* 值更大的根节点下滤 */
+void PercolateDown(int Pos, PriorityQueue H)
+{
+	int i, Child;
+	ElementType X = H->Elements[Pos];
+	for(i = Pos; i * 2 <= H->Size; i = Child)
+	{
+		// 找到更小的子节点
+		Child = i * 2;
+		if(Child != H->Size && H->Elements[Child + 1] < H->Elements[Child])
+			Child++;
+
+		// 原来的值更小的根节点上浮
+		if(X > H->Elements[Child])
+			H->Elements[i] = H->Elements[Child];
+		else
+			break;
+
+	}
+	H->Elements[i] = X;
+}
 
 /* 删除最小元素（根节点） */
 ElementType DeleteMin(PriorityQueue H)
@@ -115,9 +161,9 @@ ElementType DeleteMin(PriorityQueue H)
 void Insert(ElementType X, PriorityQueue H)
 {
     int i;
-	for(i = ++H->Size; X < H->Elements[i / 2] && i >= 1; i /= 2)
+	for(i = ++H->Size; X < H->Elements[i / 2]; i /= 2)
 	{
-		H->Elements[i] = H->Elements[i / 2];  // 父节点下移
+		H->Elements[i] = H->Elements[i / 2];  
 	}
 	H->Elements[i] = X;
 }
@@ -145,7 +191,7 @@ ElementType FindMin(PriorityQueue H)
 /* 打印堆数组 */
 void PrintPriorityQueue(PriorityQueue H)
 {
-	for(int i = 0; i <= H->Size; i++)
+	for(int i = 0; i < H->Size; i++)
 	{
 		std::cout<<H->Elements[i]<<" ";
 	}
@@ -153,9 +199,27 @@ void PrintPriorityQueue(PriorityQueue H)
 }
 
 
-/* 打印堆数组 */
+/* 建立堆数组：通过Insert方法 */
 void InsertArrayIntoPriorityQueue(ElementType* a, int size, PriorityQueue H)
 {
     for(int i = 0; i < size; i++)
         Insert(a[i], H);
 }
+
+
+/* 建立堆数组：通过Percolate方法 */
+void BuildHeap(ElementType* a, int size, PriorityQueue H)
+{
+    int i;
+    H->Size = size + 1;
+    for(i = 0; i < size; i++)
+    {
+        H->Elements[i + 1] = a[i];
+    }
+    
+	for(i = size / 2; i > 0; i--)
+		PercolateDown(i, H);
+}
+
+
+
