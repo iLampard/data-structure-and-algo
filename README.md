@@ -9,6 +9,15 @@
        2. 二分法查找 
        3. 汉诺塔
 
+- 动态规划
+    - [数列问题](https://github.com/iLampard/data-structure-and-algo/blob/master/动态规划/ArrayProblem.cpp)
+        1. 最大连续乘积子数组、最长递增子序列数组（不一定连续）、最大连续子数组和
+        2. 从0变化到2015的最小操作次数问题、跳台阶问题
+        3. 区间最小值问题（RMQ）：简单动态规划法、预处理动规法
+
+- 图
+    - [并查集](https://github.com/iLampard/data-structure-and-algo/blob/master/图/UnionFind.cpp)
+
 - [字符串](https://github.com/iLampard/data-structure-and-algo/blob/master/字符串/string_1.cpp)
     - 最长公共子序列
     - 最长递增子序列
@@ -35,11 +44,6 @@
         1. 子树的翻转：左左翻转、左右翻转、右左翻转、右右翻转
         2. 常规操作：插入、删除
 
-- 动态规划
-    - [数列问题](https://github.com/iLampard/data-structure-and-algo/blob/master/动态规划/ArrayProblem.cpp)
-        1. 最大连续乘积子数组、最长递增子序列数组（不一定连续）、最大连续子数组和
-        2. 从0变化到2015的最小操作次数问题、跳台阶问题
-        3. 区间最小值问题（RMQ）：简单动态规划法、预处理动规法
 
 
     
