@@ -1,19 +1,19 @@
 
 #include <iostream>
 
-#define NumSets 8;
+#define NumSets 8
 
 typedef int DisjSet[NumSets + 1];
 typedef int SetType;
-typedef int ElmentType;
+typedef int ElementType;
+
+enum UnionMethod {Random, BySize, ByHeight};
 
 /* 初始化数组，S[i]表示元素i的根 */
 void Initialize(DisjSet S);
 void SetUnion(DisjSet S, SetType Root1, SetType Root2, UnionMethod Method);
 SetType Find(ElementType X, DisjSet S);
 
-
-enum UnionMethod {Random, BySize, ByHeight};
 
 int main()
 {
