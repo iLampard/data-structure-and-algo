@@ -19,7 +19,7 @@
     - [并查集](https://github.com/iLampard/data-structure-and-algo/blob/master/图/UnionFind.cpp)
 
 - 字符串
-    - [常规问题1](https://github.com/iLampard/data-structure-and-algo/blob/master/字符串/string_operation_1.cpp)：最长公共子序列、最长递增子序列
+    - [常规问题1](https://github.com/iLampard/data-structure-and-algo/blob/master/字符串/string_operation_1.cpp)：字符串的翻转转和循环左移、单词翻转、最长公共子序列、最长递增子序列
     - [常规问题2](https://github.com/iLampard/data-structure-and-algo/blob/master/字符串/string_operation_2.cpp)：计算字符串长度、查找特定字符
     - KMP算法
     - Manacher算法

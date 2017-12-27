@@ -5,10 +5,10 @@
 //  Created on 2017/9/17.
 //
 
-#include "iostream"
-#include "vector"
-#include "string"
-#include "algorithm"
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
 
 
 /* 字符串循环左移： 把字符串的前k个字符平移到末尾 */
@@ -16,10 +16,23 @@ void ReverseString(char* s, int from, int to);
 void LeftRotateString(char* s, int iLen, int iRotate);
 void LeftRotateExample();
 
+/* 翻转句子中单词的顺序：单词内字符的顺序不变，句子中单词以空格隔开 */
+void ReverseWord(char* str);
+void ReverseWordExample();
 
 /* 最大公共子序列  */
 const char* LongestCommonSubsequence(char* s1, char* s2);
 void LCSExample();
+
+
+// 最长递增子序列
+void longestIncreasingSubsequence(int* array,
+                                  int iLen,
+                                  int** preIndex,
+                                  int* ilengthLIS,
+                                  int* iLISIndex);
+std::vector<int> LongestIncreasingSubsequenceMain(int* array,
+                                                  int iLen);
 
 
 /* 字符串的全排列  */
@@ -49,6 +62,8 @@ int main()
 {    
 
     LeftRotateExample();
+
+    ReverseWordExample();
     
     LCSExample();
     
@@ -71,7 +86,7 @@ int main()
 
 
 
-/* 将字符串反转 */
+/* 将字符串翻转 */
 void ReverseString(char* s, int from, int to)
 {
     while(from < to)
@@ -106,6 +121,35 @@ void LeftRotateExample()
 }
 
 
+void ReverseWord(char* str)
+{
+    int from = 0;
+    int to = 0;
+    while(str[to] != '\0')
+    {
+        if(str[to] != ' ')
+            to++;
+        else
+        {
+            ReverseString(str, from, to - 1);
+            from = ++to;
+        }
+    }
+    /* 翻转最后一个单词 */
+    ReverseString(str, from, to - 1);
+    /* 把整个句子再翻转一次 */
+    ReverseString(str, 0, strlen(str) - 1);
+}
+
+
+void ReverseWordExample()
+{
+    std::cout<<"Reverse sentence: I am a student....."<<std::endl;
+    char cstr[] = "I am a student.";
+    ReverseWord(cstr);
+    std::cout<<cstr<<std::endl;
+
+}
 
 
 // 最长公共子序列
@@ -212,7 +256,7 @@ void longestIncreasingSubsequence(int* array,
 }
 
 
-std::vector<int> longestIncreasingSubsequenceMain(int* array,
+std::vector<int> LongestIncreasingSubsequenceMain(int* array,
                                                   int iLen)
 {
     int* preIndex = new int[iLen];
