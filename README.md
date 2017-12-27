@@ -18,9 +18,11 @@
 - 图
     - [并查集](https://github.com/iLampard/data-structure-and-algo/blob/master/图/UnionFind.cpp)
 
-- [字符串](https://github.com/iLampard/data-structure-and-algo/blob/master/字符串/string_1.cpp)
-    - 最长公共子序列
-    - 最长递增子序列
+- 字符串
+    - [常规问题1](https://github.com/iLampard/data-structure-and-algo/blob/master/字符串/string_operation_1.cpp)：最长公共子序列、最长递增子序列
+    - [常规问题2](https://github.com/iLampard/data-structure-and-algo/blob/master/字符串/string_operation_2.cpp)：计算字符串长度、查找特定字符
+    - KMP算法
+    - Manacher算法
 
 - 链表递归栈
     - [链表](https://github.com/iLampard/data-structure-and-algo/blob/master/链表递归栈/LinkedList/LinkedList.cpp)

@@ -10,8 +10,36 @@
 #include <string>
 
 
-/*  计算字符串长度  */
 
+/*  计算字符串长度  */
+int strlen(char* str);
+
+/* 给定一串字符串（一个以NULL结尾的指针列表的指针），在其中查找一个特定的字符*/
+bool find_char(char **strings, char value);
+void find_char_example();
+
+/* 判断一个字符串中是否包含另一个字符串 */
+/* 把字符串a中所有的字符放入hash表，然后循环字符串b进行查找 */
+bool StringContain(std::string &a, std::string &b);
+
+/* 字符串的全排列 */
+void Permutation(char* str, int from, int to);
+
+
+int main()
+{
+    std::cout<<strlen("abc")<<std::endl;
+    
+    find_char_example();
+    
+    std::string a = "ABCD";
+    std::string b = "CD";
+    std::cout<<StringContain(a, b)<<std::endl;
+    return 0;
+}
+
+
+/*  计算字符串长度  */
 int strlen(char* str)
 {
     int length = 0;
@@ -57,14 +85,24 @@ bool StringContain(std::string &a, std::string &b)
 }
 
 
-int main()
+void find_char_example()
 {
-    std::cout<<strlen("abc")<<std::endl;
-    char* strings[2] = {"hello", "world"};
-    std::cout<<"find w?"<<std::endl;
+    std::string s1 = "hello";
+    std::string s2 = "world";
+    char** strings = new char*[2];
+    for(int i = 0; i < 2; i++)
+        strings[i] = new char[6];
+    strcpy(strings[0], s1.c_str());
+    strcpy(strings[1], s2.c_str());
+
+    std::cout<<"find w in strings array?"<<std::endl;
     std::cout<<find_char(strings, 'w')<<std::endl;
-    std::string a = "ABCD";
-    std::string b = "CD";
-    std::cout<<StringContain(a, b)<<std::endl;
-    return 0;
+
+    for(int i = 0; i < 2; i++)
+        delete [] strings[i];
+    delete [] strings;
+
 }
+
+
+
