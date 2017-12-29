@@ -1,32 +1,58 @@
 
 /*   
-http://www.cnblogs.com/polly333/p/4742261.html
-Huffman树及其应用
+https://www.geeksforgeeks.org/greedy-algorithms-set-3-PriorityQueue-coding/
 */
+
+/* HuffmanTree: 给定n个权值作为n个叶子结点，构造出的一棵二叉树带权路径长度达到最小 */
 
 
 #include <algorithm>
 #include <iostream>
 #include <limits>
 
-typedef int ElementType;
-typedef HuffmanNode *HuffmanTree;
-typedef HuffmanNode *HuffmanNodeArray;
+#define MAX_H_HEIGHT 100
 
-struct HuffmanNode
+typedef char ElementType;
+typedef struct Node *Position;
+typedef Position List;
+typedef MinHeap *PriorityQueue;
+
+
+// PriorityQueue H Node
+struct Node
 {
-	ElementType Weight;  // 权值
-	ElementType Parent;  // 父节点序号，根节点为-1
-    ElementType Left;    // 左右孩子节点序号，叶节点为-1
-    ElementType Right;
+	ElementType Element;   // 元素的值
+	int Freq;      // 元素出现的频率
+	Position Left;
+	Position Right; 
+	Node(ElementType Element_, int Freq_): Element(Element_), Freq(Freq_), Left(NULL), Right(NULL) {};
+	Node(){};
 };
 
-/* 在Huffman节点数组中找到全职最小，且无父节点的两个节点 */
-void SelectNode(HuffmanNodeArray NodeArray, int NumNode, int& MinNode1, int& MinNode2)；
+// PriorityQueue H (heap struct)
+struct MinHeap
+{
+	int Capacity;
+	int Size;
+	List *ListNodes;	// 指向Node的指针的指针
+}
 
-/* 创建Huffman树 */
-void InitHuffmanTree(HuffmanNodeArray NodeArray, int NumNode);
+/* 初始化一颗PriorityQueue树 */
+PriorityQueue InitPriorityQueue(int Capacity);
 
+/* 交换两个节点 */
+void SwapNode(Position *a, Position *b);
+
+/* 使得树满足堆序：从index位置开始的节点 */
+void Heapify(PriorityQueue H, int index)
+
+/* 找到最小的节点 */
+Position FindMin(PriorityQueue H);
+
+/* 判断是否是树叶 */
+bool IsLeaf(Position P)
+
+void PrintArray(int* array, int Len);
 
 int main()
 {
@@ -34,74 +60,75 @@ int main()
 }
 
 
-/* 在Huffman节点数组中找到全职最小，且无父节点的两个节点 */
-void SelectNode(HuffmanNodeArray NodeArray, int NumNode, int& MinNode1, int& MinNode2)
+/* 初始化一颗PriorityQueue树 */
+PriorityQueue InitPriorityQueue(int Capacity)
 {
-	int MaxWeight1 = MaxWeight2 = INT_MAX;
-
-	for(int i = 0; i < NumNode; i++)
-	{
-		// parent = - 1 说明没有父节点
-		if(NodeArray[i].Weight < MaxWeight1 && NodeArray[i].Parent == -1)
-		{
-			// 将MaxWeight1 和 MinNode1 赋值给MaxWeight2 和 MinNode2 => 保证 MaxWeight1 最小
-			MaxWeight2 = MaxWeight1;
-			MinNode2 = MinNode1;
-			MaxWeight1 = NodeArray[i].Weight;
-			MinNode1 = i;
-		}
-		else if(NodeArray[i].Weight < MaxWeight2 && NodeArray[i].Parent == -1)
-		{
-			MaxWeight2 = NodeArray[i].Weight;
-			MinNode2 = i;	
-		}
-	}
+	PriorityQueue H = new PriorityQueue;
+	H->Size = 0;
+	H->Capacity = Capacity;
+	H->ListNodes = new List [H->Capacity];
+	for(int i = 0; i < H->Capacity; i++)
+		H->ListNodes[i] = new Node;
+	return H;
 }
 
 
-/* 创建Huffman树 */
-HuffmanTree InitHuffmanTree(ElementType* weight, int NumNode)
+/* 交换两个节点 */
+void SwapNode(Position *a, Position *b)
 {
-	int i;
-	int MinNode1 = 0;
-	int MinNode2 = 0;
-	// 创建树节点
-	// 一棵有n个叶子节点的赫夫曼树共有2n-1个节点
-	int TotalNode = 2 * NumNode - 1;
-	HuffmanTree Tree = new HuffmanNode [TotalNode];
+	Position temp = *a;
+	*a = * b;
+	*b = temp;
+}
 
-	// 前 NumNode 个节点存放叶子节点
-	for(i = 0; i < NumNode; i++)
+
+/* 使得树满足堆序：从index位置开始的节点 */
+void Heapify(PriorityQueue H, int index)
+{
+	int smallest = index;
+	int left = 2 * index + 1;
+	int right = 2 *index + 2;
+	
+	// 找到根与子节点中的值最小的节点序号
+	if(left < H->Size && H->ListNodes[left] < H->ListNodes[smallest]->Freq)
+		left = smallest;
+
+	if(right < H->Size && H->ListNodes[Right] < H->ListNodes[smallest]->Freq)
+		right = smallest;
+
+	if(smallest != index)
 	{
-		Tree[i].Parent = -1;
-		Tree[i].Left = -1;
-		Tree[i].Right = -1;
-		Tree[i].Weight = weight[i];
+		SwapNode(&H->ListNodes[smallest], &H->ListNodes[index]);
+		Heapify(H, smallest);
 	}
-
-	// 其余节点存放中间节点
-	for(; i < TotalNode; i++)
-	{
-		Tree[i].Parent = -1;
-		Tree[i].Left = -1;
-		Tree[i].Right = -1;
-		Tree[i].Weight = 0;
-
-	}
-
-	// 循环构建huffman树
-	for(i = NumNode; i < TotalNode; i++)
-	{
-		SelectNode(Tree, MinNode1, MinNode2, i);
-		// 两个叶子节点的父节点放置到当前树数组的最后一个位置 - i
-		Tree[MinNode1].Parent = i;
-		Tree[MinNode2].Parent = i;
-		Tree[i].Weight = Tree[MinNode1].Weight + Tree[MinNode2].Weight;
-		Tree[i].Left = MinNode1;
-		Tree[i].Right = MinNode2;
-	}
-
-	return Tree;
 
 }
 
+
+/* 找到最小的节点 */
+Position FindMin(PriorityQueue H)
+{
+	Position temp = H->ListNodes[0];
+
+}
+
+
+/* 判断是否是树叶 */
+bool IsLeaf(Position P)
+{
+	return !(P->Left) && !(P->Right);
+}
+
+
+
+void BuildMinHeap(PriorityQueue H)
+{
+	int n = H
+}
+
+void PrintArray(int* array, int Len)
+{
+	for(int i = 0; i < Len; i++)
+		std::cout<<array[i]<<" ";
+	std::cout<<std::endl;
+}
