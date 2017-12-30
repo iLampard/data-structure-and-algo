@@ -1,11 +1,11 @@
 #include <iostream>
-#include <assert>
+#include <cassert>
 
 /* 队列的数组实现 */
 
 
 typedef int ElementType;
-typedef QueueStruct *Queue;
+typedef struct QueueStruct *Queue;
 
 struct QueueStruct
 {
@@ -14,7 +14,7 @@ struct QueueStruct
 	int Rear;              // 尾指针，若队列不空，指向队列尾元素
 	int Size;              // 队列的长度
 	ElementType *Array;    // 存储数据的数组
-}；
+};
 
 /* 判断队列是否为空 */
 int IsEmpty(Queue Q);
@@ -51,10 +51,10 @@ int main()
 {
 	Queue Q = CreateQueue(5);
 	MakeEmpty(Q);
-	Enqueue(Q, 2);
-	Enqueue(Q, 4);
-	Enqueue(Q, 1);
-	Enqueue(Q, 3);
+	Enqueue(2, Q);
+	Enqueue(4, Q);
+	Enqueue(1, Q);
+	Enqueue(3, Q);
 	std::cout<<"Elements 2, 4, 1, 3 has been enqueue"<<std::endl;
 	PrintQueue(Q);
 	std::cout<<"Dequeue"<<std::endl;
@@ -81,9 +81,10 @@ int IsFull(Queue Q)
 /* 创建一个队列：给定队列的容量 */
 Queue CreateQueue(int MaxElements)
 {
-	Queue Q = new Queue;
+	Queue Q = new QueueStruct;
 	Q->Capacity = MaxElements;
 	Q->Array = new ElementType[Q->Capacity];
+    return Q;
 }
 
 
@@ -158,7 +159,7 @@ int Succ(int Position, Queue Q)
 /* 打印队列 */
 void PrintQueue(Queue Q)
 {
-	for(int i = 0; i < Q->Size; i++)
+	for(int i = Q->Front; i <= Q->Rear; i++)
 		std::cout<<Q->Array[i]<<" ";
 	std::cout<<std::endl;
 }
