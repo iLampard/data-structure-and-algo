@@ -1,20 +1,35 @@
 #include <iostream>
 #include <cassert>
 
-/* 队列的数组实现 */
+/* 队列的链表实现 */
 
-
+struct Node;
+typedef struct Node *pNode;
+typedef pNode Position;
+typedef pNode List;
 typedef int ElementType;
 typedef struct QueueStruct *Queue;
 
+
+/* 节点 */
+struct Node
+{
+    ElementType Element;
+    Position Next;
+    Node(ElementType X): Element(X), Next(NULL){};
+    Node(ElementType X, Position P): Element(X), Next(P){};
+    Node(){};
+};
+
+
+/* 队列: 不需要设置最大容量 */
 struct QueueStruct
 {
-	int Capacity;		   // 队列的容量，即最长长度
-	int Front;             // 头指针，若队列不空，指向队列头元素
-	int Rear;              // 尾指针，若队列不空，指向队列尾元素
+	Position Front;        // 头指针，若队列不空，指向链表的头节点，头节点的下一个元素为队列的头元素
+	Position Rear;         // 尾指针，若队列不空，指向队列尾元素
 	int Size;              // 队列的长度
-	ElementType *Array;    // 存储数据的数组
 };
+
 
 /* 判断队列是否为空 */
 int IsEmpty(Queue Q);
@@ -40,9 +55,6 @@ ElementType Front(Queue Q);
 /* 元素出队 */
 void Dequeue(Queue Q);
 
-/* 找到循环队列中下一个元素的位置 */
-int Succ(int Position, Queue Q);
-
 /* 打印队列 */
 void PrintQueue(Queue Q);
 
@@ -63,9 +75,9 @@ int main()
 	std::cout<<"Dequeue again"<<std::endl;
 	Dequeue(Q);
 	PrintQueue(Q);
-    DisposeQueue(Q);
 	return 0;
 }
+
 
 /* 判断队列是否为空 */
 int IsEmpty(Queue Q)
@@ -73,18 +85,13 @@ int IsEmpty(Queue Q)
 	return Q->Size == 0;
 }
 
-/*  判断队列是否已满 */
-int IsFull(Queue Q)
-{
-	return Q->Capacity == Q->Size;
-}
 
-/* 创建一个队列：给定队列的容量 */
-Queue CreateQueue(int MaxElements)
+/* 创建一个队列*/
+Queue CreateQueue()
 {
 	Queue Q = new QueueStruct;
-	Q->Capacity = MaxElements;
-	Q->Array = new ElementType[Q->Capacity];
+	Q->Front = new Node;
+	Q->Rear = new Node;
     return Q;
 }
 
@@ -92,8 +99,12 @@ Queue CreateQueue(int MaxElements)
 /* 清空队列，释放空间 */
 void DisposeQueue(Queue Q)
 {
-	delete [] Q->Array;
-	delete Q;
+	while(Q->Front)
+	{
+		Q->Rear = Q->Front->Next;
+		delete Q->Front;
+		Q->Front = Q->Rear;
+	}
 }
 
 
@@ -101,25 +112,18 @@ void DisposeQueue(Queue Q)
 void MakeEmpty(Queue Q)
 {
 	Q->Size = 0;
-	Q->Front = 1;
-	Q->Rear = 0;
+	Q->Front->Next = NULL;
+	Q->Front = Q->Rear;
 }
 
 
 /* 元素入队 */
 void Enqueue(ElementType X, Queue Q)
 {
-	if(IsFull(Q))
-	{
-		std::cout<<"The queue is already full"<<std::endl;
-		return;
-	}
-	else
-	{
-		Q->Size++;
-		Q->Rear = Succ(Q->Rear, Q);  // 更新队尾指针位置
-		Q->Array[Q->Rear] = X;
-	}
+	List P = new Node(X);
+	Q->Rear->Next = P;
+	Q->Rear = P;
+	Q->Size++; 
 }
 
 
@@ -127,40 +131,25 @@ void Enqueue(ElementType X, Queue Q)
 ElementType Front(Queue Q)
 {
 	assert(Q->Size > 0);
-	return Q->Array[Q->Front];
+	return Q->Front->Element;
 }
 
 
 /* 元素出队 */
 void Dequeue(Queue Q)
 {
-	if(IsEmpty(Q))
-	{
-		std::cout<<"The queue is already empty"<<std::endl;
-		return;
-	}
-	else
-	{
-		Q->Size--;
-		Q->Front = Succ(Q->Front, Q);
-	}
-}
-
-
-/* 找到循环队列中下一个元素的位置 */
-int Succ(int Position, Queue Q)
-{
-	/* 循环队列：如果当前位置已经到队列尾部，则下一个位置是队列头的位置 */
-	if(++Position == Q->Capacity) // Position是从0开始的，所以比较的时候需要自加1
-		Position = 0;  
-	return Position;
+	Position P = Q->Front->Next;
+	Q->Front->Next = P->Next;
+	if(Q->Rear == P) // 此时队列已经为空
+		Q->Rear = Q->Front;
+	delete P;
+	Q->Size--;
 }
 
 
 /* 打印队列 */
 void PrintQueue(Queue Q)
 {
-	for(int i = Q->Front; i <= Q->Rear; i++)
-		std::cout<<Q->Array[i]<<" ";
+	
 	std::cout<<std::endl;
 }
