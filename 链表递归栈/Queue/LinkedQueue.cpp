@@ -37,8 +37,8 @@ int IsEmpty(Queue Q);
 /*  判断队列是否已满 */
 int IsFull(Queue Q);
 
-/* 创建一个队列：给定队列的容量 */
-Queue CreateQueue(int MaxElements);
+/* 创建一个队列*/
+Queue CreateQueue();
 
 /* 清空队列，释放空间 */
 void DisposeQueue(Queue Q);
@@ -61,7 +61,7 @@ void PrintQueue(Queue Q);
 
 int main()
 {
-	Queue Q = CreateQueue(5);
+	Queue Q = CreateQueue();
 	MakeEmpty(Q);
 	Enqueue(2, Q);
 	Enqueue(4, Q);
@@ -150,6 +150,11 @@ void Dequeue(Queue Q)
 /* 打印队列 */
 void PrintQueue(Queue Q)
 {
-	
+	Position P = Q->Front->Next;
+	while(P)
+	{
+		std::cout<<P->Element<<"";
+		P = P->Next;
+	}	
 	std::cout<<std::endl;
 }
