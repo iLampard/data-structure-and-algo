@@ -20,8 +20,8 @@ void AbsModeExample();
 
 int main()
 {
-	
-	
+	BinarySearchExample();
+	AbsModeExample();
 	return 0;
 }
 
@@ -29,7 +29,7 @@ int main()
 void PrintArray(int* array, int iLen)
 {
 	std::cout<<"The array is "<<std::endl;
-	for(int i = 0; i < sizeof(array)/sizeof(int); i++)
+	for(int i = 0; i < iLen; i++)
 	{
 		std::cout<<array[i]<<" ";
 	}
@@ -65,7 +65,7 @@ void BinarySearchExample()
 {
 	std::cout<<"BinarySearch"<<std::endl;
 	int a[] = {1, 2, 3, 4, 5, 10, 12, 8}; 
-	PrintArray(a, sizeof(a)/sizeof(int));
+	PrintArray(a, sizeof(a) / sizeof(int));
 	std::cout<<"Find out index of value 10 is "<<BinarySearch(a, sizeof(a)/sizeof(int), 10)<<std::endl;	
 }
 
@@ -77,9 +77,9 @@ int AbsMode(int* array, int iLen)
 	int iCount = 0;
 	int i;
 	int mode;
-	for(; i < iLen; i++)
+	for(i = 0; i < iLen; i++)
 	{
-		if(!iCount) // iCount == 0, 则 mode = array[i]
+		if(iCount == 0) // iCount == 0, 则 mode = array[i]
 		{
 			mode = array[i];
 			iCount = 1;
@@ -97,4 +97,13 @@ int AbsMode(int* array, int iLen)
 	return mode;
 }
 
+
+void AbsModeExample()
+{
+	std::cout<<"Absolute Mode"<<std::endl;
+	int a[] = {1, 2, 2, 4, 5, 2, 2, 2}; 
+	PrintArray(a, sizeof(a) / sizeof(int));
+	std::cout<<"Absolute mode is "<<AbsMode(a, sizeof(a) / sizeof(int))<<std::endl;
+	
+}
 
