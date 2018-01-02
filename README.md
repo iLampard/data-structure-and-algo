@@ -26,7 +26,9 @@
     - [Manacher算法](https://github.com/iLampard/data-structure-and-algo/blob/master/字符串/manacher.cpp): 判断是否回文子字符串，最长回文子串的计算
 
 - 数组
-    - [常规问题1](https://github.com/iLampard/data-structure-and-algo/blob/master/数组/array.cpp): 二分查找、绝对众数
+    - [常规问题1](https://github.com/iLampard/data-structure-and-algo/blob/master/数组/array.cpp)
+        1. 二分查找
+        2. 绝对众数
 
 - 链表递归栈
     - [链表](https://github.com/iLampard/data-structure-and-algo/blob/master/链表递归栈/LinkedList/LinkedList.cpp)
