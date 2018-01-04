@@ -1,6 +1,6 @@
 
 /*   
-https://www.geeksforgeeks.org/greedy-algorithms-set-3-PriorityQueue-coding/
+https://www.geeksforgeeks.org/greedy-algorithms-set-3-huffman-coding/
 */
 
 /* HuffmanTree: 给定n个权值作为n个叶子结点，构造出的一棵二叉树带权路径长度达到最小 */
@@ -35,7 +35,7 @@ struct MinHeap
 	int Capacity;
 	int Size;
 	List *ListNodes;	// 指向Node的指针的指针
-}
+};
 
 /* 初始化一颗PriorityQueue树 */
 PriorityQueue InitPriorityQueue(int Capacity);
@@ -46,8 +46,11 @@ void SwapNode(Position *a, Position *b);
 /* 使得树满足堆序：从index位置开始的节点 */
 void Heapify(PriorityQueue H, int index)
 
-/* 找到最小的节点 */
-Position FindMin(PriorityQueue H);
+/* 检查PriorityQueue的长度是否为1 */
+int IsSizeOne(PriorityQueue H);
+
+/* 提取最小的节点 */
+Position ExtractMin(PriorityQueue H);
 
 /* 判断是否是树叶 */
 bool IsLeaf(Position P)
@@ -60,7 +63,7 @@ int main()
 }
 
 
-/* 初始化一颗PriorityQueue树 */
+/* 初始化PriorityQueue */
 PriorityQueue InitPriorityQueue(int Capacity)
 {
 	PriorityQueue H = new PriorityQueue;
@@ -82,19 +85,19 @@ void SwapNode(Position *a, Position *b)
 }
 
 
-/* 使得树满足堆序：从index位置开始的节点 */
+/* 使得树满足堆序：从index位置开始的节点, 每个根节点的值都要大于子节点 */
 void Heapify(PriorityQueue H, int index)
 {
 	int smallest = index;
 	int left = 2 * index + 1;
-	int right = 2 *index + 2;
+	int right = 2 * index + 2;
 	
 	// 找到根与子节点中的值最小的节点序号
 	if(left < H->Size && H->ListNodes[left] < H->ListNodes[smallest]->Freq)
-		left = smallest;
+		smallest = left;
 
 	if(right < H->Size && H->ListNodes[Right] < H->ListNodes[smallest]->Freq)
-		right = smallest;
+		smallest = right;
 
 	if(smallest != index)
 	{
@@ -105,8 +108,14 @@ void Heapify(PriorityQueue H, int index)
 }
 
 
-/* 找到最小的节点 */
-Position FindMin(PriorityQueue H)
+/* 检查PriorityQueue的长度是否为1 */
+int IsSizeOne(PriorityQueue H)
+{
+	return H->Size == 1;
+}
+
+/* 提取最小的节点 */
+Position ExtractMin(PriorityQueue H)
 {
 	Position temp = H->ListNodes[0];
 
