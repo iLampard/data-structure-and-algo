@@ -46,6 +46,7 @@
         1. [队列的数组实现](https://github.com/iLampard/data-structure-and-algo/blob/master/链表递归栈/Queue/Queue.cpp)：队列的初始化、入队、出队
         2. [队列的链表实现](https://github.com/iLampard/data-structure-and-algo/blob/master/链表递归栈/Queue/LinkedQueue.cpp)：同上
         3. [优先队列](https://github.com/iLampard/data-structure-and-algo/blob/master/链表递归栈/Queue/BinaryHeap.cpp)(二叉堆): 初始化、插入、删除最小值、上滤和下滤
+        4. [Huffman编码](https://github.com/iLampard/data-structure-and-algo/blob/master/链表递归栈/Queue/Huffman.cpp): Huffman编码的实现（没有用STL，C风格自建二叉堆）
 
 - 树
     - [二叉查找树](https://github.com/iLampard/data-structure-and-algo/blob/master/树/BinarySearchTree.cpp)
