@@ -20,7 +20,7 @@
 - 图
     - [并查集](https://github.com/iLampard/data-structure-and-algo/blob/master/图/UnionFind2.cpp): 集合的合并(直接求并、按大小求并和按深度求并)、根搜寻(路径压缩)
     - [图的邻接表](https://github.com/iLampard/data-structure-and-algo/blob/master/图/AdjacencyList.cpp): 有向图和无向图的邻接表表示方法
-    - [图的遍历](https://github.com/iLampard/data-structure-and-algo/blob/master/图/Traverse.cpp): 图的深度优先和广度优先搜索（假设图用邻接表矩阵表示）
+    - [图的遍历](https://github.com/iLampard/data-structure-and-algo/blob/master/图/Traverse.cpp): 图的深度优先和广度优先搜索（假设图用邻接表矩阵表示）、拓扑排序
 
 - 字符串
     - [常规问题1](https://github.com/iLampard/data-structure-and-algo/blob/master/字符串/string_operation_1.cpp)：字符串的翻转转和循环左移、单词翻转、最长公共子序列、最长递增子序列

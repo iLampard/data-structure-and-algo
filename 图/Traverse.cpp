@@ -1,5 +1,6 @@
 #include <iostream>
 #include <list>
+#include <stack>
 
 #define MAX_VERTEX 20   // 最大顶点数量
 
@@ -32,6 +33,11 @@ void BFSTraverse(Graph G, Vertex Start);
 /* 深度优先搜索 */
 /* 按节点依次进行深度优先搜索 */
 void DFSTraverse(Graph G);
+
+void TopSortUtil(Graph G, Vertex Start, bool Visited[], std::stack<Vertex> Stack)；
+
+/* 拓扑排序 */
+void TopSort(Graph G)；
 
 int main()
 {
@@ -135,4 +141,42 @@ void DFSTraverse(Graph G)
 	for(int i = 0; i < G->NumVertex; i++)
 		if(!Visited[i])
 			DFSUtil(G, i, Visited);
+}
+
+
+void TopSortUtil(Graph G, Vertex Start, bool Visited[], std::stack<Vertex> Stack)
+{
+	Visited[Start] = true;
+
+	// 递归 - 对于该节点所有的邻接表节点
+	std::list<Vertex>::iterator i;
+	for(i = G->List[Start].begin(); i != G->List[Start].end(); i ++)
+		if(!visited[*i])
+			TopSortUtil(G, *i, visited, Stack);
+
+	// 当前节点入栈	
+	Stack.push(Start);
+}
+
+
+/* 拓扑排序 */
+void TopSort(Graph G)
+{
+	std::stack<Vertex> Stack;
+
+	// 创建一个 visited 数组
+    bool *Visited = new bool[G->NumVertex];
+    for (int i = 0; i < G->NumVertex; i++)
+        Visited[i] = false;
+    
+	// 递归 - 对于该节点所有的邻接表节点
+	for(int i = 0; i < G->NumVertex; i++)
+		if(!Visited[i])
+			TopSortUtil(G, i, Visited, Stack);
+
+	while(!Stack.empty())
+	{
+		std::cout<<Stack.top()<<" ";
+		Stack.pop();
+	}
 }
