@@ -34,10 +34,10 @@ void BFSTraverse(Graph G, Vertex Start);
 /* 按节点依次进行深度优先搜索 */
 void DFSTraverse(Graph G);
 
-void TopSortUtil(Graph G, Vertex Start, bool Visited[], std::stack<Vertex> Stack)；
+void TopSortUtil(Graph G, Vertex Start, bool Visited[], std::stack<Vertex> *Stack);
 
 /* 拓扑排序 */
-void TopSort(Graph G)；
+void TopSort(Graph G);
 
 int main()
 {
@@ -55,8 +55,22 @@ int main()
     
     std::cout<<std::endl;
     
-    std::cout << "Following is Depth First Traversaln \n";
+    std::cout << "Following is Depth First Traversal \n";
     DFSTraverse(G);
+    
+    
+    Graph H = InitGraph(6);
+    AddEdge(H, 5, 2);
+    AddEdge(H, 5, 0);
+    AddEdge(H, 4, 0);
+    AddEdge(H, 4, 1);
+    AddEdge(H, 2, 3);
+    AddEdge(H, 3, 1);
+    
+    std::cout<<std::endl;
+    std::cout << "Following is Topological sort \n";
+    TopSort(H);
+    
 
 	return 0;
 }
@@ -144,25 +158,25 @@ void DFSTraverse(Graph G)
 }
 
 
-void TopSortUtil(Graph G, Vertex Start, bool Visited[], std::stack<Vertex> Stack)
+void TopSortUtil(Graph G, Vertex Start, bool Visited[], std::stack<Vertex> *S)
 {
 	Visited[Start] = true;
 
 	// 递归 - 对于该节点所有的邻接表节点
 	std::list<Vertex>::iterator i;
-	for(i = G->List[Start].begin(); i != G->List[Start].end(); i ++)
-		if(!visited[*i])
-			TopSortUtil(G, *i, visited, Stack);
+	for(i = G->List[Start].begin(); i != G->List[Start].end(); i++)
+		if(!Visited[*i])
+			TopSortUtil(G, *i, Visited, S);
 
 	// 当前节点入栈	
-	Stack.push(Start);
+	(*S).push(Start);
 }
 
 
 /* 拓扑排序 */
 void TopSort(Graph G)
 {
-	std::stack<Vertex> Stack;
+	std::stack<Vertex> s;
 
 	// 创建一个 visited 数组
     bool *Visited = new bool[G->NumVertex];
@@ -172,11 +186,11 @@ void TopSort(Graph G)
 	// 递归 - 对于该节点所有的邻接表节点
 	for(int i = 0; i < G->NumVertex; i++)
 		if(!Visited[i])
-			TopSortUtil(G, i, Visited, Stack);
-
-	while(!Stack.empty())
+			TopSortUtil(G, i, Visited, &s);
+    
+	while(!s.empty())
 	{
-		std::cout<<Stack.top()<<" ";
-		Stack.pop();
+		std::cout<<s.top()<<" ";
+		s.pop();
 	}
 }
