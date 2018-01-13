@@ -23,6 +23,8 @@
     - [图的遍历](https://github.com/iLampard/data-structure-and-algo/blob/master/图/Traverse.cpp): 图的深度优先和广度优先搜索（假设图用邻接表矩阵表示）、拓扑排序、判断是否有环
     - 最短路径：
         1. [Dijkstra算法](https://github.com/iLampard/data-structure-and-algo/blob/master/图/Dijkstra.cpp): 邻接矩阵表示的图结构的最短路径
+    - 最小生成树：
+        1. [Prim算法](https://github.com/iLampard/data-structure-and-algo/blob/master/图/Prim.cpp): 邻接矩阵表示的图结构的最小生成树
 
 - 字符串
     - [常规问题1](https://github.com/iLampard/data-structure-and-algo/blob/master/字符串/string_operation_1.cpp)：字符串的翻转转和循环左移、单词翻转、最长公共子序列、最长递增子序列
