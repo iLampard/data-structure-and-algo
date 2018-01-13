@@ -39,6 +39,11 @@ void TopSortUtil(Graph G, Vertex Start, bool Visited[], std::stack<Vertex> *Stac
 /* 拓扑排序 */
 void TopSort(Graph G);
 
+/* 判断有向图是否有环 */
+bool IsCyclicUtil(Graph G, Vertex Start, bool Visited[], bool VertexStack[]);
+
+bool IsCyclic(Graph G);
+
 int main()
 {
 	Graph G = InitGraph(4);
@@ -58,7 +63,13 @@ int main()
     std::cout << "Following is Depth First Traversal \n";
     DFSTraverse(G);
     
+    std::cout<<std::endl;
     
+    if(IsCyclic(G))
+    	std::cout<<"Graph contains a cycle \n";
+    else
+    	std::cout<<"Graph does not contain a cycle \n";
+
     Graph H = InitGraph(6);
     AddEdge(H, 5, 2);
     AddEdge(H, 5, 0);
@@ -193,4 +204,47 @@ void TopSort(Graph G)
 		std::cout<<s.top()<<" ";
 		s.pop();
 	}
+}
+
+
+bool IsCyclicUtil(Graph G, Vertex Start, bool Visited[], bool VertexStack[])
+{
+	if(!Visited[Start])
+	{
+		Visited[Start] = true;
+		VertexStack[Start] = true;
+
+		std::list<Vertex>::iterator i;
+		for(i = G->List[Start].begin(); i != G->List[Start].end(); i++)
+		{
+			if(!Visited[*i] && IsCyclicUtil(G, *i, Visited, VertexStack)) // 递归判断是否有环
+				return true;
+			else if(VertexStack[*i])  // 节点i已经在栈中
+				return true; 
+		}
+	}
+
+	VertexStack[Start] = false;
+	return false;
+}
+
+/* True - 有环
+算法： 用一个栈来记录已经访问过的节点，如果在深度优先搜索的时候访问到了已经入栈的节点，则说明有环
+ */
+bool IsCyclic(Graph G)
+{
+	bool *Visited = new bool[G->NumVertex];
+	bool *VertexStack = new bool[G->NumVertex];
+	for(int i = 0; i < G->NumVertex; i++)
+	{
+		Visited[i] = false;
+		VertexStack[i] = false;
+	}
+
+	// 进行深度优先搜索
+	for(int i = 0; i < G->NumVertex; i++)
+		 if(IsCyclicUtil(G, i, Visited, VertexStack))
+		 	return true;
+
+	return false;
 }

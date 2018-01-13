@@ -20,7 +20,7 @@
 - 图
     - [并查集](https://github.com/iLampard/data-structure-and-algo/blob/master/图/UnionFind2.cpp): 集合的合并(直接求并、按大小求并和按深度求并)、根搜寻(路径压缩)
     - [图的邻接表](https://github.com/iLampard/data-structure-and-algo/blob/master/图/AdjacencyList.cpp): 有向图和无向图的邻接表表示方法
-    - [图的遍历](https://github.com/iLampard/data-structure-and-algo/blob/master/图/Traverse.cpp): 图的深度优先和广度优先搜索（假设图用邻接表矩阵表示）、拓扑排序
+    - [图的遍历](https://github.com/iLampard/data-structure-and-algo/blob/master/图/Traverse.cpp): 图的深度优先和广度优先搜索（假设图用邻接表矩阵表示）、拓扑排序、判断是否有环
     - 最短路径：
         1. [Dijkstra算法](https://github.com/iLampard/data-structure-and-algo/blob/master/图/Dijkstra.cpp): 邻接矩阵表示的图结构的最短路径
 
