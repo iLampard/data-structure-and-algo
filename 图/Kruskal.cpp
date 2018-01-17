@@ -8,8 +8,8 @@ typedef int ElementType;
 typedef int Vertex;
 typedef struct HeapStruct *PriorityQueue;
 typedef struct GraphStruct *Graph;
-typedef std::list<EdgeStruct> EdgeList;
-
+typedef struct EdgeStruct *Edge;
+typedef Edge *EdgeList;
 
 struct HeapStruct
 {
@@ -24,15 +24,14 @@ struct EdgeStruct
 	Vertex Start;  /* 开始节点 */
 	Vertex End;    /* 结束节点  */
 	ElementType Weight;    /* 边的权值 */
-	EdgeStruct(Vertex Start_, Vertex End_, ElementType Weight_):
+    EdgeStruct(Vertex Start_, Vertex End_, ElementType Weight_):Start(Start_), End(End_), Weight(Weight_){};
 };
 
 
 struct GraphStruct
 {
 	int NumVertex, NumEdge; /* 图的顶底数和边数 */
-	EdgeList Edge;
-
+	EdgeList List;
 };
 
 
@@ -73,9 +72,7 @@ SetType Find(ElementType X, DisjSet S);
 
 /************************************************/
 
-
-/* 打印结果 */
-void PrintSolution(DisjSet S, Graph G);
+void Kruskal(Graph G);
 
 
 int main()
@@ -89,7 +86,7 @@ int main()
         2--------3
             4       */
     int NumVertex = 4;
-    int NumEdge = 5
+    int NumEdge = 5;
     Graph G = InitGraph(NumVertex, NumEdge);
     AddEdge(G, 0, 1, 10);
     AddEdge(G, 0, 2, 6);
@@ -107,14 +104,14 @@ Graph InitGraph(int NumVertex, int NumEdge)
 	Graph G = new GraphStruct;
 	G->NumVertex = NumVertex;
 	G->NumEdge = NumEdge;
+    G->List = new Edge[G->NumEdge];
 	return G;
 }
 
 
 void AddEdge(Graph G, Vertex Start, Vertex End, ElementType Weight)
 {
-	EdgeStruct edge(Start, End, Weight);
-	G->Edge.push_back(edge); 
+	G->List[i] = new EdgeStruct(Start, End, Weight);
 }
 
 void FindVertex(Graph G, ElementType Weight, Vertex* Start, Vertex* End)
