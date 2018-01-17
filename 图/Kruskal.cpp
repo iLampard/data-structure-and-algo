@@ -1,14 +1,15 @@
 
 #include <iostream>
+#include <list>
 
-#define NumSets 8
-
-typedef int DisjSet[NumSets + 1];
+typedef int *DisjSet;
 typedef int SetType;
 typedef int ElementType;
 typedef int Vertex;
 typedef struct HeapStruct *PriorityQueue;
 typedef struct GraphStruct *Graph;
+typedef std::list<EdgeStruct> EdgeList;
+
 
 struct HeapStruct
 {
@@ -17,13 +18,33 @@ struct HeapStruct
 	ElementType *Elements;
 };
 
-struct GraphStruct
+
+struct EdgeStruct 
 {
-	int NumVertex;
-	Vertex** GraphMatrix;
+	Vertex Start;  /* 开始节点 */
+	Vertex End;    /* 结束节点  */
+	ElementType Weight;    /* 边的权值 */
+	EdgeStruct(Vertex Start_, Vertex End_, ElementType Weight_):
 };
 
-/**************  利用堆结构存储边 *******************/
+
+struct GraphStruct
+{
+	int NumVertex, NumEdge; /* 图的顶底数和边数 */
+	EdgeList Edge;
+
+};
+
+
+
+/**************  图结构的定义 *******************/
+
+Graph InitGraph(int NumVertex, int NumEdge);
+
+void AddEdge(Graph G, Vertex Start, Vertex End, ElementType Weight);
+
+void FindVertex(Graph G, ElementType Weight);
+/**************  利用堆结构存储边的长度 *******************/
 /* 初始化一个给定长度的堆（用数组表示） */
 PriorityQueue InitHeap(int MaxElements);
 
@@ -42,7 +63,7 @@ void BuildHeap(ElementType* a, int size, PriorityQueue H);
 /**************  并查集  *******************/
 /* 初始化数组，S[i]表示元素i的根 */
 /* 假设元素从1 - N， 对应的S[i]的 i 也是从 1 - N  */
-void Initialize(DisjSet S);
+void InitDisjSet(DisjSet S, int NumSets);
 
 /* 假设Root1 和 Root2 连在一起 */
 void SetUnion(DisjSet S, SetType Root1, SetType Root2);
@@ -50,16 +71,62 @@ void SetUnion(DisjSet S, SetType Root1, SetType Root2);
 /* 找到根节点：使用路径压缩法 */
 SetType Find(ElementType X, DisjSet S);
 
-/* 打印S数组 */
-void PrintDisjSet(DisjSet S);
 /************************************************/
+
+
+/* 打印结果 */
+void PrintSolution(DisjSet S, Graph G);
+
 
 int main()
 {
+	/* create following weighted graph
+             10
+        0--------1
+        |  \     |
+       6|   5\   |15
+        |      \ |
+        2--------3
+            4       */
+    int NumVertex = 4;
+    int NumEdge = 5
+    Graph G = InitGraph(NumVertex, NumEdge);
+    AddEdge(G, 0, 1, 10);
+    AddEdge(G, 0, 2, 6);
+    AddEdge(G, 0, 3, 5);
+    AddEdge(G, 1, 3, 15);
+    AddEdge(G, 2, 3, 4);
+    Kruskal(G);
 	return 0;
 }
 
+/**************  图结构的定义 *******************/
 
+Graph InitGraph(int NumVertex, int NumEdge)
+{
+	Graph G = new GraphStruct;
+	G->NumVertex = NumVertex;
+	G->NumEdge = NumEdge;
+	return G;
+}
+
+
+void AddEdge(Graph G, Vertex Start, Vertex End, ElementType Weight)
+{
+	EdgeStruct edge(Start, End, Weight);
+	G->Edge.push_back(edge); 
+}
+
+void FindVertex(Graph G, ElementType Weight, Vertex* Start, Vertex* End)
+{
+	for(int i = 0; i < G->NumEdge; i++)
+		if(G->Edge[i].Weight == Weight)
+		{
+			(*Start) = G->Edge[i].Start;
+			(*End) = G->Edge[i].End;
+		}
+
+}
 /**************  利用堆结构存储边 *******************/
 /* 初始化一个给定长度的堆（用数组表示） */
 PriorityQueue InitHeap(int MaxElements)
@@ -141,27 +208,28 @@ void BuildHeap(ElementType* a, int size, PriorityQueue H)
 /************************************************/
 
 
-void Initialize(DisjSet S, UnionMethod Method)
+/* 假设元素从1 - N， 对应的S[i]的 i 也是从 1 - N  */
+DisjSet InitDisjSet(int NumSets)
 {
+	DisjSet S = new SetType[NumSets + 1];
 	for(int i = 1; i <= NumSets; i++)
 		S[i] = 0;
 		
 }
 
 
-void SetUnion(DisjSet S, SetType Root1, SetType Root2, UnionMethod Method)
+void SetUnion(DisjSet S, SetType Root1, SetType Root2)
 {
-	if(Method == ByHeight) // 根据高度求并：浅的树并入深的树
+	// 根据高度求并：浅的树并入深的树
+	if(S[Root2] < S[Root1]) /* Root2 更深 */
+		S[Root1] = Root2;
+	else
 	{
-		if(S[Root2] < S[Root1]) /* Root2 更深 */
-			S[Root1] = Root2;
-		else
-		{
-			if(S[Root2] == S[Root1]) // 深度相同
-				S[Root1]--;  // 合并之后深度加一
-			S[Root2] = Root1;
-		}
+		if(S[Root2] == S[Root1]) // 深度相同
+			S[Root1]--;  // 合并之后深度加一
+		S[Root2] = Root1;
 	}
+	
 }
 
 
@@ -179,10 +247,50 @@ SetType Find(ElementType X, DisjSet S)
 
 void Kruskal(Graph G)
 {
-	int EdgeAccepted;
-	DisjSet S;
-	PriorityQueue H;
+	int NumEdgeAccepted = 0;
+	DisjSet S = InitDisjSet(G->NumVertex);
+	PriorityQueue H = InitHeap(G->NumEdge);
 	Vertex U, V;
 	SetType Uset, Vset;
-	Edge E;
+	ElementType EdgeWeight;
+	EdgeList EdgeAccepted;
+
+
+	/* 用一个堆来存储边长 weight  */
+	ElementType* EdgeWeight = new ElementType[G->NumEdge];
+	for(int i = 0; i < G->NumEdge; i++)
+		EdgeWeight[i] = G->Edge[i].Weight;
+	BuildHeap(EdgeWeight, G->NumEdge, H);
+
+	/* 把顶点联通信息放入并查集 */
+	for(int i = 0; i < G->NumEdge; i++)
+		SetUnion(S, G->Edge[i].Start, G->Edge[i].End);
+
+	while(EdgeAccepted < G->NumVertex - 1)
+	{
+		/* 找到边长(weight)最小的边 */
+		EdgeWeight = DeleteMin(H);
+		FindVertex(G, EdgeWeight, &U, &V);
+		Uset = Find(U, S);
+		Vset = Find(V, S);
+		
+		/* 如果U V 不连通 */
+		if(Uset != Vset)
+		{
+			NumEdgeAccepted++;
+			SetUnion(S, Uset, Vset);
+			EdgeAccepted.push_back(EdgeStruct(U, V, EdgeWeight));
+		}
+
+	}
+
+	std::cout<<"Following are the edges in MST \n";
+	for(int i = 0; i < EdgeAccepted; i++)
+	{
+		std::cout<<EdgeAccepted[i].Start<<" -- "<<EdgeAccepted[i].End<<" : "<<EdgeAccepted.Weight<<std::endl;
+	}
+	std::endl;
+
 }
+
+
