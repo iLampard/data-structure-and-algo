@@ -16,6 +16,7 @@ struct EdgeStruct
 	Vertex End;    /* 结束节点  */
 	ElementType Weight;    /* 边的权值 */
     EdgeStruct(Vertex Start_, Vertex End_, ElementType Weight_):Start(Start_), End(End_), Weight(Weight_){};
+    EdgeStruct(){};
 };
 
 
@@ -112,7 +113,7 @@ DisjSet InitDisjSet(int NumSets)
 	DisjSet S = new SetType[NumSets + 1];
 	for(int i = 1; i <= NumSets; i++)
 		S[i] = 0;
-		
+    return S;
 }
 
 
@@ -147,40 +148,35 @@ void Kruskal(Graph G)
 {
 	int NumEdgeAccepted = 0;
 	DisjSet S = InitDisjSet(G->NumVertex);
-	Vertex U, V;
 	SetType Uset, Vset;
-	ElementType EdgeWeight;
+    struct EdgeStruct NextEdge;
+	int i = 0;
+	Edge result = new EdgeStruct[G->NumEdge];
 
 	qsort(G->EdgeList, G->NumEdge, sizeof(G->EdgeList[0]), CompareEdge);
 
-	/* 把顶点联通信息放入并查集 */
-	for(int i = 0; i < G->NumEdge; i++)
-		SetUnion(S, G->EdgeList[i].Start, G->EdgeList[i].End);
-
-	while(EdgeAccepted < G->NumVertex - 1)
+	while(NumEdgeAccepted < G->NumVertex - 1)
 	{
 		/* 找到边长(weight)最小的边 */
-		EdgeWeight = DeleteMin(H);
-		FindVertex(G, EdgeWeight, &U, &V);
-		Uset = Find(U, S);
-		Vset = Find(V, S);
+		NextEdge = G->EdgeList[i++];
+		Uset = Find(NextEdge.Start, S);
+		Vset = Find(NextEdge.End, S);
 		
 		/* 如果U V 不连通 */
 		if(Uset != Vset)
 		{
-			NumEdgeAccepted++;
+			result[NumEdgeAccepted++] = NextEdge;
 			SetUnion(S, Uset, Vset);
-			EdgeAccepted.push_back(EdgeStruct(U, V, EdgeWeight));
 		}
 
 	}
 
 	std::cout<<"Following are the edges in MST \n";
-	for(int i = 0; i < EdgeAccepted; i++)
+	for(int i = 0; i < NumEdgeAccepted; i++)
 	{
-		std::cout<<EdgeAccepted[i].Start<<" -- "<<EdgeAccepted[i].End<<" : "<<EdgeAccepted.Weight<<std::endl;
+		std::cout<<result[i].Start<<" -- "<<result[i].End<<" : "<<result[i].Weight<<std::endl;
 	}
-	std::endl;
+    std::cout<<std::endl;
 
 }
 
