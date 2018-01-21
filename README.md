@@ -16,6 +16,7 @@
         3. 区间最小值问题（RMQ）：简单动态规划法、预处理动规法
     - [背包问题](https://github.com/iLampard/data-structure-and-algo/blob/master/动态规划/beibao.cpp)
         1. 简单的0-1问题
+    - [LeetCode问题](https://github.com/iLampard/data-structure-and-algo/blob/master/动态规划/LeetCodeProblems.cpp): HouseRobber(#198)
 
 - 图
     - [并查集](https://github.com/iLampard/data-structure-and-algo/blob/master/图/UnionFind2.cpp): 集合的合并(直接求并、按大小求并和按深度求并)、根搜寻(路径压缩)
