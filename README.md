@@ -16,6 +16,7 @@
         3. 区间最小值问题（RMQ）：简单动态规划法、预处理动规法
     - [背包问题](https://github.com/iLampard/data-structure-and-algo/blob/master/动态规划/beibao.cpp)
         1. 简单的0-1问题
+    - [格子取数(走棋盘)问题](https://github.com/iLampard/data-structure-and-algo/blob/master/动态规划/CHessProblem.cpp): 只走一次的总和最小的路径
     - [LeetCode问题](https://github.com/iLampard/data-structure-and-algo/blob/master/动态规划/LeetCodeProblems.cpp): HouseRobber(#198), ClimbingStairs(#70)
 
 - 图

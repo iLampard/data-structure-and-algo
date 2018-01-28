@@ -32,7 +32,7 @@ int MinPath(vector<vector<int> > Chess, int M, int N)
     // 初始化
     PathSum[0] = Chess[0][0];
     for(int i = 1; i < N; i++)
-        PathSum[i] += PathSum[i-1] + Chess[0][i];
+        PathSum[i] += (PathSum[i-1] + Chess[0][i]);
     
     for(int i = 0; i < M; i++) // 按行滚动
     {
