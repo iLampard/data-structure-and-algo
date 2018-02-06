@@ -15,6 +15,9 @@ int ClimbStairs(int n);
 int MAX = 100000;
 int coinChange(int* coins, int coinsSize, int amount);
 
+// https://leetcode.com/problems/edit-distance/description/
+int minDistance(char* word1, char* word2);
+
 int main()
 {
     int HouseValues[] = {1, 2, 7, 1, 10};
@@ -26,6 +29,11 @@ int main()
     int amount = 11;
     std::cout<<"Min number of coins that match total amount of "<<amount<<" is \n";
     std::cout<<coinChange(coins, coinsSize, amount)<<std::endl;
+    
+    char s[] = "mart";
+    char t[] = "karma";
+    std::cout<<"Min distance of mart to karma is \n"<<minDistance(s, t)<<std::endl;
+    
     return 0;
 }
 
@@ -94,4 +102,38 @@ int coinChange(int* coins, int coinsSize, int amount)
     return dp[amount] == MAX ? -1: dp[amount];
 
 
+}
+
+
+// https://leetcode.com/problems/edit-distance/description/
+int minDistance(char* word1, char* word2)
+{
+    // dp[i][j] 表示源串word1[0,...i-1]和目标word2[0,...j-1]的编辑距离
+    int sourceSize = strlen(word1);
+    int targetSize = strlen(word2);
+
+    int dp[sourceSize + 1][targetSize + 1];
+    
+    for(int i = 0; i <= sourceSize; i++)
+        for(int j = 0; j <= targetSize; j++)
+            dp[i][j] = 0;
+    
+
+    // 边界条件
+    for(int i = 1; i <= sourceSize; i++)
+        dp[i][0] = i;
+
+    for(int j = 1; j <= targetSize; j++)
+        dp[0][j] = j;
+
+    for(int i = 1; i <= sourceSize; i++)
+        for(int j = 1; j <= targetSize; j++)
+        {
+            if(word1[i-1] == word2[j-1])
+                dp[i][j] = dp[i-1][j-1];
+            else
+                dp[i][j] = std::min(dp[i-1][j-1], std::min(dp[i][j-1], dp[i-1][j])) + 1;
+        }
+
+    return dp[sourceSize][targetSize];
 }
