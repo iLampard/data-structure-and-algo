@@ -7,35 +7,23 @@
 //
 
 #include <iostream>
-
+#include <cstdio>
 
 
 void PrintArray(int* a, int size);
+void swap(int* a, int *b);
 
-/* 归并排序 */
-void MergeArray(int* a, int start, int mid, int end);
-void MergeSort(int* a, int start, int end);
-void MergeSortExample();
+void BubbleSort(int*a , int size);
 
-/* 插入排序 */
-void InsertSort(int* a, int iLen);
-void InsertSortExample();
-
-/* 冒泡排序 */
-void BubbleSort(int* a, int iLen);
-void BubbleSortExample();
-
-/* 希尔排序 */
-void ShellSort(int* a, int iLen);
-void ShellSortExample();
-
+void Merge(int* a, int begin, int mid, int end);
+void MergeSort(int* a, int begin, int end);
 
 int main()
 {
-	MergeSortExample();
-	InsertSortExample();
-	BubbleSortExample();
-    ShellSortExample();
+	int a[] = {1, 2, 5, 4, 10, 9};
+	//BubbleSort(a, sizeof(a)/sizeof(int));
+	MergeSort(a, 0, sizeof(a) / sizeof(int) - 1);
+	PrintArray(a, sizeof(a) / sizeof(int));
 	system("pause");
 	return 0;
 }
@@ -44,153 +32,75 @@ int main()
 void PrintArray(int* a, int size)
 {
 	for(int i = 0; i < size; i++)
-		std::cout<<a[i]<<" ";
-	std::cout<<std::endl;
+		printf("%d ", a[i]);
+	printf("\n");
 }
 
 
-/* 归并排序 */
-void MergeArray(int* a, int start, int mid, int end)
+void swap(int* a, int* b)
 {
-	int* temp = new int[end - start + 1];
-	int i, j, k;
-	for(i = start, j = mid + 1, k = 0; (i <= mid) &&(j <= end); k++)
-	{
-		if(a[i] > a[j])
-			temp[k] = a[j++];
-		else
-			temp[k] = a[i++];
-	}
-
-	// 多余的元素放入temp中
-	while(i <= mid)
-		temp[k++] = a[i++];
-	while(j <= end)
-		temp[k++] = a[j++];
-
-	// 赋值给数组a
-	for(i = 0; i < k; i++)
-		a[start + i] = temp[i];
-
+	int temp = *a;
+	*a = *b;
+	*b = temp;
 }
 
-
-void MergeSort(int* a, int start, int end)
+void BubbleSort(int* a, int size)
 {
-	if(start >= end)
-		return;
+	int i, j;
 
-	int mid = (start + end) / 2;
-	// 对左半边排序
-	MergeSort(a, start, mid);
-	// 对右半边排序
-	MergeSort(a, mid + 1, end);
-	// 合并左右两边排序好的子序列
-	MergeArray(a, start, mid, end);
-}
-
-void MergeSortExample()
-{
-	int a[] = {3, 56, 2, 7, 45, 8, 1};
-	int size = sizeof(a) / sizeof(int);
-	std::cout<<"Before merge sort:"<<std::endl;
-	PrintArray(a, size);
-	std::cout<<"After merge sort"<<std::endl;
-	MergeSort(a, 0, size - 1);
-	PrintArray(a, size);
-}
-
-
-/* 插入排序 */
-void InsertSort(int* a, int iLen)
-{
-	int temp, j;
-	// 从 1 位置的元素开始循环
-	for(int i = 1; i < iLen; i++)
-	{
-		temp = a[i];
-		// 在a[i]左侧的任意比 a[i] 大的元素都要向右移动一个位置，如此循环到 0 位置
-		for(j = i - 1; a[j] > temp && j >=0; j--)
-		{
-			a[j + 1] = a[j];
-		}
-		a[j + 1] = temp;
-	}
-}
-
-
-void InsertSortExample()
-{
-	int a[] = {4, 1, 2, 5, 3, 6, 7, 8};
-	int size = sizeof(a) / sizeof(int);
-	std::cout<<"Before insert sort:"<<std::endl;
-	PrintArray(a, size);
-	std::cout<<"After insert sort"<<std::endl;
-	InsertSort(a, size);
-	PrintArray(a, size);
-}
-
-
-/* 冒泡排序 */
-void BubbleSort(int* a, int iLen)
-{
-	int start = 0;
-	int end = iLen - 1;
-	for(int i = start; i < end; i++)
-		/* 每次从0位置开始冒泡，与后面位置的元素两两比较，不断互换位置 */
-		/* 每一轮比较完成，都会找到一个最大值放在序列尾部 */
-		for(int j = start; j < end - i; j++)
-		{
+	for(i = 0; i < size - 1; i++)
+		for(j = 0; j < size - i - 1; j++)
+		{ 
 			if(a[j] > a[j+1])
-				std::swap(a[j], a[j+1]);
+				swap(&a[j], &a[j+1]);
 		}
+
+	return;
 }
 
 
-void BubbleSortExample()
+// left subarray a[begin...mid]
+// right subarray a[mid + 1, end]
+void Merge(int* a, int begin, int mid, int end)
 {
-	int a[] = {4, 1, 2, 5, 3, 6, 7, 1};
-	int size = sizeof(a) / sizeof(int);
-	std::cout<<"Before bubble sort:"<<std::endl;
-	PrintArray(a, size);
-	std::cout<<"After bubble sort"<<std::endl;
-	BubbleSort(a, size);
-	PrintArray(a, size);
-}
+	int i, j, k;
+	int left_size = mid - begin + 1;
+	int right_size = end - mid;
 
+	int left_array[left_size];
+	int right_array[right_size];
 
-/* 希尔排序 */
-void ShellSort(int* a, int iLen)
-{
-	// 以 n/2^i 作为步长序列
-	for(int gap = iLen >> 1; gap > 0; gap >>= 1)
+	for(i = 0; i < left_size; i++)
+		left_array[i] = a[begin + i];
+
+	for(j = 0; j <right_size; j++)
+		right_array[j] = a[mid + j + 1];
+
+	i = 0;
+	j = 0;
+	k = begin;
+	while(i < left_size && j < right_size)
 	{
-		for(int i = 0; i < gap; i++)
-		{
-			for(int j = i + gap; j < iLen; j += gap) // 同属一列的元素
-			{
-				// 使用插入排序法
-				int temp = a[j];
-				int k = j - gap;
-				while(a[k] > temp && k >= i)
-				{
-					a[k + gap] = a[k];
-					k -= gap;
-				}   
-				a[k + gap] = temp;
-			}
-		}
+		if(left_array[i] >= right_array[j])
+			a[k++] = right_array[j++];
+		else
+			a[k++] = left_array[i++];
 	}
+
+	while(i < left_size)
+		a[k++] = left_array[i++];
+
+	while(j < right_size)
+		a[k++] = right_array[j++];
 }
 
-
-void ShellSortExample()
+void MergeSort(int* a, int begin, int end)
 {
-    int a[] = {4, 1, 2, 5, 3, 6, 7, 1};
-    int size = sizeof(a) / sizeof(int);
-    std::cout<<"Before Shell sort:"<<std::endl;
-    PrintArray(a, size);
-    std::cout<<"After Shell sort"<<std::endl;
-    ShellSort(a, size);
-    PrintArray(a, size);
+	if(begin < end)
+	{
+		int mid = begin + (end - begin) / 2;
+		MergeSort(a, begin, mid);
+		MergeSort(a, mid + 1, end);
+		Merge(a, begin, mid, end);
+	}
 }
