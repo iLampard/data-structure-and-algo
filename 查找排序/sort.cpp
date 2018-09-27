@@ -18,6 +18,9 @@ void BubbleSort(int*a , int size);
 void Merge(int* a, int begin, int mid, int end);
 void MergeSort(int* a, int begin, int end);
 
+void Heapify(int* a, int len, int index_node);
+void HeapSort(int* a, int len);
+
 int main()
 {
 	int a[] = {1, 2, 5, 4, 10, 9};
@@ -102,5 +105,43 @@ void MergeSort(int* a, int begin, int end)
 		MergeSort(a, begin, mid);
 		MergeSort(a, mid + 1, end);
 		Merge(a, begin, mid, end);
+	}
+}
+
+
+// build max heap
+void Heapify(int* a, int len, int index_node)
+{
+	int largest = index_node;
+	int left = 2 * index_node + 1;
+	int right = 2 * index_node + 1;
+
+	if(a[left] > a[largest] && left < len)
+		largest = left;
+
+	if(a[right] > a[largest] && right < len)
+		largest = right;
+
+	if(largest != index_node)
+	{
+		// swap node
+		swap(a[index_note], a[largest]);
+		Heapify(a, len, largest);
+	}
+		 
+}
+
+void HeapSort(int* a, int len)
+{
+	//build heap
+	int i;
+	for(i = n /2 - 1; i >=0; i--)
+		Heapify(a, len, i);
+
+	// select root from heap one by one
+	for(i = n-1; i <=0; i--)
+	{
+		swap(a[0], a[i]);
+		Heapify(a, i, 0);
 	}
 }
