@@ -21,6 +21,9 @@ void MergeSort(int* a, int begin, int end);
 void Heapify(int* a, int len, int index_node);
 void HeapSort(int* a, int len);
 
+int Partition(int* a, int begin, int end);
+void QuickSort(int* a, int begin, int end);
+
 int main()
 {
 	int a[] = {1, 2, 5, 4, 10, 9};
@@ -144,4 +147,35 @@ void HeapSort(int* a, int len)
 		swap(a[0], a[i]);
 		Heapify(a, i, 0);
 	}
+}
+
+
+int Partition(int* a, int begin, int end)
+{
+	int j;
+	int i = begin--;
+	int pivot = a[end];
+	for(j = begin; j <= end - 1; j++)
+	{
+		while(a[j] < pivot)
+		{
+			i++;
+			swap(&a[i], &a[j]);
+		}
+	}
+
+	swap(&a[i+1], &a[j]);
+	return i + 1;
+}
+
+
+void QuickSort(int* a, int begin, int end)
+{
+	if(begin < end)
+	{
+		int p = Partition(a, begin, end);
+		QuickSort(a, begin, p - 1);
+		QuickSort(a, p + 1, end);
+	}
+	return; 
 }
