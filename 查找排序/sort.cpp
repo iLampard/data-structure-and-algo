@@ -70,34 +70,33 @@ void BubbleSort(int* a, int size)
 void Merge(int* a, int begin, int mid, int end)
 {
 	int i, j, k;
-	int left_size = mid - begin + 1;
-	int right_size = end - mid;
+	int n1 = mid - begin + 1;
+	int n2 = end - mid;
+	int L[n1];
+	int R[n2];
+	for(i = 0; i < n1; i++)
+		L[i] = a[i + begin];
 
-	int left_array[left_size];
-	int right_array[right_size];
-
-	for(i = 0; i < left_size; i++)
-		left_array[i] = a[begin + i];
-
-	for(j = 0; j <right_size; j++)
-		right_array[j] = a[mid + j + 1];
+	for(i = 0; i < n2; i++)
+		R[i] = a[i + mid + 1];
 
 	i = 0;
 	j = 0;
 	k = begin;
-	while(i < left_size && j < right_size)
+	while(i < n1 && j < n2)
 	{
-		if(left_array[i] >= right_array[j])
-			a[k++] = right_array[j++];
+		if(L[i] > R[j])
+			a[k++] = R[j++];
 		else
-			a[k++] = left_array[i++];
+			a[k++] = L[i++];
 	}
 
-	while(i < left_size)
-		a[k++] = left_array[i++];
+	while(i < n1)
+		a[k++] = L[i++];
+	while(j < n2)
+		a[k++] = R[j++];
 
-	while(j < right_size)
-		a[k++] = right_array[j++];
+
 }
 
 void MergeSort(int* a, int begin, int end)
@@ -108,6 +107,7 @@ void MergeSort(int* a, int begin, int end)
 		MergeSort(a, begin, mid);
 		MergeSort(a, mid + 1, end);
 		Merge(a, begin, mid, end);
+		
 	}
 }
 
@@ -128,23 +128,23 @@ void Heapify(int* a, int len, int index_node)
 	if(largest != index_node)
 	{
 		// swap node
-		swap(a[index_note], a[largest]);
+		swap(&a[index_node], &a[largest]);
 		Heapify(a, len, largest);
 	}
 		 
 }
 
-void HeapSort(int* a, int len)
+void HeapSort(int* a, int n)
 {
 	//build heap
 	int i;
-	for(i = n /2 - 1; i >=0; i--)
-		Heapify(a, len, i);
+	for(i = n/2 - 1; i >=0; i--)
+		Heapify(a, n, i);
 
 	// select root from heap one by one
-	for(i = n-1; i <=0; i--)
+	for(i = n - 1; i >= 0; i--)
 	{
-		swap(a[0], a[i]);
+		swap(&a[0], &a[i]);
 		Heapify(a, i, 0);
 	}
 }
@@ -155,9 +155,9 @@ int Partition(int* a, int begin, int end)
 	int j;
 	int i = begin--;
 	int pivot = a[end];
-	for(j = begin; j <= end - 1; j++)
+	for(j = begin; j <= end - 1; i++)
 	{
-		while(a[j] < pivot)
+		if(a[j] < pivot)
 		{
 			i++;
 			swap(&a[i], &a[j]);
